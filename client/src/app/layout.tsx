@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
 import "./globals.css";
 import { AppProvider } from "./AppProvider";
-
+import { cookies } from "next/headers";
+import ShowModal from "./modals/ShowModal";
 const nunito = Nunito({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -15,10 +16,15 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = cookies();
+  const sessionToken = cookieStore.get("jwt");
   return (
     <html lang="en">
       <body className={nunito.className}>
-        <AppProvider>{children}</AppProvider>
+        <AppProvider initialSessionToken={sessionToken?.value}>
+          {children}
+          <ShowModal />
+        </AppProvider>
       </body>
     </html>
   );

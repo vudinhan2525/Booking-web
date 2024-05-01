@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { UserIcon } from "@/lib/icon";
 import { Button } from "@/components/ui/button";
+import CustomButton from "@/components/ui/CustomButton";
 
 export default function Header() {
   return (
@@ -20,19 +21,21 @@ export default function Header() {
           <Button variant={"outline"} className="text-[15px] border-[0px]">
             My Bookings
           </Button>
-          <Button
+          <CustomButton
+            showLoginModal={true}
             variant={"outline"}
             className="flex justify-center items-center gap-1 text-[15px] border-primary-color hover:text-primary-color text-primary-color"
           >
             <UserIcon width="18px" height="18px"></UserIcon>
             <p className="">Log In</p>
-          </Button>
-          <Button
+          </CustomButton>
+          <CustomButton
+            showRegisterModal={true}
             variant={"outline"}
             className="text-[15px] border-primary-color text-white bg-primary-color hover:bg-primary-color hover:text-white hover:bg-opacity-80"
           >
             Register
-          </Button>
+          </CustomButton>
         </div>
       </div>
       <div className="mt-2">
