@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UserBodyDto } from './user.dto';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -20,6 +20,12 @@ export class UserService {
   async createUser(body: UserBodyDto) {
     if (body.password !== body.passwordConfirm) {
       throw new Error('Password and passwordConfirm do not match');
+    }
+    const existingUser = await this.usersRepository.findOne({
+      where: { email: body.email },
+    });
+    if (existingUser) {
+      throw new HttpException('Email already exists', HttpStatus.BAD_REQUEST);
     }
     const hashedPassword = await bcrypt.hash(body.password, 10);
     const newUser = this.usersRepository.create({

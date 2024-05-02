@@ -16,7 +16,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { GoogleIcons } from "@/lib/icon";
 import http from "@/lib/http";
-import { IUser } from "@/interfaces/IUser";
 import {
   RegisterBody,
   RegisterBodyType,
@@ -42,14 +41,16 @@ export default function RegisterModal() {
   // 2. Define a submit handler.
   async function onSubmit(values: RegisterBodyType) {
     try {
-      const response = await http.post<{ status: string; data: IUser }>(
-        "/users",
-        values,
-        {
-          headers: { "Content-Type": "application/json" },
-          withCredentials: true,
-        }
-      );
+      const response = await http.post<any>("/users", values, {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      });
+      if (
+        response.statusCode === 400 &&
+        response.message === "Email already exists"
+      ) {
+        form.setError("email", { message: response.message });
+      }
       if (response.status === "success") {
         window.location.reload();
       }
@@ -78,12 +79,22 @@ export default function RegisterModal() {
                   name="firstName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-[15px] text-gray-600">
+                      <FormLabel
+                        className={`${
+                          form.formState.errors.firstName
+                            ? "text-red-500"
+                            : "text-gray-600"
+                        } text-[15px] `}
+                      >
                         First Name
                       </FormLabel>
                       <FormControl>
                         <Input
-                          className="focus-visible:ring-[1px] focus-visible:ring-primary-color px-4 text-[15px] py-5 focus-visible:ring-offset-0"
+                          className={`${
+                            form.formState.errors.firstName
+                              ? "bg-red-100 focus-visible:ring-red-400 border-[1px] border-red-400"
+                              : "focus-visible:ring-primary-color"
+                          } focus-visible:ring-[1px]  px-4 text-[15px] py-5 autofill:bg-white focus-visible:ring-offset-0`}
                           placeholder="First Name"
                           {...field}
                         />
@@ -97,12 +108,22 @@ export default function RegisterModal() {
                   name="lastName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-[15px] text-gray-600">
+                      <FormLabel
+                        className={`${
+                          form.formState.errors.lastName
+                            ? "text-red-500"
+                            : "text-gray-600"
+                        } text-[15px] `}
+                      >
                         Last Name
                       </FormLabel>
                       <FormControl>
                         <Input
-                          className="focus-visible:ring-[1px] focus-visible:ring-primary-color px-4 text-[15px] py-5 focus-visible:ring-offset-0"
+                          className={`${
+                            form.formState.errors.lastName
+                              ? "bg-red-100 focus-visible:ring-red-400 border-[1px] border-red-400"
+                              : "focus-visible:ring-primary-color"
+                          } focus-visible:ring-[1px]  px-4 text-[15px] py-5 autofill:bg-white focus-visible:ring-offset-0`}
                           placeholder="Last Name"
                           {...field}
                         />
@@ -117,12 +138,23 @@ export default function RegisterModal() {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-[15px] text-gray-600">
+                    <FormLabel
+                      className={`${
+                        form.formState.errors.email
+                          ? "text-red-500"
+                          : "text-gray-600"
+                      } text-[15px] `}
+                    >
                       Email
                     </FormLabel>
                     <FormControl>
                       <Input
-                        className="focus-visible:ring-[1px] focus-visible:ring-primary-color px-4 text-[15px] py-5 focus-visible:ring-offset-0"
+                        autoComplete="off"
+                        className={`${
+                          form.formState.errors.email
+                            ? "bg-red-100 focus-visible:ring-red-400 border-[1px] border-red-400"
+                            : "focus-visible:ring-primary-color autofill:bg-slate-500"
+                        } focus-visible:ring-[1px]  px-4 text-[15px] py-5 autofill:bg-white focus-visible:ring-offset-0`}
                         placeholder="Email"
                         {...field}
                       />
@@ -136,13 +168,23 @@ export default function RegisterModal() {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-[15px] text-gray-600">
+                    <FormLabel
+                      className={`${
+                        form.formState.errors.password
+                          ? "text-red-500"
+                          : "text-gray-600"
+                      } text-[15px] `}
+                    >
                       Password
                     </FormLabel>
                     <FormControl>
                       <Input
                         type="password"
-                        className="focus-visible:ring-[1px] focus-visible:ring-primary-color px-4 text-[15px] py-5 focus-visible:ring-offset-0"
+                        className={`${
+                          form.formState.errors.password
+                            ? "bg-red-100 focus-visible:ring-red-400 border-[1px] border-red-400"
+                            : "focus-visible:ring-primary-color"
+                        } focus-visible:ring-[1px]  px-4 text-[15px] py-5 autofill:bg-white focus-visible:ring-offset-0`}
                         placeholder="Password"
                         {...field}
                       />
@@ -156,13 +198,23 @@ export default function RegisterModal() {
                 name="passwordConfirm"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-[15px] text-gray-600">
+                    <FormLabel
+                      className={`${
+                        form.formState.errors.passwordConfirm
+                          ? "text-red-500"
+                          : "text-gray-600"
+                      } text-[15px] `}
+                    >
                       Password Confirm
                     </FormLabel>
                     <FormControl>
                       <Input
                         type="password"
-                        className="focus-visible:ring-[1px] focus-visible:ring-primary-color px-4 text-[15px] py-5 focus-visible:ring-offset-0"
+                        className={`${
+                          form.formState.errors.passwordConfirm
+                            ? "bg-red-100 focus-visible:ring-red-400 border-[1px] border-red-400"
+                            : "focus-visible:ring-primary-color"
+                        } focus-visible:ring-[1px]  px-4 text-[15px] py-5 autofill:bg-white focus-visible:ring-offset-0`}
                         placeholder="Password Confirm"
                         {...field}
                       />

@@ -8,7 +8,14 @@ export default function Header() {
     <div className="px-24 fixed top-0 left-0 pt-2 right-0">
       <div className="flex items-center justify-between ">
         <div className="flex  justify-center items-center">
-          <Image alt="logo" src={"/logo.png"} width={80} height={50} />
+          <Image
+            alt="logo"
+            src={"/logo.png"}
+            priority={true}
+            width={80}
+            height="0"
+            style={{ width: "100%", height: "auto" }}
+          />
           <div className="flex select-none ml-[-10px]">
             <p className="text-[#31AE84] text-2xl font-bold">Sun</p>
             <p className="text-[#14B0C4] text-2xl font-bold">Travel</p>
