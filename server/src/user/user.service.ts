@@ -3,6 +3,8 @@ import { UserBodyDto } from './user.dto';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
+import * as bcrypt from 'bcrypt';
+import * as jwt from 'jsonwebtoken';
 @Injectable()
 export class UserService {
   constructor(
@@ -15,9 +17,26 @@ export class UserService {
       where: { id: id },
     });
   }
-  async createUser(body: UserBodyDto): Promise<User> {
-    const newUser = this.usersRepository.create(body);
+  async createUser(body: UserBodyDto) {
+    if (body.password !== body.passwordConfirm) {
+      throw new Error('Password and passwordConfirm do not match');
+    }
+    const hashedPassword = await bcrypt.hash(body.password, 10);
+    const newUser = this.usersRepository.create({
+      firstName: body.firstName,
+      lastName: body.lastName,
+      email: body.email,
+      password: hashedPassword,
+    });
     const savedUser = await this.usersRepository.save(newUser);
-    return savedUser;
+    // Generate JWT token
+    const token = jwt.sign({ userId: savedUser.id }, process.env.JWT_SECRET, {
+      expiresIn: process.env.JWT_EXPIRE_IN,
+    });
+    return {
+      status: 'success',
+      data: savedUser,
+      token: token,
+    };
   }
 }
