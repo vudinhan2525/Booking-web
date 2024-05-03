@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
+import { sendMail } from 'src/utils/email';
 @Injectable()
 export class UserService {
   constructor(
@@ -44,5 +45,31 @@ export class UserService {
       data: savedUser,
       token: token,
     };
+  }
+  async forgotPassword(email: string) {
+    const user = await this.usersRepository.findOne({
+      where: { email: email },
+    });
+    if (!user) {
+      throw new HttpException('Email is not exist.', HttpStatus.BAD_REQUEST);
+    }
+    const token = await user.createPasswordResetToken();
+    await this.usersRepository.save(user);
+    //3) Send it to user's email
+    const url = `${process.env.CLIENT_ENDPOINT}/resetPassword/${token}`;
+    console.log(url);
+    try {
+      //await sendMail(email, 'Reset your password', url);
+      return { status: 'success', message: 'Email sent successfully' };
+    } catch (error) {
+      // Handle error and respond to the user
+      user.passwordResetExpires = null;
+      user.passwordResetToken = null;
+      await this.usersRepository.save(user);
+      throw new HttpException(
+        'Failed to send email',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }

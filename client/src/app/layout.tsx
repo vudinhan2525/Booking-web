@@ -3,7 +3,7 @@ import { Nunito } from "next/font/google";
 import "./globals.css";
 import { AppProvider } from "./AppProvider";
 import { cookies } from "next/headers";
-import ShowModal from "./modals/ShowModal";
+import ShowModal from "../components/modals/ShowModal";
 const nunito = Nunito({ subsets: ["latin"] });
 
 export const metadata: Metadata = {

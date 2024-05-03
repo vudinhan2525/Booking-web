@@ -21,4 +21,12 @@ export class UserController {
     res.cookie('jwt', result.token);
     res.status(200).json(result);
   }
+  @Post('forgotPassword')
+  async forgotPassword(
+    @Body() data: { email: string },
+    @Res() response: Response,
+  ) {
+    const result = await this.userService.forgotPassword(data.email);
+    response.status(200).json(result);
+  }
 }
