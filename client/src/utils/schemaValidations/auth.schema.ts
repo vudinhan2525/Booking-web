@@ -29,7 +29,7 @@ export const RegisterBody = z
       ctx.addIssue({
         code: "custom",
         message: "Mật khẩu không khớp",
-        path: ["confirmPassword"],
+        path: ["passwordConfirm"],
       });
     }
   });

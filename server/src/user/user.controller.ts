@@ -29,4 +29,14 @@ export class UserController {
     const result = await this.userService.forgotPassword(data.email);
     response.status(200).json(result);
   }
+  @Post('resetPassword')
+  async resetPassword(
+    @Body() data: { token: string; password: string; passwordConfirm: string },
+    @Res() response: Response,
+  ) {
+    await this.userService.resetPassword(data);
+    response.status(200).json({
+      status: 'success',
+    });
+  }
 }
