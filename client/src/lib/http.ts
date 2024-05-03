@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 type CustomOpts = RequestInit & {
   baseUrl?: string;
   withCredentials?: boolean; // Add withCredentials option
@@ -29,7 +30,17 @@ const request = async <Response>(
   }
   const result = await fetch(fullUrl, fetchOptions);
   const data: Response = await result.json();
-
+  if (result.status === 401 && result.statusText === "Unauthorized") {
+    if (typeof window !== undefined) {
+      //clear jwt
+      await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/auth/logout`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      });
+      location.href = "?showLoginModal=1";
+    }
+  }
   return data;
 };
 const http = {

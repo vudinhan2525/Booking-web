@@ -1,6 +1,6 @@
 "use client";
-import { sessionToken } from "@/lib/http";
-import { createContext, useContext, useState } from "react";
+import http, { sessionToken } from "@/lib/http";
+import { createContext, useContext, useEffect, useState } from "react";
 const AppContext = createContext<{
   showLoginModal: boolean;
   setShowLoginModal: (t: boolean) => void;
@@ -26,6 +26,16 @@ export function AppProvider({
       sessionToken.value = initialSessionToken;
     }
   });
+  useEffect(() => {
+    // Get URL parameter
+    const params = new URLSearchParams(window.location.search);
+    const showLoginModalParam = params.get("showLoginModal");
+
+    // Set showLoginModal state based on URL parameter
+    if (showLoginModalParam === "1") {
+      setShowLoginModal(true);
+    }
+  }, []);
   return (
     <AppContext.Provider
       value={{

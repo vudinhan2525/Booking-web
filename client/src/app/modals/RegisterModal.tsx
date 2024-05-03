@@ -15,11 +15,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { GoogleIcons } from "@/lib/icon";
-import http from "@/lib/http";
 import {
   RegisterBody,
   RegisterBodyType,
 } from "@/utils/schemaValidations/auth.schema";
+import authApiRequest from "@/apiRequest/auth";
 export default function RegisterModal() {
   const { setShowRegisterModal } = useAppContext();
   const handleTurnOffModal = (e: any) => {
@@ -41,10 +41,7 @@ export default function RegisterModal() {
   // 2. Define a submit handler.
   async function onSubmit(values: RegisterBodyType) {
     try {
-      const response = await http.post<any>("/users", values, {
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true,
-      });
+      const response = await authApiRequest.register(values);
       if (
         response.statusCode === 400 &&
         response.message === "Email already exists"

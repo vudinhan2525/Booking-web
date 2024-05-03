@@ -1,6 +1,7 @@
 "use client";
 import { useAppContext } from "@/app/AppProvider";
 import { Button } from "./button";
+import authApiRequest from "@/apiRequest/auth";
 
 export default function CustomButton({
   variant,
@@ -8,6 +9,7 @@ export default function CustomButton({
   children,
   showLoginModal,
   showRegisterModal,
+  buttonLogout,
 }: {
   variant:
     | "default"
@@ -20,16 +22,23 @@ export default function CustomButton({
   children: React.ReactNode | undefined;
   showLoginModal?: boolean;
   showRegisterModal?: boolean;
+  buttonLogout?: boolean;
 }) {
   const { setShowLoginModal, setShowRegisterModal } = useAppContext();
   return (
     <Button
-      onClick={() => {
+      onClick={async () => {
         if (showLoginModal) {
           setShowLoginModal(true);
         }
         if (showRegisterModal) {
           setShowRegisterModal(true);
+        }
+        if (buttonLogout) {
+          const response = await authApiRequest.logoutFromNextClient();
+          if (response.status === "success") {
+            window.location.href = "/";
+          }
         }
       }}
       variant={variant}

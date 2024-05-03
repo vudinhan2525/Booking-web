@@ -18,7 +18,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { GoogleIcons } from "@/lib/icon";
-import http from "@/lib/http";
+import authApiRequest from "@/apiRequest/auth";
 
 export default function LoginModal() {
   const { setShowLoginModal } = useAppContext();
@@ -38,10 +38,7 @@ export default function LoginModal() {
   // 2. Define a submit handler.
   async function onSubmit(values: LoginBodyType) {
     try {
-      const response = await http.post<any>("/auth/login", values, {
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true,
-      });
+      const response = await authApiRequest.login(values);
       if (
         response.statusCode === 400 &&
         response.message === "Email or password is not correct"
@@ -50,7 +47,7 @@ export default function LoginModal() {
         form.setError("password", { message: response.message });
       }
       if (response.status === "success") {
-        window.location.reload();
+        window.location.href = "/";
       }
     } catch (error) {}
   }

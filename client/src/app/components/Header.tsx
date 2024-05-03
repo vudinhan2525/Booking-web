@@ -43,6 +43,13 @@ export default function Header() {
           >
             Register
           </CustomButton>
+          <CustomButton
+            variant={"outline"}
+            buttonLogout={true}
+            className="text-[15px] font-bold text-gray-600 hover:text-gray-600 border-[0px]"
+          >
+            Log out
+          </CustomButton>
         </div>
       </div>
       <div className="mt-2">
