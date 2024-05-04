@@ -4,6 +4,7 @@ import { faCar, faHotel, faPlane } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import SearchFlight from "./SearchFlight";
+import SearchHotels from "./SearchHotels";
 
 export default function SearchForm() {
   const [optSelected, setOptSelected] = useState(1);
@@ -49,6 +50,7 @@ export default function SearchForm() {
       </div>
       <div>
         {searchOpt[optSelected].title === "Flights" && <SearchFlight />}
+        {searchOpt[optSelected].title === "Hotels" && <SearchHotels />}
       </div>
     </div>
   );
