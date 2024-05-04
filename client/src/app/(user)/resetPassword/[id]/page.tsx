@@ -56,6 +56,7 @@ export default function ResetToken({ params }: { params: { id: string } }) {
       if (response.status === "success") {
         window.location.href = "/";
       }
+      //... handle 2 error token fail and passwordconfirm not correct
     } catch (error) {}
   }
   return (

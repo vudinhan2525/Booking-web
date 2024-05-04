@@ -14,6 +14,7 @@ export default function CustomButton({
   variant:
     | "default"
     | "destructive"
+    | "transparent"
     | "outline"
     | "secondary"
     | "ghost"

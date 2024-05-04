@@ -57,7 +57,7 @@ export default function LoginModal() {
   return (
     <div
       onMouseDown={(e) => handleTurnOffModal(e)}
-      className="modal fixed top-0 animate-fadeIn right-0 left-0 bottom-0 bg-black/10"
+      className="modal z-[21] fixed top-0 animate-fadeIn right-0 left-0 bottom-0 bg-black/10"
     >
       <div className="absolute bg-white px-6 pt-8 pb-6 w-[35%] left-[50%] translate-x-[-50%] top-[50%] translate-y-[-50%] rounded-xl">
         <div className="mb-4 flex justify-between items-center">
