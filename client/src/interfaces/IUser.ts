@@ -4,7 +4,8 @@ export interface IUser {
   lastName: string;
   email: string;
   password: string;
-  passwordConfirm: string;
+  passwordConfirm: string | null;
   createdAt: Date;
   updatedAt: Date;
+  isActive: boolean;
 }

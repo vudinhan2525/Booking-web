@@ -14,7 +14,12 @@ export class AuthMiddleWare implements NestMiddleware {
   ) {}
 
   async use(req: Request, res: Response, next: NextFunction) {
-    const token = req.cookies.jwt;
+    let token;
+    if (req.cookies.jwt) {
+      token = req.cookies.jwt;
+    } else if (req.body.token) {
+      token = req.body.token;
+    }
     try {
       if (token) {
         //2) Verify token

@@ -15,5 +15,10 @@ const userApiRequest = {
       headers: { "Content-Type": "application/json" },
       withCredentials: true,
     }),
+  getMeFromClient: () =>
+    http.get<any>("users/getMe", {
+      headers: { "Content-Type": "application/json" },
+      withCredentials: true,
+    }),
 };
 export default userApiRequest;

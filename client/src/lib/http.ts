@@ -29,18 +29,19 @@ const request = async <Response>(
     fetchOptions.body = body ?? {};
   }
   const result = await fetch(fullUrl, fetchOptions);
+
   const data: Response = await result.json();
-  if (result.status === 401 && result.statusText === "Unauthorized") {
-    if (typeof window !== undefined) {
-      //clear jwt
-      await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/auth/logout`, {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-      });
-      location.href = "?showLoginModal=1";
-    }
-  }
+  // if (result.status === 401 && result.statusText === "Unauthorized") {
+  //   if (typeof window !== undefined) {
+  //     //clear jwt
+  //     await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/auth/logout`, {
+  //       method: "GET",
+  //       headers: { "Content-Type": "application/json" },
+  //       credentials: "include",
+  //     });
+  //     location.href = "?showLoginModal=1";
+  //   }
+  // }
   return data;
 };
 const http = {
@@ -60,17 +61,4 @@ const http = {
     return request<Response>("DELETE", url, JSON.stringify(body), options);
   },
 };
-class SessionToken {
-  private token = "";
-  get value() {
-    return this.token;
-  }
-  set value(token: string) {
-    if (typeof window === undefined) {
-      throw new Error("Cannot set token in server side");
-    }
-    this.token = token;
-  }
-}
-export const sessionToken = new SessionToken();
 export default http;

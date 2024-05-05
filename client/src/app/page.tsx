@@ -14,8 +14,8 @@ export default function Home() {
           alt="mainbg"
           quality={70}
           fill
-          objectFit="cover"
-          objectPosition="center"
+          priority
+          style={{ objectFit: "cover", objectPosition: "center" }}
         ></Image>
         <div className="absolute top-[50%] translate-y-[-42%] left-[50%] translate-x-[-50%] w-[90%] h-[400px] ">
           <header className="text-center mb-4 text-4xl font-bold text-white">

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, Post, Res } from '@nestjs/common';
 import { UserBodyDto } from './user.dto';
 import { UserService } from './user.service';
 import { Response } from 'express';
@@ -6,9 +6,11 @@ import { Response } from 'express';
 @Controller('users')
 export class UserController {
   constructor(private userService: UserService) {}
-  @Get(':id')
-  getHello(@Param('id') id: number) {
-    return this.userService.getUser(id);
+  @Get('getMe')
+  getHello(@Res() response: Response) {
+    response
+      .status(200)
+      .json({ status: 'success', data: response.locals.user });
   }
   @Post()
   async createUser(

@@ -13,12 +13,6 @@ export class UserService {
     @InjectRepository(User)
     private usersRepository: Repository<User>,
   ) {}
-
-  async getUser(id: number): Promise<User> {
-    return await this.usersRepository.findOne({
-      where: { id: id },
-    });
-  }
   async createUser(body: UserBodyDto) {
     if (body.password !== body.passwordConfirm) {
       throw new Error('Password and passwordConfirm do not match');
