@@ -1,12 +1,15 @@
 import Image from "next/image";
 import Header from "../components/component/Header/Header";
 import SearchForm from "@/components/component/Search/SearchForm";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
+import MostPopularFlight from "./_component/MostPopularFlight";
 
 export default function Home() {
   return (
     <div className="min-h-[100vh] bg-white">
       <Header></Header>
-      <div className="relative w-full h-[600px] ">
+      <div className="relative w-full h-[550px]">
         <Image
           src={
             "https://shopcartimg2.blob.core.windows.net/shopcartctn/main-bg-2.jpg"
@@ -17,14 +20,25 @@ export default function Home() {
           priority
           style={{ objectFit: "cover", objectPosition: "center" }}
         ></Image>
-        <div className="absolute top-[50%] translate-y-[-42%] left-[50%] translate-x-[-50%] w-[90%] h-[400px] ">
-          <header className="text-center mb-4 text-4xl font-bold text-white">
+        <div className="absolute px-24 top-[50%] translate-y-[-42%] left-[50%] translate-x-[-50%] w-full h-[400px] ">
+          <header className="text-center mt-4 mb-4 text-4xl font-bold text-white">
             The world is yours to explore.
           </header>
           <SearchForm />
         </div>
       </div>
-      <div className="w-[200px] h-[1000px]"></div>
+      <div className="py-12 h-[1000px] px-24">
+        <div className="flex items-center gap-4">
+          <h1 className="text-[26px] font-bold">Most popular flights</h1>
+          <div>
+            <FontAwesomeIcon
+              icon={faStar}
+              className="text-[26px] text-primary-color"
+            />
+          </div>
+        </div>
+        <MostPopularFlight />
+      </div>
     </div>
   );
 }

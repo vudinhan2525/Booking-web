@@ -2,7 +2,7 @@ import { Injectable, NestMiddleware } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Request, Response, NextFunction } from 'express';
 import * as jwt from 'jsonwebtoken';
-import { User } from 'src/user/user.entity';
+import { User } from 'src/entities/user.entity';
 import { Repository } from 'typeorm';
 import { promisify } from 'util';
 

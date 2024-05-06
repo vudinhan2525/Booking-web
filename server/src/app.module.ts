@@ -6,12 +6,12 @@ import {
 } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UserModule } from './user/user.module';
+import { UserModule } from './modules/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './user/user.entity';
+import { User } from './entities/user.entity';
 import { ConfigModule } from '@nestjs/config';
-import { AuthModule } from './auth/auth.module';
-import { AuthMiddleWare } from './auth/middlewares/auth.middleware';
+import { AuthModule } from './modules/auth.module';
+import { AuthMiddleWare } from './middlewares/auth.middleware';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -19,9 +19,9 @@ import { AuthMiddleWare } from './auth/middlewares/auth.middleware';
       type: 'mysql',
       host: 'localhost',
       port: 3306,
-      username: 'root',
-      password: 'Vudinhan123.',
-      database: 'bookingweb',
+      username: process.env.MYSQL_USERNAME,
+      password: process.env.MYSQL_PASSWORD,
+      database: process.env.MYSQL_DATABASENAME,
       entities: [User],
       synchronize: true,
     }),

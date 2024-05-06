@@ -5,9 +5,11 @@ import { Button } from "@/components/ui/button";
 import CustomButton from "@/components/ui/CustomButton";
 import { useEffect, useState } from "react";
 import useDebounce from "@/hooks/useDebounce";
+import { useAppContext } from "@/app/AppProvider";
 export default function Header() {
   const [onTop, setOnTop] = useState(true);
   const debounce = useDebounce(onTop, 500);
+  const { isAuthenticated } = useAppContext();
   useEffect(() => {
     function handleScroll() {
       setOnTop(window.scrollY === 0);
@@ -63,32 +65,38 @@ export default function Header() {
           >
             My Bookings
           </Button>
-          <CustomButton
-            showLoginModal={true}
-            variant={onTop ? "transparent" : "outline"}
-            className={`${
-              onTop
-                ? "text-white border-[1px] border-white"
-                : "hover:text-primary-color text-primary-color border-primary-color "
-            } flex justify-center items-center gap-1 text-[15px] `}
-          >
-            <UserIcon width="18px" height="18px"></UserIcon>
-            <p className="">Log In</p>
-          </CustomButton>
-          <CustomButton
-            showRegisterModal={true}
-            variant={"outline"}
-            className="text-[15px] border-primary-color text-white bg-primary-color hover:bg-primary-color hover:text-white hover:bg-opacity-80"
-          >
-            Register
-          </CustomButton>
-          <CustomButton
-            variant={"outline"}
-            buttonLogout={true}
-            className="text-[15px] font-bold text-gray-600 hover:text-gray-600 border-[0px]"
-          >
-            Log out
-          </CustomButton>
+          {!isAuthenticated && (
+            <div className="flex gap-2">
+              <CustomButton
+                showLoginModal={true}
+                variant={onTop ? "transparent" : "outline"}
+                className={`${
+                  onTop
+                    ? "text-white border-[1px] border-white"
+                    : "hover:text-primary-color text-primary-color border-primary-color "
+                } flex justify-center items-center gap-1 text-[15px] `}
+              >
+                <UserIcon width="18px" height="18px"></UserIcon>
+                <p className="">Log In</p>
+              </CustomButton>
+              <CustomButton
+                showRegisterModal={true}
+                variant={"outline"}
+                className="text-[15px] border-primary-color text-white bg-primary-color hover:bg-primary-color hover:text-white hover:bg-opacity-80"
+              >
+                Register
+              </CustomButton>
+            </div>
+          )}
+          {isAuthenticated && (
+            <CustomButton
+              variant={"outline"}
+              buttonLogout={true}
+              className="text-[15px] font-bold text-gray-600 hover:text-gray-600 border-[0px]"
+            >
+              Log out
+            </CustomButton>
+          )}
         </div>
       </div>
       <div className="mt-2 flex gap-2">
