@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Header from "../components/component/Header/Header";
 import SearchForm from "@/components/component/Search/SearchForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
@@ -8,7 +7,6 @@ import MostPopularFlight from "./_component/MostPopularFlight";
 export default function Home() {
   return (
     <div className="min-h-[100vh] bg-white">
-      <Header></Header>
       <div className="relative w-full h-[550px]">
         <Image
           src={

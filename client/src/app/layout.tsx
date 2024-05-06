@@ -3,6 +3,8 @@ import { Nunito } from "next/font/google";
 import "./globals.css";
 import { AppProvider } from "./AppProvider";
 import ShowModal from "../components/modals/ShowModal";
+import Header from "@/components/component/Header/Header";
+import Footer from "@/components/component/Footer/Footer";
 const nunito = Nunito({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -19,8 +21,10 @@ export default async function RootLayout({
     <html lang="en">
       <body className={nunito.className}>
         <AppProvider>
+          <Header />
           {children}
           <ShowModal />
+          <Footer />
         </AppProvider>
       </body>
     </html>

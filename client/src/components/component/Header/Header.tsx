@@ -6,31 +6,45 @@ import CustomButton from "@/components/ui/CustomButton";
 import { useEffect, useState } from "react";
 import useDebounce from "@/hooks/useDebounce";
 import { useAppContext } from "@/app/AppProvider";
+import { useRouter, usePathname } from "next/navigation";
 export default function Header() {
-  const [onTop, setOnTop] = useState(true);
+  const pathname = usePathname();
+  const router = useRouter();
+  const [onTop, setOnTop] = useState(false);
   const debounce = useDebounce(onTop, 500);
   const { isAuthenticated } = useAppContext();
   useEffect(() => {
     function handleScroll() {
-      setOnTop(window.scrollY === 0);
+      if (pathname === "/") {
+        setOnTop(window.scrollY === 0);
+      }
     }
-
+    if (pathname === "/") {
+      setOnTop(true);
+    } else {
+      setOnTop(false);
+    }
     // Add event listener when the component mounts
-    window.addEventListener("scroll", handleScroll);
+    if (pathname === "/") window.addEventListener("scroll", handleScroll);
 
     // Remove event listener when the component unmounts
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [pathname]);
   return (
     <div
       className={`${
         !onTop && "bg-white"
-      } transition-all px-24 z-20  fixed top-0 left-0 pt-2 right-0`}
+      } transition-all pb-2 px-24 z-20  fixed top-0 left-0 pt-2 right-0`}
     >
       <div className="flex  items-center justify-between ">
-        <div className="flex  justify-center items-center">
+        <div
+          onClick={() => {
+            router.push("/");
+          }}
+          className="flex cursor-pointer justify-center items-center"
+        >
           <Image
             alt="logo"
             src={"/logo.png"}
@@ -111,6 +125,9 @@ export default function Header() {
           Hotels
         </Button>
         <Button
+          onClick={() => {
+            router.push("/flights");
+          }}
           variant={onTop ? "transparent" : "outline"}
           className={`${
             onTop

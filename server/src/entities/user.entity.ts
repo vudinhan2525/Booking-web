@@ -5,10 +5,16 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({
+    charset: 'utf8',
+    collation: 'utf8_general_ci',
+  })
   firstName: string;
 
-  @Column()
+  @Column({
+    charset: 'utf8',
+    collation: 'utf8_general_ci',
+  })
   lastName: string;
 
   @Column({ unique: true })
@@ -22,10 +28,10 @@ export class User {
   @Column({ default: true })
   isActive: boolean;
 
-  @Column({ default: () => 'CURRENT_TIMESTAMP' })
+  @Column({ nullable: true })
   createdAt: Date;
 
-  @Column({ default: () => 'CURRENT_TIMESTAMP' })
+  @Column({ nullable: true })
   updatedAt: Date;
 
   @Column({ nullable: true })

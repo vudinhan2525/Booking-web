@@ -11,6 +11,8 @@ export default function FlightCart({ flight }: { flight: IFlight }) {
           src="https://shopcartimg2.blob.core.windows.net/shopcartctn/tphcm.webp"
           alt="pic"
           fill
+          quality={70}
+          sizes="100%"
           priority
           style={{ objectFit: "cover", objectPosition: "center" }}
         />

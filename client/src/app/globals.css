@@ -75,8 +75,15 @@ html *::-webkit-scrollbar-track {
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
   }
+  .bg-flight-ct {
+    background: rgb(39, 111, 208);
+    background: linear-gradient(
+      221deg,
+      rgba(39, 111, 208, 1) 30%,
+      rgba(56, 166, 231, 0.9676093948321516) 66%
+    );
+  }
 }
-
 @layer base {
   * {
     @apply border-border;

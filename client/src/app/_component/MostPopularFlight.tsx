@@ -23,7 +23,7 @@ export default function MostPopularFlight() {
   };
   return (
     <div className="mt-4">
-      <div className="flex gap-2">
+      <div className="flex py-1 gap-2">
         {["Vietnam", "Thailand", "Singapore", "South Korea"].map((el, idx) => {
           return (
             <Button

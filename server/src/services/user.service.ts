@@ -24,11 +24,15 @@ export class UserService {
       throw new HttpException('Email already exists', HttpStatus.BAD_REQUEST);
     }
     const hashedPassword = await bcrypt.hash(body.password, 10);
+    const now = new Date();
+    const formattedDateTime = now.toISOString().slice(0, 19).replace('T', ' ');
     const newUser = this.usersRepository.create({
       firstName: body.firstName,
       lastName: body.lastName,
       email: body.email,
       password: hashedPassword,
+      createdAt: formattedDateTime,
+      updatedAt: formattedDateTime,
     });
     const savedUser = await this.usersRepository.save(newUser);
     // Generate JWT token

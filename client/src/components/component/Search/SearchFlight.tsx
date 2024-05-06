@@ -12,16 +12,36 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 
-export default function SearchFlight() {
+export default function SearchFlight({
+  fromFlightPage,
+}: {
+  fromFlightPage: boolean;
+}) {
   const [isRoundTrip, setIsRoundTrip] = useState(false);
   return (
-    <div className="flex animate-fadeIn py-4 mx-12 gap-20 px-4">
+    <div
+      className={`${
+        fromFlightPage
+          ? "bg-white border-[1px] rounded-lg border-primary-color px-8"
+          : "mx-12 px-4"
+      } flex animate-fadeIn  py-4 gap-20 `}
+    >
       <div className="basis-[55%]">
         <div className="flex justify-center gap-4 items-end">
           <div className="basis-[46%]">
-            <p className="text-gray-200 mb-2 font-semibold">From</p>
+            <p
+              className={`${
+                fromFlightPage ? "text-gray-800" : "text-gray-200"
+              }  mb-2 font-semibold`}
+            >
+              From
+            </p>
             <div className="w-full flex items-center relative">
-              <input className="pointer-events-none w-full outline-none pr-4 pl-10 py-3 rounded-xl"></input>
+              <input
+                className={`${
+                  fromFlightPage ? "border-[1px] border-gray-400" : ""
+                } pointer-events-none w-full outline-none pr-4 pl-10 py-3 rounded-xl`}
+              ></input>
               <div className="top-[50%] translate-y-[-50%] left-[12px] absolute">
                 <FontAwesomeIcon
                   icon={faPlaneDeparture}
@@ -37,9 +57,19 @@ export default function SearchFlight() {
             />
           </div>
           <div className="basis-[46%]">
-            <p className="text-gray-200 mb-2 font-semibold">To</p>
+            <p
+              className={`${
+                fromFlightPage ? "text-gray-800" : "text-gray-200"
+              }  mb-2 font-semibold`}
+            >
+              To
+            </p>
             <div className="w-full flex items-center relative">
-              <input className="pointer-events-none w-full outline-none pr-4 pl-10 py-3 rounded-xl"></input>
+              <input
+                className={`${
+                  fromFlightPage ? "border-[1px] border-gray-400" : ""
+                } pointer-events-none w-full outline-none pr-4 pl-10 py-3 rounded-xl`}
+              ></input>
               <div className="top-[50%] translate-y-[-50%] left-[12px] absolute">
                 <FontAwesomeIcon
                   icon={faPlaneArrival}
@@ -51,9 +81,19 @@ export default function SearchFlight() {
         </div>
         <div className="flex mt-4 justify-between gap-4 items-end">
           <div className="basis-[46%]">
-            <p className="text-gray-200 mb-2 font-semibold">Depature Date</p>
+            <p
+              className={`${
+                fromFlightPage ? "text-gray-800" : "text-gray-200"
+              }  mb-2 font-semibold`}
+            >
+              Depature Date
+            </p>
             <div className="w-full flex items-center relative">
-              <input className="pointer-events-none w-full outline-none pr-4 pl-10 py-3 rounded-xl"></input>
+              <input
+                className={`${
+                  fromFlightPage ? "border-[1px] border-gray-400" : ""
+                } pointer-events-none w-full outline-none pr-4 pl-10 py-3 rounded-xl`}
+              ></input>
               <div className="top-[50%] left-[12px] translate-y-[-50%] absolute">
                 <FontAwesomeIcon
                   icon={faCalendarDays}
@@ -75,16 +115,22 @@ export default function SearchFlight() {
                 htmlFor="terms"
                 className="leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
-                <p className="cursor-pointer text-gray-200 font-semibold">
+                <p
+                  className={`${
+                    isRoundTrip
+                      ? `${fromFlightPage ? "text-gray-800" : "text-gray-200"} `
+                      : "text-gray-200"
+                  } cursor-pointer  font-semibold`}
+                >
                   Return Date
                 </p>
               </label>
             </div>
             <div className="w-full flex items-center relative">
               <input
-                className={`${
-                  !isRoundTrip && "bg-gray-300"
-                } w-full pointer-events-none outline-none pr-4 pl-10 py-3 rounded-xl`}
+                className={`${!isRoundTrip && "bg-gray-300"} w-full ${
+                  fromFlightPage && "border-[1px] border-gray-400"
+                } pointer-events-none outline-none pr-4 pl-10 py-3 rounded-xl`}
               ></input>
               <div className="top-[50%] left-[12px] translate-y-[-50%] absolute">
                 <FontAwesomeIcon
@@ -99,8 +145,18 @@ export default function SearchFlight() {
         </div>
       </div>
       <div className="basis-[45%]">
-        <p className="text-gray-200 mb-2 font-semibold">No. of Passengers</p>
-        <div className="flex gap-2 px-4 rounded-xl py-3 bg-white">
+        <p
+          className={`${
+            fromFlightPage ? "text-gray-800" : "text-gray-200"
+          }  mb-2 font-semibold`}
+        >
+          No. of Passengers
+        </p>
+        <div
+          className={`${
+            fromFlightPage && "border-[1px] border-gray-400"
+          } flex gap-2 px-4 rounded-xl py-3 bg-white`}
+        >
           <div>
             <FontAwesomeIcon
               icon={faUserGroup}
@@ -110,8 +166,18 @@ export default function SearchFlight() {
           <p>1 Adult, 0 Child, 0 Infant</p>
         </div>
         <div className="mt-4">
-          <p className="text-gray-200 mb-2 font-semibold">Seat class</p>
-          <div className="flex items-center gap-2 px-4 rounded-xl py-3 bg-white">
+          <p
+            className={`${
+              fromFlightPage ? "text-gray-800" : "text-gray-200"
+            }  mb-2 font-semibold`}
+          >
+            Seat class
+          </p>
+          <div
+            className={`${
+              fromFlightPage && "border-[1px] border-gray-400"
+            } inline-flex items-center gap-2 px-4 rounded-xl py-3 bg-white`}
+          >
             <div>
               <SeatAirPlaneIcons width="22px" height="22px" />
             </div>

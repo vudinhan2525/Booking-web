@@ -49,7 +49,9 @@ export default function SearchForm() {
         })}
       </div>
       <div>
-        {searchOpt[optSelected].title === "Flights" && <SearchFlight />}
+        {searchOpt[optSelected].title === "Flights" && (
+          <SearchFlight fromFlightPage={false} />
+        )}
         {searchOpt[optSelected].title === "Hotels" && <SearchHotels />}
       </div>
     </div>
