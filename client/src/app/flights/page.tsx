@@ -18,6 +18,7 @@ export default function FlightSearchPage() {
               fill
               sizes="100%"
               style={{ objectFit: "contain" }}
+              className="select-none"
             />
           </div>
         </div>
@@ -29,7 +30,7 @@ export default function FlightSearchPage() {
           quality={100}
           width={300}
           height={300}
-          className="absolute bottom-[-10%] right-[32%]"
+          className="select-none absolute bottom-[-10%] right-[32%]"
         />
         <Image
           src={
@@ -39,7 +40,7 @@ export default function FlightSearchPage() {
           quality={100}
           width={300}
           height={300}
-          className="absolute top-[0] right-[0]"
+          className="select-none absolute top-[0] right-[0]"
         />
         <div className="absolute top-[30%] text-4xl max-w-[350px] left-[10%] font-bold text-white">
           <TypingText />

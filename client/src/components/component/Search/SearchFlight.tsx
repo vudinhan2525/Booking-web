@@ -1,6 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+
 import { SeatAirPlaneIcons } from "@/lib/icon";
 import {
   faCalendarDays,
@@ -10,14 +11,25 @@ import {
   faUserGroup,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
+import { Combobox } from "./Combobox";
+import { airports } from "@/lib/dataAir";
+import { toDayMonthYear } from "@/utils/convertTime";
+const initialFrom = {
+  name: "",
+  nameAirport: "",
+};
 export default function SearchFlight({
   fromFlightPage,
 }: {
   fromFlightPage: boolean;
 }) {
+  const [airportFrom, setAirportFrom] = useState(initialFrom);
+  const [airportTo, setAirportTo] = useState(initialFrom);
+  const [departureTime, setDepatureTime] = useState("");
   const [isRoundTrip, setIsRoundTrip] = useState(false);
+  const [arrivalTime, setArrivalTime] = useState("");
+
   return (
     <div
       className={`${
@@ -36,24 +48,44 @@ export default function SearchFlight({
             >
               From
             </p>
-            <div className="w-full flex items-center relative">
-              <input
-                className={`${
-                  fromFlightPage ? "border-[1px] border-gray-400" : ""
-                } pointer-events-none w-full outline-none pr-4 pl-10 py-3 rounded-xl`}
-              ></input>
-              <div className="top-[50%] translate-y-[-50%] left-[12px] absolute">
-                <FontAwesomeIcon
-                  icon={faPlaneDeparture}
-                  className=" text-primary-color "
-                />
-              </div>
-            </div>
+            <Combobox
+              isAirportList={true}
+              frameworks={airports}
+              setValue={setAirportFrom}
+              value={airportFrom}
+              child={
+                <div className="w-full flex items-center relative cursor-pointer">
+                  <div
+                    className={`${
+                      fromFlightPage ? "border-[1px] border-gray-400" : ""
+                    } pointer-events-none w-full bg-white outline-none pr-4 pl-10 py-3 rounded-xl`}
+                  >
+                    {airportFrom.name ? airportFrom.name : "Select airport"}
+                  </div>
+                  <div className="top-[50%] translate-y-[-50%] left-[12px] absolute">
+                    <FontAwesomeIcon
+                      icon={faPlaneDeparture}
+                      className=" text-primary-color "
+                    />
+                  </div>
+                </div>
+              }
+            />
           </div>
-          <div className="cursor-pointer flex justify-center basis-[8%]">
+          <div
+            onClick={() => {
+              const q = airportFrom;
+              const r = airportTo;
+              setAirportFrom(r);
+              setAirportTo(q);
+            }}
+            className="cursor-pointer flex justify-center basis-[8%]"
+          >
             <FontAwesomeIcon
               icon={faRotate}
-              className="text-white px-3 py-3 rounded-full hover:text-primary-color hover:bg-gray-300 transition-all text-xl"
+              className={`${
+                fromFlightPage ? "text-gray-700" : "text-white"
+              } px-3 py-3 rounded-full hover:text-primary-color hover:bg-gray-300 transition-all text-xl`}
             />
           </div>
           <div className="basis-[46%]">
@@ -64,19 +96,29 @@ export default function SearchFlight({
             >
               To
             </p>
-            <div className="w-full flex items-center relative">
-              <input
-                className={`${
-                  fromFlightPage ? "border-[1px] border-gray-400" : ""
-                } pointer-events-none w-full outline-none pr-4 pl-10 py-3 rounded-xl`}
-              ></input>
-              <div className="top-[50%] translate-y-[-50%] left-[12px] absolute">
-                <FontAwesomeIcon
-                  icon={faPlaneArrival}
-                  className=" text-primary-color "
-                />
-              </div>
-            </div>
+            <Combobox
+              isAirportList={true}
+              frameworks={airports}
+              setValue={setAirportTo}
+              value={airportTo}
+              child={
+                <div className="w-full flex items-center relative cursor-pointer">
+                  <div
+                    className={`${
+                      fromFlightPage ? "border-[1px] border-gray-400" : ""
+                    } pointer-events-none w-full bg-white outline-none pr-4 pl-10 py-3 rounded-xl`}
+                  >
+                    {airportTo.name ? airportTo.name : "Select airport"}
+                  </div>
+                  <div className="top-[50%] translate-y-[-50%] left-[12px] absolute">
+                    <FontAwesomeIcon
+                      icon={faPlaneArrival}
+                      className=" text-primary-color "
+                    />
+                  </div>
+                </div>
+              }
+            />
           </div>
         </div>
         <div className="flex mt-4 justify-between gap-4 items-end">
@@ -88,19 +130,30 @@ export default function SearchFlight({
             >
               Depature Date
             </p>
-            <div className="w-full flex items-center relative">
-              <input
-                className={`${
-                  fromFlightPage ? "border-[1px] border-gray-400" : ""
-                } pointer-events-none w-full outline-none pr-4 pl-10 py-3 rounded-xl`}
-              ></input>
-              <div className="top-[50%] left-[12px] translate-y-[-50%] absolute">
-                <FontAwesomeIcon
-                  icon={faCalendarDays}
-                  className=" text-primary-color"
-                />
-              </div>
-            </div>
+            <Combobox
+              isCalendar={true}
+              value={departureTime}
+              setValue={setDepatureTime}
+              child={
+                <div className="w-full cursor-pointer flex items-center relative">
+                  <div
+                    className={`${
+                      fromFlightPage ? "border-[1px] border-gray-400" : ""
+                    } pointer-events-none bg-white w-full outline-none pr-4 pl-10 py-3 rounded-xl`}
+                  >
+                    {departureTime !== ""
+                      ? toDayMonthYear(departureTime)
+                      : "Select date"}
+                  </div>
+                  <div className="top-[50%] left-[12px] translate-y-[-50%] absolute">
+                    <FontAwesomeIcon
+                      icon={faCalendarDays}
+                      className=" text-primary-color"
+                    />
+                  </div>
+                </div>
+              }
+            />
           </div>
           <div className="basis-[8%]"></div>
           <div className="basis-[46%]">
@@ -126,21 +179,33 @@ export default function SearchFlight({
                 </p>
               </label>
             </div>
-            <div className="w-full flex items-center relative">
-              <input
-                className={`${!isRoundTrip && "bg-gray-300"} w-full ${
-                  fromFlightPage && "border-[1px] border-gray-400"
-                } pointer-events-none outline-none pr-4 pl-10 py-3 rounded-xl`}
-              ></input>
-              <div className="top-[50%] left-[12px] translate-y-[-50%] absolute">
-                <FontAwesomeIcon
-                  icon={faCalendarDays}
-                  className={`${
-                    isRoundTrip ? "text-primary-color" : "text-gray-500"
-                  }`}
-                />
-              </div>
-            </div>
+            <Combobox
+              isCalendar={true}
+              value={arrivalTime}
+              setValue={setArrivalTime}
+              departureDate={departureTime}
+              child={
+                <div className="w-full cursor-pointer flex items-center relative">
+                  <div
+                    className={`${!isRoundTrip && "bg-gray-300"} w-full ${
+                      fromFlightPage && "border-[1px] border-gray-400"
+                    } pointer-events-none outline-none pr-4 pl-10 py-3 rounded-xl`}
+                  >
+                    {arrivalTime !== ""
+                      ? toDayMonthYear(arrivalTime)
+                      : "Select date"}
+                  </div>
+                  <div className="top-[50%] left-[12px] translate-y-[-50%] absolute">
+                    <FontAwesomeIcon
+                      icon={faCalendarDays}
+                      className={`${
+                        isRoundTrip ? "text-primary-color" : "text-gray-500"
+                      }`}
+                    />
+                  </div>
+                </div>
+              }
+            />
           </div>
         </div>
       </div>

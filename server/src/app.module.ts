@@ -12,6 +12,8 @@ import { User } from './entities/user.entity';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './modules/auth.module';
 import { AuthMiddleWare } from './middlewares/auth.middleware';
+import { Flight } from './entities/flight.entity';
+import { FlightModule } from './modules/flight.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -22,12 +24,13 @@ import { AuthMiddleWare } from './middlewares/auth.middleware';
       username: process.env.MYSQL_USERNAME,
       password: process.env.MYSQL_PASSWORD,
       database: process.env.MYSQL_DATABASENAME,
-      entities: [User],
+      entities: [User, Flight],
       synchronize: true,
     }),
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, Flight]),
     UserModule,
     AuthModule,
+    FlightModule,
   ],
   controllers: [AppController],
   providers: [AppService],
