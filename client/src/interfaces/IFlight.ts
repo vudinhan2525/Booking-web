@@ -4,6 +4,8 @@ export interface IFlight {
   toAirport: string;
   from: string;
   to: string;
+  fromCode: string;
+  toCode: string;
   airline: string;
   flightCode: string;
   seatType: string;
@@ -11,4 +13,5 @@ export interface IFlight {
   departureTime: string;
   arrivalTime: string;
   price: number;
+  seatLeft: number;
 }

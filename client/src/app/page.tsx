@@ -18,7 +18,7 @@ export default function Home() {
           priority
           style={{ objectFit: "cover", objectPosition: "center" }}
         ></Image>
-        <div className="absolute px-24 top-[50%] translate-y-[-42%] left-[50%] translate-x-[-50%] w-full h-[400px] ">
+        <div className="absolute px-24 top-[50%] z-[10] translate-y-[-42%] left-[50%] translate-x-[-50%] w-full h-[400px] ">
           <header className="text-center mt-4 mb-4 text-4xl font-bold text-white">
             The world is yours to explore.
           </header>

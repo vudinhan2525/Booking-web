@@ -12,12 +12,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
-import { Combobox } from "./Combobox";
+import { Combobox } from "./ComboBox";
 import { airports } from "@/lib/dataAir";
 import { toDayMonthYear } from "@/utils/convertTime";
 const initialFrom = {
   name: "",
   nameAirport: "",
+  code: "",
 };
 export default function SearchFlight({
   fromFlightPage,
@@ -29,7 +30,12 @@ export default function SearchFlight({
   const [departureTime, setDepatureTime] = useState("");
   const [isRoundTrip, setIsRoundTrip] = useState(false);
   const [arrivalTime, setArrivalTime] = useState("");
-
+  const [seatType, setSeatType] = useState({ name: "Economy" });
+  const [numberPassenger, setNumberPassenger] = useState({
+    adult: 1,
+    child: 0,
+    infant: 0,
+  });
   return (
     <div
       className={`${
@@ -217,19 +223,27 @@ export default function SearchFlight({
         >
           No. of Passengers
         </p>
-        <div
-          className={`${
-            fromFlightPage && "border-[1px] border-gray-400"
-          } flex gap-2 px-4 rounded-xl py-3 bg-white`}
-        >
-          <div>
-            <FontAwesomeIcon
-              icon={faUserGroup}
-              className="text-primary-color"
-            />
-          </div>
-          <p>1 Adult, 0 Child, 0 Infant</p>
-        </div>
+        <Combobox
+          isSetNumberPassenger={true}
+          setValue={setNumberPassenger}
+          value={numberPassenger}
+          child={
+            <div
+              className={`${
+                fromFlightPage && "border-[1px] border-gray-400"
+              } flex cursor-pointer gap-2 px-4 rounded-xl py-3 bg-white`}
+            >
+              <div>
+                <FontAwesomeIcon
+                  icon={faUserGroup}
+                  className="text-primary-color"
+                />
+              </div>
+              <p>{`${numberPassenger.adult} Adult, ${numberPassenger.child} Child, ${numberPassenger.infant} Infant`}</p>
+            </div>
+          }
+        />
+
         <div className="mt-4">
           <p
             className={`${
@@ -238,16 +252,29 @@ export default function SearchFlight({
           >
             Seat class
           </p>
-          <div
-            className={`${
-              fromFlightPage && "border-[1px] border-gray-400"
-            } inline-flex items-center gap-2 px-4 rounded-xl py-3 bg-white`}
-          >
-            <div>
-              <SeatAirPlaneIcons width="22px" height="22px" />
-            </div>
-            <p>Economy</p>
-          </div>
+
+          <Combobox
+            isSeatList={true}
+            frameworks={[
+              { name: "Economy" },
+              { name: "Business" },
+              { name: "First Class" },
+            ]}
+            setValue={setSeatType}
+            value={seatType}
+            child={
+              <div
+                className={`${
+                  fromFlightPage && "border-[1px] border-gray-400"
+                } min-w-[150px] cursor-pointer inline-flex items-center gap-2 px-4 rounded-xl py-3 bg-white`}
+              >
+                <div>
+                  <SeatAirPlaneIcons width="22px" height="22px" />
+                </div>
+                <p>{seatType.name}</p>
+              </div>
+            }
+          />
         </div>
         <Button
           type="submit"

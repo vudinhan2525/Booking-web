@@ -16,6 +16,8 @@ export class FlightService {
         toAirport: body[i].toAirport,
         from: body[i].from,
         to: body[i].to,
+        fromCode: body[i].fromCode,
+        toCode: body[i].toCode,
         airline: body[i].airline,
         flightCode: body[i].flightCode,
         seatType: body[i].seatType,
@@ -23,6 +25,7 @@ export class FlightService {
         departureTime: body[i].departureTime,
         arrivalTime: body[i].arrivalTime,
         price: body[i].price,
+        seatLeft: body[i].seatLeft,
       });
       await this.flightRepository.save(newFlight);
     }

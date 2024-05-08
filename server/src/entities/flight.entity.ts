@@ -12,6 +12,10 @@ export class Flight {
   @Column()
   to: string;
   @Column()
+  fromCode: string;
+  @Column()
+  toCode: string;
+  @Column()
   airline: string;
   @Column()
   flightCode: string;
@@ -25,4 +29,6 @@ export class Flight {
   arrivalTime: string;
   @Column()
   price: number;
+  @Column()
+  seatLeft: number;
 }

@@ -16,6 +16,12 @@ export class FlightBody {
   to: string;
   @IsNotEmpty()
   @Expose()
+  fromCode: string;
+  @IsNotEmpty()
+  @Expose()
+  toCode: string;
+  @IsNotEmpty()
+  @Expose()
   airline: string;
   @IsNotEmpty()
   @Expose()
@@ -35,4 +41,7 @@ export class FlightBody {
   @IsNotEmpty()
   @Expose()
   price: number;
+  @IsNotEmpty()
+  @Expose()
+  seatLeft: number;
 }
