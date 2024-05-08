@@ -3,7 +3,7 @@ import React from "react";
 import TypingText from "./_component/TypingText";
 import SearchFlight from "@/components/component/Search/SearchFlight";
 
-export default function FlightSearchPage() {
+export default function FlightSearchFormPage() {
   return (
     <div className=" mt-28">
       <div className="w-[full] relative h-[370px] bg-flight-ct">

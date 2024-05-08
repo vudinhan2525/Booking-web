@@ -83,6 +83,12 @@ html *::-webkit-scrollbar-track {
       rgba(56, 166, 231, 0.9676093948321516) 66%
     );
   }
+  .slider .thumb {
+    @apply h-6 w-6 rounded-full  border-[3px] border-gray-100 bg-primary-color  outline-0 top-[-10px] cursor-pointer;
+  }
+  .slider .track-1 {
+    @apply h-[4px] bg-primary-color;
+  }
 }
 @layer base {
   * {

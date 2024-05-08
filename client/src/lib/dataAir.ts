@@ -15,3 +15,21 @@ export const airports = [
     code: "DAD",
   },
 ];
+export const airlines = [
+  {
+    label: "Vietnam Airlines",
+    link: "https://shopcartimg2.blob.core.windows.net/shopcartctn/vietnamairlinelogo.jpg",
+  },
+  {
+    label: "VietJet Air",
+    link: "https://shopcartimg2.blob.core.windows.net/shopcartctn/vietjetlogo.jpg",
+  },
+  {
+    label: "Jetstar Pacific",
+    link: "https://shopcartimg2.blob.core.windows.net/shopcartctn/jetstarlogo.jpg",
+  },
+  {
+    label: "Bamboo Airways",
+    link: "https://shopcartimg2.blob.core.windows.net/shopcartctn/bambologo.jpg",
+  },
+];

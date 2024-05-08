@@ -13,6 +13,8 @@ export default function MostPopularFlight() {
     toAirport: "Noi Bai",
     from: "Ha Noi",
     to: "Ho Chi Minh",
+    fromCode: "HAN",
+    toCode: "SGN",
     airline: "Vietnam Airlines",
     seatType: "",
     airplane: "",
@@ -20,6 +22,7 @@ export default function MostPopularFlight() {
     departureTime: "2024-12-10T10:45:00.000Z",
     arrivalTime: "2024-12-10T12:30:00.000Z",
     price: 1259000,
+    seatLeft: 400,
   };
   return (
     <div className="mt-4">

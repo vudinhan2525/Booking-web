@@ -34,9 +34,9 @@ export default function Header() {
   }, [pathname]);
   return (
     <div
-      className={`${
-        !onTop && "bg-white"
-      } transition-all pb-2 px-24 z-20  fixed top-0 left-0 pt-2 right-0`}
+      className={`${!onTop && "bg-white"} transition-all pb-2 px-24 z-20 ${
+        pathname !== "/flights/search" && "fixed"
+      } top-0 left-0 pt-2 right-0 `}
     >
       <div className="flex  items-center justify-between ">
         <div

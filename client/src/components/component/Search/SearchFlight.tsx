@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-
+import { useRouter } from "next/navigation";
 import { SeatAirPlaneIcons } from "@/lib/icon";
 import {
   faCalendarDays,
@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import { Combobox } from "./ComboBox";
 import { airports } from "@/lib/dataAir";
 import { toDayMonthYear } from "@/utils/convertTime";
+import objectToQueryString from "@/utils/convertToQueryString";
 const initialFrom = {
   name: "",
   nameAirport: "",
@@ -30,12 +31,24 @@ export default function SearchFlight({
   const [departureTime, setDepatureTime] = useState("");
   const [isRoundTrip, setIsRoundTrip] = useState(false);
   const [arrivalTime, setArrivalTime] = useState("");
+  const router = useRouter();
   const [seatType, setSeatType] = useState({ name: "Economy" });
   const [numberPassenger, setNumberPassenger] = useState({
     adult: 1,
     child: 0,
     infant: 0,
   });
+
+  const handleNavigate = () => {
+    const obj: any = {};
+    if (airportFrom.code) {
+      obj.from = airportFrom.code;
+    }
+    if (airportTo.code) {
+      obj.to = airportTo.code;
+    }
+    router.push("/flights/search?" + objectToQueryString(obj));
+  };
   return (
     <div
       className={`${
@@ -278,6 +291,7 @@ export default function SearchFlight({
         </div>
         <Button
           type="submit"
+          onClick={() => handleNavigate()}
           className="mt-4 w-full text-[16px] bg-orange-600 font-bold hover:bg-orange-700 transition-all"
         >
           Search flights
