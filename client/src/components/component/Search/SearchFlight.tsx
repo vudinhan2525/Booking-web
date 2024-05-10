@@ -47,6 +47,13 @@ export default function SearchFlight({
     if (airportTo.code) {
       obj.to = airportTo.code;
     }
+    console.log(departureTime);
+    if (departureTime) {
+      obj.departureTime = new Date(departureTime).toISOString().split("T")[0];
+    }
+    if (arrivalTime && isRoundTrip) {
+      obj.arrivalTime = new Date(arrivalTime).toISOString().split("T")[0];
+    }
     router.push("/flights/search?" + objectToQueryString(obj));
   };
   return (

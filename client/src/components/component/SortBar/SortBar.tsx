@@ -64,6 +64,7 @@ export default function SortBar() {
                           quality={100}
                           src={el.link}
                           fill
+                          sizes="100%"
                           style={{ objectFit: "contain" }}
                         />
                       </div>
