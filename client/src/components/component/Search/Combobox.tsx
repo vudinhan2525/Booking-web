@@ -141,7 +141,7 @@ export function Combobox({
                   <div
                     onClick={() => {
                       setValue((prev: any) => {
-                        if (prev.adult <= 0) return prev;
+                        if (prev.adult <= 1) return prev;
                         return { ...prev, adult: prev.adult - 1 };
                       });
                     }}

@@ -34,14 +34,39 @@ export class FlightBody {
   airplane: string;
   @IsNotEmpty()
   @Expose()
-  departureTime: string;
+  departureTime: Date;
   @IsNotEmpty()
   @Expose()
-  arrivalTime: string;
+  arrivalTime: Date;
   @IsNotEmpty()
   @Expose()
   price: number;
   @IsNotEmpty()
   @Expose()
   seatLeft: number;
+}
+export class FlightQuery {
+  @Expose()
+  from: string;
+
+  @Expose()
+  to: string;
+
+  @Expose()
+  departureTime: string;
+
+  @Expose()
+  arrivalTime: string;
+
+  @Expose()
+  numberAdult: number;
+
+  @Expose()
+  numberChild: number;
+
+  @Expose()
+  numberInfant: number;
+
+  @Expose()
+  seatType: string;
 }

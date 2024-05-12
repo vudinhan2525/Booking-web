@@ -1,6 +1,14 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { IFlight } from "@/interfaces/IFlight";
+import { airlines } from "@/lib/dataAir";
 import { RefundableIcon, RescheduleIcon } from "@/lib/icon";
+import {
+  calculateTimeDifference,
+  convertTime2,
+  formatNumber,
+  isoStringToMonthDay,
+} from "@/utils/convertTime";
 import {
   faCheckCircle,
   faCircleInfo,
@@ -8,10 +16,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-export default function FlightItem() {
+export default function FlightItem({ flight }: { flight: IFlight }) {
   const [opt, setOpt] = useState("");
+  console.log(flight);
   return (
     <div className="bg-white  transition-all hover:border-primary-color border-[1px] border-transparent cursor-pointer pb-4 w-full mt-4 shadow-md rounded-xl">
       <div
@@ -30,22 +39,29 @@ export default function FlightItem() {
                 alt="logo"
                 quality={100}
                 src={
-                  "https://shopcartimg2.blob.core.windows.net/shopcartctn/vietjetlogo.jpg"
+                  "https://shopcartimg2.blob.core.windows.net/shopcartctn/vietnamairlinelogo.jpg"
                 }
                 fill
                 sizes="100%"
                 style={{ objectFit: "contain" }}
               />
             </div>
-            <p>Vietjet Air</p>
+            <p>{flight.airline}</p>
           </div>
           <div className="basis-[25%] flex gap-3 items-center">
             <div>
-              <p>21:45</p>
-              <p className="text-xs text-gray-700 text-center">SGN</p>
+              <p>{convertTime2(flight.departureTime)}</p>
+              <p className="text-xs text-gray-700 text-center">
+                {flight.fromCode}
+              </p>
             </div>
             <div className="mt-[-12px] flex flex-col gap-1  items-center">
-              <div className="text-center text-xs text-gray-700">1h 20m</div>
+              <div className="text-center text-xs text-gray-700">
+                {calculateTimeDifference(
+                  flight.departureTime,
+                  flight.arrivalTime
+                )}
+              </div>
               <div className="w-[40px] relative h-[1px] bg-gray-400">
                 <div className="absolute w-[8px] h-[8px] rounded-full bg-white border-[1px] border-gray-400 translate-y-[-3.5px]"></div>
                 <div className="absolute w-[8px] h-[8px] rounded-full bg-gray-400 right-0 translate-y-[-3.5px]"></div>
@@ -53,12 +69,16 @@ export default function FlightItem() {
               <div className="text-center text-xs text-gray-700">Direct</div>
             </div>
             <div>
-              <p>23:05</p>
-              <p className="text-xs text-gray-700 text-center">DAD</p>
+              <p>{convertTime2(flight.arrivalTime)}</p>
+              <p className="text-xs text-gray-700 text-center">
+                {flight.toCode}
+              </p>
             </div>
           </div>
           <div className="basis-[25%] mr-[10px] flex justify-end gap-[2px]">
-            <p className="text-orange-600 font-bold">1.029.715 VND</p>
+            <p className="text-orange-600 font-bold">{`${formatNumber(
+              flight.price
+            )} VND`}</p>
             <p className="text-xs mt-[5px] text-gray-500">/pax</p>
           </div>
         </div>
@@ -142,31 +162,40 @@ export default function FlightItem() {
         <div className="pt-6 py-6 bg-[#F7F9FA] px-10 animate-fadeIn flex gap-4">
           <div className="flex flex-col justify-between">
             <div>
-              <p className="text-sm">21:45</p>
-              <p className="text-xs text-gray-700">Nov 28</p>
+              <p className="text-sm">{convertTime2(flight.departureTime)}</p>
+              <p className="text-xs text-gray-700">
+                {isoStringToMonthDay(flight.departureTime)}
+              </p>
             </div>
-            <p className="text-xs text-gray-700">1h 20m</p>
+            <p className="text-xs text-gray-700">
+              {calculateTimeDifference(
+                flight.departureTime,
+                flight.arrivalTime
+              )}
+            </p>
             <div>
-              <p className="text-sm">23:05</p>
-              <p className="text-xs text-gray-700">Nov 28</p>
+              <p className="text-sm">{convertTime2(flight.arrivalTime)}</p>
+              <p className="text-xs text-gray-700">
+                {" "}
+                {isoStringToMonthDay(flight.arrivalTime)}
+              </p>
             </div>
           </div>
-          <div className="h-[250px] w-[1px] bg-gray-200 relative">
+          <div className="h-[200px] w-[1px] bg-gray-200 relative">
             <div className="w-[12px] h-[12px] translate-x-[-5.5px] bg-white border-primary-color border-[1px]  rounded-full absolute"></div>
             <div className="w-[12px] h-[12px] translate-x-[-5.5px] bg-primary-color bottom-0  rounded-full absolute"></div>
           </div>
           <div>
-            <p className="font-bold">Ho Chi Minh City (SGN)</p>
-            <p className="text-sm text-gray-700">Tansonnhat Intl</p>
+            <p className="font-bold">{`${flight.from} (${flight.fromCode})`}</p>
             <p className="text-sm text-gray-700">Terminal 1</p>
             <div className="flex items-center my-2">
-              <p className="text-sm">VietJet Air</p>
-              <div className="relative w-[30px] h-[30px]">
+              <p className="text-sm">{flight.airline}</p>
+              <div className="relative ml-2 w-[30px] h-[30px]">
                 <Image
                   alt="logo"
                   quality={100}
                   src={
-                    "https://shopcartimg2.blob.core.windows.net/shopcartctn/vietjetlogo.jpg"
+                    "https://shopcartimg2.blob.core.windows.net/shopcartctn/vietnamairlinelogo.jpg"
                   }
                   fill
                   sizes="100%"
@@ -174,7 +203,7 @@ export default function FlightItem() {
                 />
               </div>
             </div>
-            <p className="text-sm">VJ-636 • Promo</p>
+            <p className="text-sm">{`${flight.flightCode} • Promo`}</p>
             <div className="flex mt-3 gap-6">
               <div className="basis-[1/2] text-sm text-[15px] text-gray-500 flex items-start gap-3">
                 <div>
@@ -189,11 +218,11 @@ export default function FlightItem() {
                 <div>
                   <FontAwesomeIcon icon={faCircleInfo} className="text-lg" />
                 </div>
-                <p>Airbus A320-100/200</p>
+                <p>{flight.airplane}</p>
               </div>
             </div>
-            <p className="font-bold mt-4">Da Nang (DAD)</p>
-            <p className="text-sm text-gray-700">Da Nang Airport</p>
+            <p className="font-bold mt-4">{`${flight.to} (${flight.toCode})`}</p>
+            <p className="text-sm text-gray-700">{flight.toAirport}</p>
           </div>
         </div>
       )}
@@ -208,17 +237,17 @@ export default function FlightItem() {
                     alt="logo"
                     quality={100}
                     src={
-                      "https://shopcartimg2.blob.core.windows.net/shopcartctn/vietjetlogo.jpg"
+                      "https://shopcartimg2.blob.core.windows.net/shopcartctn/vietnamairlinelogo.jpg"
                     }
                     fill
                     sizes="100%"
                     style={{ objectFit: "contain" }}
                   />
                 </div>
-                <p>Vietjet Air</p>
+                <p>{flight.airline}</p>
               </div>
               <p className="text-xs text-gray-500 my-2">
-                Ho Chi Minh City → Da Nang • Promo
+                {`${flight.from} → ${flight.to} • Promo`}
               </p>
               <div className="flex items-center gap-2 mt-2">
                 <div className="mt-[-5px]">
@@ -242,7 +271,7 @@ export default function FlightItem() {
             <header className="font-bold mb-2">Price Details</header>
             <div className="px-4 py-3 shadow-md bg-white rounded-lg">
               <div className=" flex justify-between">
-                <p className="text-sm text-gray-700 ">Adult Basic Fare (x1)</p>
+                <p className="text-sm text-gray-700 ">{`Adult Basic Fare (x2)`}</p>
                 <p className="text-sm">1.029.715 VND</p>
               </div>
               <div className="flex mt-2 justify-between">

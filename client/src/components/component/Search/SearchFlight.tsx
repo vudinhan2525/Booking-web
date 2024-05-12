@@ -14,7 +14,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { Combobox } from "./ComboBox";
 import { airports } from "@/lib/dataAir";
-import { toDayMonthYear } from "@/utils/convertTime";
+import { convertTime, toDayMonthYear } from "@/utils/convertTime";
 import objectToQueryString from "@/utils/convertToQueryString";
 const initialFrom = {
   name: "",
@@ -38,7 +38,6 @@ export default function SearchFlight({
     child: 0,
     infant: 0,
   });
-
   const handleNavigate = () => {
     const obj: any = {};
     if (airportFrom.code) {
@@ -47,12 +46,23 @@ export default function SearchFlight({
     if (airportTo.code) {
       obj.to = airportTo.code;
     }
-    console.log(departureTime);
     if (departureTime) {
-      obj.departureTime = new Date(departureTime).toISOString().split("T")[0];
+      obj.departureTime = convertTime(departureTime);
     }
     if (arrivalTime && isRoundTrip) {
-      obj.arrivalTime = new Date(arrivalTime).toISOString().split("T")[0];
+      obj.arrivalTime = convertTime(arrivalTime);
+    }
+    if (numberPassenger) {
+      const res =
+        numberPassenger.adult +
+        "-" +
+        numberPassenger.child +
+        "-" +
+        numberPassenger.infant;
+      obj.numberPassenger = res;
+    }
+    if (seatType.name) {
+      obj.seatType = seatType.name;
     }
     router.push("/flights/search?" + objectToQueryString(obj));
   };

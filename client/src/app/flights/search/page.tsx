@@ -12,10 +12,51 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import FlightItem from "./_component/flightCart";
+import FlightItem from "./_component/flightItem";
+import { useEffect, useState } from "react";
+import flightApiRequest from "@/apiRequest/flight";
+import { IFlight } from "@/interfaces/IFlight";
 export default function SearchFlightPage() {
   const searchParams = useSearchParams();
-  console.log(getAllDatesOfMonth("2024-05-09T01:32:28.468Z"));
+  const [flightData, setFlightData] = useState<IFlight[]>();
+  useEffect(() => {
+    if (searchParams) {
+      getFlightList();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
+  const getFlightList = async () => {
+    const numberPassenger = searchParams.get("numberPassenger")?.split("-");
+    let obj: any = {};
+    if (searchParams.get("from")) {
+      obj.from = searchParams.get("from");
+    }
+    if (searchParams.get("to")) {
+      obj.to = searchParams.get("to");
+    }
+    if (searchParams.get("departureTime")) {
+      obj.departureTime = searchParams.get("departureTime") + "T00:00:00.000Z";
+    }
+    if (searchParams.get("arrivalTime")) {
+      obj.arrivalTime = searchParams.get("arrivalTime") + "T00:00:00.000Z";
+    }
+    if (searchParams.get("seatType")) {
+      obj.seatType = searchParams.get("seatType");
+    }
+    if (numberPassenger) {
+      obj.numberAdult = parseInt(numberPassenger[0]);
+      obj.numberChild = parseInt(numberPassenger[1]);
+      obj.numberInfant = parseInt(numberPassenger[2]);
+    }
+    try {
+      const response = await flightApiRequest.getFlights(obj);
+      if (response.status === "success") {
+        setFlightData(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="h-[2000px] bg-[#F7F9FA] border-t-[1px] flex gap-8 px-28 py-10">
       <div className="basis-[32%] ">
@@ -66,9 +107,10 @@ export default function SearchFlightPage() {
             </div>
           </div>
         </div>
-        <FlightItem />
-        <FlightItem />
-        <FlightItem />
+        {flightData &&
+          flightData.map((el, idx) => {
+            return <FlightItem flight={el} key={idx} />;
+          })}
       </div>
     </div>
   );

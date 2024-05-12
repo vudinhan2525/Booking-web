@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FlightBody } from 'src/dtos/flight/flightBody.dto';
+import { FlightBody, FlightQuery } from 'src/dtos/flight/flightBody.dto';
 import { Flight } from 'src/entities/flight.entity';
-import { Repository } from 'typeorm';
+import { Between, MoreThan, MoreThanOrEqual, Repository } from 'typeorm';
 @Injectable()
 export class FlightService {
   constructor(
@@ -47,5 +47,37 @@ export class FlightService {
     // } catch (error) {
     //   console.log(error);
     // }
+  }
+  async getFlight(body: FlightQuery) {
+    let totalPassenger = 0;
+    if (body.numberAdult) {
+      totalPassenger += body.numberAdult;
+    }
+    if (body.numberChild) {
+      totalPassenger += body.numberChild;
+    }
+    const obj: any = {
+      seatLeft: MoreThan(totalPassenger),
+    };
+    if (body.from) {
+      obj.fromCode = body.from;
+    }
+    if (body.to) {
+      obj.toCode = body.to;
+    }
+    if (body.departureTime) {
+      if (body.arrivalTime) {
+        obj.departureTime = Between(
+          new Date(body.departureTime),
+          new Date(body.arrivalTime),
+        );
+      } else {
+        obj.departureTime = MoreThanOrEqual(new Date(body.departureTime));
+      }
+    }
+    const flights = await this.flightRepository.find({
+      where: obj,
+    });
+    return flights;
   }
 }

@@ -24,9 +24,9 @@ export class Flight {
   @Column()
   airplane: string;
   @Column()
-  departureTime: string;
+  departureTime: Date;
   @Column()
-  arrivalTime: string;
+  arrivalTime: Date;
   @Column()
   price: number;
   @Column()
