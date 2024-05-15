@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { IFlight } from "@/interfaces/IFlight";
-import { airlines } from "@/lib/dataAir";
+import { getAirline } from "@/lib/dataAir";
 import { RefundableIcon, RescheduleIcon } from "@/lib/icon";
 import {
   calculateTimeDifference,
@@ -20,7 +20,6 @@ import React, { useEffect, useState } from "react";
 
 export default function FlightItem({ flight }: { flight: IFlight }) {
   const [opt, setOpt] = useState("");
-  console.log(flight);
   return (
     <div className="bg-white  transition-all hover:border-primary-color border-[1px] border-transparent cursor-pointer pb-4 w-full mt-4 shadow-md rounded-xl">
       <div
@@ -38,9 +37,7 @@ export default function FlightItem({ flight }: { flight: IFlight }) {
               <Image
                 alt="logo"
                 quality={100}
-                src={
-                  "https://shopcartimg2.blob.core.windows.net/shopcartctn/vietnamairlinelogo.jpg"
-                }
+                src={getAirline.get(flight.airline)}
                 fill
                 sizes="100%"
                 style={{ objectFit: "contain" }}
@@ -194,9 +191,7 @@ export default function FlightItem({ flight }: { flight: IFlight }) {
                 <Image
                   alt="logo"
                   quality={100}
-                  src={
-                    "https://shopcartimg2.blob.core.windows.net/shopcartctn/vietnamairlinelogo.jpg"
-                  }
+                  src={getAirline.get(flight.airline)}
                   fill
                   sizes="100%"
                   style={{ objectFit: "contain" }}
@@ -236,9 +231,7 @@ export default function FlightItem({ flight }: { flight: IFlight }) {
                   <Image
                     alt="logo"
                     quality={100}
-                    src={
-                      "https://shopcartimg2.blob.core.windows.net/shopcartctn/vietnamairlinelogo.jpg"
-                    }
+                    src={getAirline.get(flight.airline)}
                     fill
                     sizes="100%"
                     style={{ objectFit: "contain" }}
@@ -301,18 +294,16 @@ export default function FlightItem({ flight }: { flight: IFlight }) {
                     <Image
                       alt="logo"
                       quality={100}
-                      src={
-                        "https://shopcartimg2.blob.core.windows.net/shopcartctn/vietjetlogo.jpg"
-                      }
+                      src={getAirline.get(flight.airline)}
                       fill
                       sizes="100%"
                       style={{ objectFit: "contain" }}
                     />
                   </div>
-                  <p>Vietjet Air</p>
+                  <p>{flight.airline}</p>
                 </div>
                 <p className="text-xs mt-1 text-gray-500">
-                  Ho Chi Minh City → Da Nang
+                  {`${flight.from} → ${flight.to}`}
                 </p>
               </div>
               <p className="text-sm text-gray-500">Promo</p>
@@ -334,18 +325,16 @@ export default function FlightItem({ flight }: { flight: IFlight }) {
                     <Image
                       alt="logo"
                       quality={100}
-                      src={
-                        "https://shopcartimg2.blob.core.windows.net/shopcartctn/vietjetlogo.jpg"
-                      }
+                      src={getAirline.get(flight.airline)}
                       fill
                       sizes="100%"
                       style={{ objectFit: "contain" }}
                     />
                   </div>
-                  <p>Vietjet Air</p>
+                  <p>{flight.airline}</p>
                 </div>
                 <p className="text-xs mt-1 text-gray-500">
-                  Ho Chi Minh City → Da Nang
+                  {`${flight.from} → ${flight.to}`}
                 </p>
               </div>
               <p className="text-sm text-gray-500">Promo</p>

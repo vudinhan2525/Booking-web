@@ -95,3 +95,49 @@ export function isoStringToMonthDay(isoString: string) {
 
   return `${monthAbbreviation} ${day}`;
 }
+//return type like "Thu, 28 Nov"
+export function convertTime3(isoString: string): string {
+  // Khởi tạo đối tượng Date từ chuỗi ISO
+  const date = new Date(isoString);
+
+  // Mảng tên ngày trong tuần
+  const daysOfWeek: string[] = [
+    "Sun",
+    "Mon",
+    "Tue",
+    "Wed",
+    "Thu",
+    "Fri",
+    "Sat",
+  ];
+
+  // Mảng tên tháng
+  const monthsOfYear: string[] = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  // Lấy tên ngày trong tuần
+  const dayOfWeek: string = daysOfWeek[date.getUTCDay()];
+
+  // Lấy ngày
+  const dayOfMonth: number = date.getUTCDate();
+
+  // Lấy tên tháng
+  const month: string = monthsOfYear[date.getUTCMonth()];
+
+  // Tạo chuỗi định dạng theo yêu cầu
+  const formattedDate: string = `${dayOfWeek}, ${dayOfMonth} ${month}`;
+
+  return formattedDate;
+}

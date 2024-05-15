@@ -15,6 +15,38 @@ export const airports = [
     code: "DAD",
   },
 ];
+const getAirport = new Map();
+getAirport.set("HAN", {
+  nameAirport: "HAN - Noibai International Airport",
+  name: "Ha Noi",
+});
+getAirport.set("SGN", {
+  nameAirport: "SGN - Tan Son Nhat International Airport",
+  name: "Ho Chi Minh",
+});
+getAirport.set("DAD", {
+  nameAirport: "DAD - Da Nang Airport",
+  name: "Da Nang",
+});
+export { getAirport };
+const getAirline = new Map();
+getAirline.set(
+  "Vietnam Airlines",
+  "https://shopcartimg2.blob.core.windows.net/shopcartctn/vietnamairlinelogo.jpg"
+);
+getAirline.set(
+  "VietJet Air",
+  "https://shopcartimg2.blob.core.windows.net/shopcartctn/vietjetlogo.jpg"
+);
+getAirline.set(
+  "Jetstar Pacific",
+  "https://shopcartimg2.blob.core.windows.net/shopcartctn/jetstarlogo.jpg"
+);
+getAirline.set(
+  "Bamboo Airways",
+  "https://shopcartimg2.blob.core.windows.net/shopcartctn/bambologo.jpg"
+);
+export { getAirline };
 export const airlines = [
   {
     label: "Vietnam Airlines",

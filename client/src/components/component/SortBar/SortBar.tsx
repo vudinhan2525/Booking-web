@@ -6,15 +6,87 @@ import Slider from "react-slider";
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import { formatNumber } from "@/utils/convertTime";
-export default function SortBar() {
+import { IfilterObj } from "@/interfaces/IfliterObj";
+const timeArr = [
+  {
+    label: "Night to Morning",
+    time: "00:00 - 06:00",
+  },
+  {
+    label: "Morning to Noon",
+    time: "06:00 - 12:00",
+  },
+  {
+    label: "Noon to Evening",
+    time: "12:00 - 18:00",
+  },
+  {
+    label: "Night to Morning",
+    time: "18:00 - 24:00",
+  },
+];
+export default function SortBar({
+  filterObj,
+  setFilterObj,
+}: {
+  filterObj: IfilterObj;
+  setFilterObj: Dispatch<SetStateAction<IfilterObj>>;
+}) {
   const [showList, setShowList] = useState<string[]>([
     "airline",
     "time",
     "price",
   ]);
-  const [values, setValues] = useState([0, 1000000]);
+  const [values, setValues] = useState([0, 3000000]);
+  const handleChangeAirline = (idx: number) => {
+    if (filterObj.airline.includes(airlines[idx].label)) {
+      setFilterObj((prev) => {
+        return {
+          ...prev,
+          airline: prev.airline.filter((el) => el !== airlines[idx].label),
+        };
+      });
+    } else {
+      const newArr = filterObj.airline;
+      newArr.push(airlines[idx].label);
+      setFilterObj((prev) => {
+        return {
+          ...prev,
+          airline: newArr,
+        };
+      });
+    }
+  };
+  const [depatureTime, setDepatureTime] = useState(0);
+  const handleChangeDepatureTime = (idx: number) => {
+    if (depatureTime === idx + 1) {
+      setDepatureTime(0);
+      setFilterObj((prev) => {
+        return { ...prev, depatureTime: 0 };
+      });
+    } else {
+      setDepatureTime(idx + 1);
+      setFilterObj((prev) => {
+        return { ...prev, depatureTime: idx + 1 };
+      });
+    }
+  };
+  const [arrivalTime, setArrivalTime] = useState(0);
+  const handleChangeArrivalTime = (idx: number) => {
+    if (arrivalTime === idx + 1) {
+      setArrivalTime(0);
+      setFilterObj((prev) => {
+        return { ...prev, arrivalTime: 0 };
+      });
+    } else {
+      setArrivalTime(idx + 1);
+      setFilterObj((prev) => {
+        return { ...prev, arrivalTime: idx + 1 };
+      });
+    }
+  };
   return (
     <div className="bg-white px-6 rounded-xl border-[1px] py-4">
       <header className="text-2xl font-bold">Filter:</header>
@@ -52,7 +124,12 @@ export default function SortBar() {
             {airlines.map((el, idx) => {
               return (
                 <div key={idx} className="flex items-center gap-2">
-                  <Checkbox id={`terms-${idx}`} onCheckedChange={() => {}} />
+                  <Checkbox
+                    id={`terms-${idx}`}
+                    onCheckedChange={() => {
+                      handleChangeAirline(idx);
+                    }}
+                  />
                   <label
                     htmlFor={`terms-${idx}`}
                     className="leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -110,57 +187,73 @@ export default function SortBar() {
           <div className="animate-fadeIn">
             <header className="text-gray-700 mt-4">Depature Time</header>
             <div className="grid grid-cols-2 gap-x-4 gap-y-4 mt-3">
-              <div className="border-[1px] border-gray-400 px-4 py-2  rounded-lg text-center cursor-pointer">
-                <p className="text-xs text-gray-500">Night to Morning</p>
-                <p className="text-sm text-primary-color font-semibold">
-                  00:00 - 06:00
-                </p>
-              </div>
-              <div className="border-[1px] border-gray-400 px-4 py-2  rounded-lg text-center cursor-pointer">
-                <p className="text-xs text-gray-500">Morning to Noon</p>
-                <p className="text-sm text-primary-color font-semibold">
-                  06:00 - 12:00
-                </p>
-              </div>
-              <div className="border-[1px] border-gray-400 px-4 py-2  rounded-lg text-center cursor-pointer">
-                <p className="text-xs text-gray-500">Noon to Evening</p>
-                <p className="text-sm text-primary-color font-semibold">
-                  12:00 - 18:00
-                </p>
-              </div>
-              <div className="border-[1px] border-gray-400 px-4 py-2  rounded-lg text-center cursor-pointer">
-                <p className="text-xs text-gray-500">Evening to Night</p>
-                <p className="text-sm text-primary-color font-semibold">
-                  18:00 - 24:00
-                </p>
-              </div>
+              {timeArr.map((el, idx) => {
+                return (
+                  <div
+                    key={idx}
+                    onClick={() => handleChangeDepatureTime(idx)}
+                    className={`${
+                      depatureTime === idx + 1
+                        ? " border-transparent bg-primary-color"
+                        : " border-gray-400 "
+                    } border-[1px] px-4 py-2 transition-all rounded-lg text-center cursor-pointer`}
+                  >
+                    <p
+                      className={`${
+                        depatureTime === idx + 1
+                          ? "  text-white"
+                          : " text-gray-500 "
+                      } text-xs text-gray-500`}
+                    >
+                      {el.label}
+                    </p>
+                    <p
+                      className={`${
+                        depatureTime === idx + 1
+                          ? "  text-white"
+                          : " text-primary-color"
+                      } text-sm  font-semibold`}
+                    >
+                      {el.time}
+                    </p>
+                  </div>
+                );
+              })}
             </div>
             <header className="text-gray-700 mt-4">Arrival Time</header>
             <div className="grid grid-cols-2 gap-x-4 gap-y-4 mt-3">
-              <div className="select-none opacity-30 border-[1px] border-gray-400 px-4 py-2  rounded-lg text-center ">
-                <p className="text-xs text-gray-500">Night to Morning</p>
-                <p className="text-sm text-primary-color font-semibold">
-                  00:00 - 06:00
-                </p>
-              </div>
-              <div className="border-[1px] border-gray-400 px-4 py-2  rounded-lg text-center cursor-pointer">
-                <p className="text-xs text-gray-500">Morning to Noon</p>
-                <p className="text-sm text-primary-color font-semibold">
-                  06:00 - 12:00
-                </p>
-              </div>
-              <div className="border-[1px] border-gray-400 px-4 py-2  rounded-lg text-center cursor-pointer">
-                <p className="text-xs text-gray-500">Noon to Evening</p>
-                <p className="text-sm text-primary-color font-semibold">
-                  12:00 - 18:00
-                </p>
-              </div>
-              <div className="border-[1px] border-gray-400 px-4 py-2  rounded-lg text-center cursor-pointer">
-                <p className="text-xs text-gray-500">Evening to Night</p>
-                <p className="text-sm text-primary-color font-semibold">
-                  18:00 - 24:00
-                </p>
-              </div>
+              {timeArr.map((el, idx) => {
+                return (
+                  <div
+                    key={idx}
+                    onClick={() => handleChangeArrivalTime(idx)}
+                    className={`${
+                      arrivalTime === idx + 1
+                        ? " border-transparent bg-primary-color"
+                        : " border-gray-400 "
+                    } border-[1px] px-4 py-2 transition-all rounded-lg text-center cursor-pointer`}
+                  >
+                    <p
+                      className={`${
+                        arrivalTime === idx + 1
+                          ? "  text-white"
+                          : " text-gray-500 "
+                      } text-xs text-gray-500`}
+                    >
+                      {el.label}
+                    </p>
+                    <p
+                      className={`${
+                        arrivalTime === idx + 1
+                          ? "  text-white"
+                          : " text-primary-color"
+                      } text-sm  font-semibold`}
+                    >
+                      {el.time}
+                    </p>
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}
@@ -212,6 +305,18 @@ export default function SortBar() {
               </p>
               <p className="text-sm text-gray-700">
                 {formatNumber(values[1]) + " VND"}
+              </p>
+            </div>
+            <div
+              className="flex justify-center mt-2"
+              onClick={() => {
+                setFilterObj((prev) => {
+                  return { ...prev, priceFrom: values[0], priceTo: values[1] };
+                });
+              }}
+            >
+              <p className="border-primary-color cursor-pointer hover:bg-primary-color hover:text-white  transition-all text-primary-color border-[1px] w-fit px-6 py-2 rounded-lg">
+                Filter by price
               </p>
             </div>
           </div>

@@ -69,4 +69,11 @@ export class FlightQuery {
 
   @Expose()
   seatType: string;
+
+  @Expose()
+  priceFrom: number;
+  @Expose()
+  priceTo: number;
+  @Expose()
+  airline: string[];
 }
