@@ -70,7 +70,7 @@ export default function SearchFlightPage() {
       obj.airline = filterObj.airline;
     }
     if (filterObj.depatureTime !== 0) {
-      obj.depatureHour = filterObj.depatureTime;
+      obj.departureHour = filterObj.depatureTime;
     }
     if (filterObj.arrivalTime !== 0) {
       obj.arrivalHour = filterObj.arrivalTime;

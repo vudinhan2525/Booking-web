@@ -76,4 +76,8 @@ export class FlightQuery {
   priceTo: number;
   @Expose()
   airline: string[];
+  @Expose()
+  departureHour: number;
+  @Expose()
+  arrivalHour: number;
 }

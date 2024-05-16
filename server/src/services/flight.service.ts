@@ -49,7 +49,6 @@ export class FlightService {
     // }
   }
   async getFlight(body: FlightQuery) {
-    console.log(body);
     let totalPassenger = 0;
     if (body.numberAdult) {
       totalPassenger += body.numberAdult;
@@ -88,6 +87,48 @@ export class FlightService {
     const flights = await this.flightRepository.find({
       where: obj,
     });
+    if (body.departureHour) {
+      const result = flights.filter((el) => {
+        if (this.isTimeInRange(el.departureTime, body.departureHour))
+          return true;
+        else return false;
+      });
+      return result;
+    }
+    if (body.arrivalHour) {
+      const result = flights.filter((el) => {
+        if (this.isTimeInRange(el.arrivalTime, body.arrivalHour)) return true;
+        else return false;
+      });
+      return result;
+    }
     return flights;
+  }
+
+  isTimeInRange(dateTime: Date, part: number) {
+    // Extract hours and minutes
+    const hours = dateTime.getUTCHours();
+    const minutes = dateTime.getUTCMinutes();
+    // Calculate the total minutes from the start of the day
+    const totalMinutes = hours * 60 + minutes;
+
+    if (part === 1) {
+      const startMinutes = 0; // 00:00
+      const endMinutes = 6 * 60; // 06:00
+      return totalMinutes >= startMinutes && totalMinutes < endMinutes;
+    } else if (part === 2) {
+      const startMinutes = 6 * 60; // 00:00
+      const endMinutes = 12 * 60; // 06:00
+      return totalMinutes >= startMinutes && totalMinutes < endMinutes;
+    } else if (part === 3) {
+      const startMinutes = 12 * 60; // 00:00
+      const endMinutes = 18 * 60; // 06:00
+      return totalMinutes >= startMinutes && totalMinutes < endMinutes;
+    } else if (part === 4) {
+      const startMinutes = 18 * 60; // 00:00
+      const endMinutes = 24 * 60; // 06:00
+      return totalMinutes >= startMinutes && totalMinutes < endMinutes;
+    }
+    return false;
   }
 }
