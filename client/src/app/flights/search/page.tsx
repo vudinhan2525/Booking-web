@@ -129,6 +129,7 @@ export default function SearchFlightPage() {
     if (filterObj !== initialObj) {
       getFlightList();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterObj]);
   return (
     <div className=" bg-[#F7F9FA] border-t-[1px] flex gap-8 px-28 py-10">

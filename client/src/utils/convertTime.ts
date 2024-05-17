@@ -141,3 +141,36 @@ export function convertTime3(isoString: string): string {
 
   return formattedDate;
 }
+export function getFutureDate(isoString: string, n: number) {
+  // Parse the input ISO string to a Date object
+  let date = new Date(isoString);
+  // Add 'n' days to the date
+  date.setDate(date.getDate() + n);
+  // Define an array of weekdays and months for formatting
+  const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  // Get the components of the new date
+  const dayOfWeek = weekdays[date.getDay()];
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = months[date.getMonth()];
+  const year = date.getFullYear();
+  // Format the date string
+  return {
+    label: `${dayOfWeek}, ${day} ${month} ${year}`,
+    value: date.toString(),
+  };
+}

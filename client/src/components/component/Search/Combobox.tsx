@@ -4,6 +4,7 @@ import { Calendar } from "@/components/ui/calendar";
 import {
   faBaby,
   faChild,
+  faDoorClosed,
   faMinus,
   faPlus,
   faUser,
@@ -20,6 +21,8 @@ export function Combobox({
   departureDate,
   isSeatList,
   isSetNumberPassenger,
+  isDestination,
+  isDurationList,
 }: {
   child: React.ReactNode;
   setValue: any;
@@ -28,11 +31,14 @@ export function Combobox({
   frameworks?: {
     nameAirport?: string;
     name: string;
+    title?: string;
   }[];
   isAirportList?: boolean;
   departureDate?: any;
   isSeatList?: boolean;
   isSetNumberPassenger?: boolean;
+  isDestination?: boolean;
+  isDurationList?: boolean;
 }) {
   const [open, setOpen] = React.useState(false);
   const dropdownRef = React.useRef<HTMLDivElement>(null);
@@ -76,7 +82,9 @@ export function Combobox({
         <div
           className={`w-[300px] ${isSeatList && "w-[200px]"} ${
             isSetNumberPassenger && "w-full"
-          } py-3  bg-white animate-fadeIn border-[1px] rounded-lg  absolute z-10`}
+          } ${isDestination && "w-full"} ${
+            isDurationList && "w-[135px]"
+          } py-3  bg-white animate-fadeIn border-[1px] rounded-lg max-h-[300px] overflow-y-auto absolute z-10`}
         >
           {frameworks &&
             frameworks.map((el, idx) => {
@@ -107,6 +115,12 @@ export function Combobox({
                         </div>
                       )}
                       <p className="pl-4 font-semibold">{el.name}</p>
+                    </div>
+                  )}
+                  {isDestination && (
+                    <div>
+                      <p className="font-bold">{el.name}</p>
+                      <p className="text-sm text-gray-700">{el.title}</p>
                     </div>
                   )}
                 </div>
@@ -149,7 +163,7 @@ export function Combobox({
                   >
                     <FontAwesomeIcon icon={faMinus} />
                   </div>
-                  <div className="max-w-[25px] text-center min-w-[20px]">
+                  <div className="max-w-[25px] select-none text-center min-w-[20px]">
                     {value.adult}
                   </div>
                   <div
@@ -187,7 +201,7 @@ export function Combobox({
                   >
                     <FontAwesomeIcon icon={faMinus} />
                   </div>
-                  <div className="max-w-[25px] text-center min-w-[20px]">
+                  <div className="max-w-[25px] select-none text-center min-w-[20px]">
                     {value.child}
                   </div>
                   <div
@@ -202,55 +216,119 @@ export function Combobox({
                   </div>
                 </div>
               </div>
-              <div className="flex py-2 items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <FontAwesomeIcon
-                    className="text-gray-700 text-lg"
-                    icon={faBaby}
-                  />
-                  <div className="flex flex-col">
-                    <p className="font-semibold">Infant</p>
-                    <p className="text-xs text-gray-700">{"(Age < 2)"}</p>
+              {value.infant !== undefined && (
+                <div className="flex py-2 items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <FontAwesomeIcon
+                      className="text-gray-700 text-lg"
+                      icon={faBaby}
+                    />
+                    <div className="flex flex-col">
+                      <p className="font-semibold">Infant</p>
+                      <p className="text-xs text-gray-700">{"(Age < 2)"}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div
+                      onClick={() => {
+                        setShowWarningInfant(false);
+                        setValue((prev: any) => {
+                          if (prev.infant <= 0) return prev;
+                          return { ...prev, infant: prev.infant - 1 };
+                        });
+                      }}
+                      className="px-3 hover:bg-gray-100 transition-all rounded-lg py-2 cursor-pointer text-primary-color"
+                    >
+                      <FontAwesomeIcon icon={faMinus} />
+                    </div>
+                    <div className="text-center select-none max-w-[25px] min-w-[20px]">
+                      {value.infant}
+                    </div>
+                    <div
+                      onClick={() => {
+                        if (value.infant + 1 > value.adult) {
+                          setShowWarningInfant(true);
+                          return;
+                        }
+                        setValue((prev: any) => {
+                          return { ...prev, infant: prev.infant + 1 };
+                        });
+                      }}
+                      className="px-3 hover:bg-gray-100 transition-all rounded-lg py-2 cursor-pointer text-primary-color"
+                    >
+                      <FontAwesomeIcon icon={faPlus} />
+                    </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <div
-                    onClick={() => {
-                      setShowWarningInfant(false);
-                      setValue((prev: any) => {
-                        if (prev.infant <= 0) return prev;
-                        return { ...prev, infant: prev.infant - 1 };
-                      });
-                    }}
-                    className="px-3 hover:bg-gray-100 transition-all rounded-lg py-2 cursor-pointer text-primary-color"
-                  >
-                    <FontAwesomeIcon icon={faMinus} />
+              )}
+              {value.bedroom !== undefined && (
+                <div className="flex py-2 items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <FontAwesomeIcon
+                      className="text-gray-700 text-base"
+                      icon={faDoorClosed}
+                    />
+                    <div className="flex flex-col">
+                      <p className="font-semibold">Room</p>
+                      <p className="text-xs text-gray-700">{""}</p>
+                    </div>
                   </div>
-                  <div className="text-center max-w-[25px] min-w-[20px]">
-                    {value.infant}
-                  </div>
-                  <div
-                    onClick={() => {
-                      if (value.infant + 1 > value.adult) {
-                        setShowWarningInfant(true);
-                        return;
-                      }
-                      setValue((prev: any) => {
-                        return { ...prev, infant: prev.infant + 1 };
-                      });
-                    }}
-                    className="px-3 hover:bg-gray-100 transition-all rounded-lg py-2 cursor-pointer text-primary-color"
-                  >
-                    <FontAwesomeIcon icon={faPlus} />
+                  <div className="flex items-center gap-2">
+                    <div
+                      onClick={() => {
+                        setValue((prev: any) => {
+                          if (prev.bedroom <= 0) return prev;
+                          return { ...prev, bedroom: prev.bedroom - 1 };
+                        });
+                      }}
+                      className="px-3 hover:bg-gray-100 transition-all rounded-lg py-2 cursor-pointer text-primary-color"
+                    >
+                      <FontAwesomeIcon icon={faMinus} />
+                    </div>
+                    <div className="text-center select-none max-w-[25px] min-w-[20px]">
+                      {value.bedroom}
+                    </div>
+                    <div
+                      onClick={() => {
+                        setValue((prev: any) => {
+                          return { ...prev, bedroom: prev.bedroom + 1 };
+                        });
+                      }}
+                      className="px-3 hover:bg-gray-100 transition-all rounded-lg py-2 cursor-pointer text-primary-color"
+                    >
+                      <FontAwesomeIcon icon={faPlus} />
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
               {showWarningInfant && (
                 <p className="text-sm italic">
                   *The number of infants must not exceed the number of adult
                   passenger(s)
                 </p>
               )}
+            </div>
+          )}
+          {isDurationList && (
+            <div>
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((el, idx) => {
+                return (
+                  <div
+                    key={idx}
+                    onClick={() => {
+                      setValue(el);
+                      setOpen(false);
+                    }}
+                    className="cursor-pointer px-4 hover:bg-gray-200 transition-all py-2"
+                  >
+                    {idx === 0 ? (
+                      <p>{`${el} Night`}</p>
+                    ) : (
+                      <p>{`${el} Nights`}</p>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           )}
         </div>

@@ -1,7 +1,7 @@
 import Image from "next/image";
 import React from "react";
-import TypingText from "./_component/TypingText";
-import SearchFlight from "@/components/component/Search/SearchFlight";
+import TypingText from "../flights/_component/TypingText";
+import SearchHotels from "@/components/component/Search/SearchHotels";
 
 export default function FlightSearchFormPage() {
   return (
@@ -11,7 +11,7 @@ export default function FlightSearchFormPage() {
           <div className="relative w-[300px] h-[300px]">
             <Image
               src={
-                "https://shopcartimg2.blob.core.windows.net/shopcartctn/3d-casual-life-airplane.png"
+                "https://shopcartimg2.blob.core.windows.net/shopcartctn/hotel3d.webp"
               }
               alt="bg"
               quality={100}
@@ -24,13 +24,13 @@ export default function FlightSearchFormPage() {
         </div>
         <Image
           src={
-            "https://shopcartimg2.blob.core.windows.net/shopcartctn/cloud.png"
+            "https://shopcartimg2.blob.core.windows.net/shopcartctn/coconuttree.png"
           }
           alt="bg"
           quality={100}
           width={300}
           height={300}
-          className="select-none absolute bottom-[-10%] right-[32%]"
+          className="select-none absolute top-[13%] z-[6] right-[40px]"
         />
         <Image
           src={
@@ -40,16 +40,16 @@ export default function FlightSearchFormPage() {
           quality={100}
           width={300}
           height={300}
-          className="select-none absolute top-[0] right-[0]"
+          className="select-none absolute top-[-60px] right-[32%]"
         />
         <div className="absolute top-[30%] text-4xl max-w-[350px] left-[10%] font-bold text-white">
-          <TypingText msg="Get your ticket and started flying." />
+          <TypingText msg="Find the best hotel for your trip." />
         </div>
         <div className="pt-20 absolute w-[70%] bottom-0 right-[50%] translate-x-[50%] bg-primary-color rounded-lg translate-y-[90%]">
           <p className="absolute top-[6%] left-[20px] px-2 py-2 border-[1px] border-white rounded-lg text-white font-bold">
             One ways / Round trip
           </p>
-          <SearchFlight fromFlightPage={true} />
+          <SearchHotels fromHotelsPage={true} />
         </div>
       </div>
       <div className="h-[500px]"></div>

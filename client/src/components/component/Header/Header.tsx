@@ -115,6 +115,9 @@ export default function Header() {
       </div>
       <div className="mt-2 flex gap-2">
         <Button
+          onClick={() => {
+            router.push("/hotels");
+          }}
           variant={onTop ? "transparent" : "outline"}
           className={`${
             onTop
