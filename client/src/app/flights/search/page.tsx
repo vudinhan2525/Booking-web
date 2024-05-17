@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname, useSearchParams } from "next/navigation";
-import SortBar from "@/components/component/SortBar/SortBar";
+import SortBarFlight from "@/components/component/SortBar/SortBarFlight";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -134,7 +134,7 @@ export default function SearchFlightPage() {
   return (
     <div className=" bg-[#F7F9FA] border-t-[1px] flex gap-8 px-28 py-10">
       <div className="basis-[32%] ">
-        <SortBar filterObj={filterObj} setFilterObj={setFilterObj} />
+        <SortBarFlight filterObj={filterObj} setFilterObj={setFilterObj} />
       </div>
 
       <div className="basis-[68%]">

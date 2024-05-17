@@ -27,7 +27,7 @@ const timeArr = [
     time: "18:00 - 24:00",
   },
 ];
-export default function SortBar({
+export default function SortBarFlight({
   filterObj,
   setFilterObj,
 }: {

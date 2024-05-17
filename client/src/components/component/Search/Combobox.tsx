@@ -80,10 +80,10 @@ export function Combobox({
       <div onClick={() => setOpen((prev) => !prev)}>{child}</div>
       {open && (
         <div
-          className={`w-[300px] ${isSeatList && "w-[200px]"} ${
-            isSetNumberPassenger && "w-full"
-          } ${isDestination && "w-full"} ${
-            isDurationList && "w-[135px]"
+          className={`${isAirportList && "w-[300px]"} ${
+            isSeatList && "w-[200px]"
+          } ${isSetNumberPassenger && "w-full"} ${isDestination && "w-full"} ${
+            isDurationList && "w-[165px]"
           } py-3  bg-white animate-fadeIn border-[1px] rounded-lg max-h-[300px] overflow-y-auto absolute z-10`}
         >
           {frameworks &&
