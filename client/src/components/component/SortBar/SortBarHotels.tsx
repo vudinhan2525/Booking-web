@@ -1,6 +1,6 @@
 "use client";
 import { Checkbox } from "@/components/ui/checkbox";
-import { accomodationType, facilities } from "@/lib/dataHotel";
+import { accomodationType } from "@/lib/dataHotel";
 import {
   faChevronDown,
   faChevronUp,
@@ -10,6 +10,7 @@ import Slider from "react-slider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { formatNumber } from "@/utils/convertTime";
+import { facilities } from "@/utils/facilities";
 
 export default function SortBarHotels() {
   const [showList, setShowList] = useState<string[]>([
@@ -120,7 +121,7 @@ export default function SortBarHotels() {
                     className="leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                   >
                     <div className="flex cursor-pointer gap-2 items-center">
-                      <p className="text-sm">{el}</p>
+                      <p className="text-sm">{el.title}</p>
                     </div>
                   </label>
                 </div>

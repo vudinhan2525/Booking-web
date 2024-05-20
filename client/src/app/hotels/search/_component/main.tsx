@@ -139,7 +139,7 @@ export default function MainSearchHotelPages() {
               </div>
             </div>
             <div className="basis-[30%] border-l-[1px]">
-              <div className="flex flex-col items-end">
+              <div className="flex flex-col  items-end">
                 <div className="flex items-center mt-10 gap-2">
                   <div>
                     <FontAwesomeIcon

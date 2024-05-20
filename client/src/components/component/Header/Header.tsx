@@ -36,6 +36,7 @@ export default function Header() {
     <div
       className={`${!onTop && "bg-white"} transition-all pb-2 px-24 z-20 ${
         pathname !== "/flights/search" &&
+        pathname !== "/hotels/detail" &&
         pathname !== "/hotels/search" &&
         "fixed"
       } top-0 left-0 pt-2 right-0 `}

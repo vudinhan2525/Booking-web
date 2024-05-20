@@ -16,18 +16,7 @@ export const destinations = [
     title: "Quang Ninh Province, Vietnam",
   },
 ];
-export const facilities = [
-  "WiFi",
-  "Swimming Pool",
-  "Parking",
-  "Restaurant",
-  "24-Hour Front Desk",
-  "Elevator",
-  "Wheelchair Access",
-  "Fitness Center",
-  "Meeting Facilities",
-  "Airport Transfer",
-];
+
 export const accomodationType = [
   "Homes",
   "Others",
