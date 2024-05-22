@@ -14,23 +14,29 @@ import { AuthModule } from './modules/auth.module';
 import { AuthMiddleWare } from './middlewares/auth.middleware';
 import { Flight } from './entities/flight.entity';
 import { FlightModule } from './modules/flight.module';
+import { Hotel } from './entities/hotel.entity';
+import { HotelModule } from './modules/hotel.module';
+import { RoomModule } from './modules/room.module';
+import { Room } from './entities/room.entity';
 @Module({
   imports: [
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: process.env.MYSQL_HOST,
-      port: +process.env.MYSQL_PORT,
-      username: process.env.MYSQL_USERNAME,
-      password: process.env.MYSQL_PASSWORD,
-      database: process.env.MYSQL_DATABASENAME,
-      entities: [User, Flight],
+      host: process.env.MYSQL_HOSTLOCAL,
+      port: +process.env.MYSQL_PORTLOCAL,
+      username: process.env.MYSQL_USERNAMELOCAL,
+      password: process.env.MYSQL_PASSWORDLOCAL,
+      database: process.env.MYSQL_DATABASENAMELOCAL,
+      entities: [User, Flight, Hotel, Room],
       synchronize: true,
     }),
-    TypeOrmModule.forFeature([User, Flight]),
+    TypeOrmModule.forFeature([User, Flight, Hotel, Room]),
     UserModule,
     AuthModule,
     FlightModule,
+    HotelModule,
+    RoomModule,
   ],
   controllers: [AppController],
   providers: [AppService],

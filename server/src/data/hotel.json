@@ -1,0 +1,79 @@
+[
+  {
+    "id": 1,
+    "name": "Seashore Hotel & Apartment",
+    "accomodation": "Hotels",
+    "address": "15-16 Hoang Sa, Man Thai Ward, Son Tra District",
+    "location": "Da Nang, Vietnam",
+    "long": 16.052686420490236,
+    "lat": 108.24642518376632,
+    "summary": "Location Seashore Hotel & Apartment is located in area / city Man Thai Ward. The hotel has a very good location, also near the Da Nang International Airport (DAD), which is only 7.37 km away. The hotel is located only 4.7 km away from Da Nang Railway Station. There are plenty of tourist attractions nearby, such as Linh Ung Pagoda within 3.31 km, and Nhà hàng Bà Rô within 2.14 km. About Seashore Hotel & Apartment For you, travelers who wish to travel comfortably on a budget, Seashore Hotel & Apartment is the perfect place to stay that provides decent facilities as well as great services. ",
+    "facilities": "AC,Restaurant,Swimming pool,24-Hour Front Desk,Parking,Elevator,Wifi"
+  },
+  {
+    "id": 2,
+    "name": "Bay Capital Danang",
+    "accomodation": "Hotels",
+    "address": "17 Quang Trung, Hai Chau 1 Ward, Hai Chau District",
+    "location": "Da Nang, Vietnam",
+    "long": 16.052612145972642,
+    "lat": 108.24183169715694,
+    "summary": "Whether you are planning an event or other special occasions, Bay Capital Danang is a great choice for you with a large and well-equipped function room to suit your requirements. This hotel is the perfect choice for couples seeking a romantic getaway or a honeymoon retreat. Enjoy the most memorable nights with your loved one by staying at Bay Capital Danang. Bay Capital Danang is the splendid choice for you who are seeking a luxurious treat for your holiday. Get pampered with the most excellent services and make your holiday memorable by staying here. Spa treatment is one of the main features of the hotel. Pamper yourself with the relaxing treatment that rejuvenates you.From business event to corporate gathering, Bay Capital Danang provides complete services and facilities that you and your colleagues need.",
+    "facilities": "AC,Restaurant,Swimming pool,24-Hour Front Desk,Parking,Elevator,Wifi,Coffee shop,Grocery,Beauty salon"
+  },
+  {
+    "id": 3,
+    "name": "Melia Vinpearl Danang Riverfront",
+    "accomodation": "Hotels",
+    "address": "341 Tran Hung Dao, Son Tra, An Hai Bac Ward, Son Tra District",
+    "location": "Da Nang, Vietnam",
+    "long": 16.00581306221641,
+    "lat": 108.244211706683,
+    "summary": "Whether you are planning an event or other special occasions, Melia Vinpearl Danang Riverfront is a great choice for you with a large and well-equipped function room to suit your requirements. Melia Vinpearl Danang Riverfront is the splendid choice for you who are seeking a luxurious treat for your holiday. Get pampered with the most excellent services and make your holiday memorable by staying here. From business event to corporate gathering, Melia Vinpearl Danang Riverfront provides complete services and facilities that you and your colleagues need. Have fun with various entertaining facilities for you and the whole family at Melia Vinpearl Danang Riverfront, a wonderful accommodation for your family holiday. If you plan to have a long-term stay, staying at Melia Vinpearl Danang Riverfront is the right choice for you. Providing wide range of facilities and great service quality, this accommodation certainly makes you feel at home.",
+    "facilities": "AC,Restaurant,Swimming pool,24-Hour Front Desk,Parking,Elevator,Wifi,Bar,Cloakroom"
+  },
+  {
+    "id": 4,
+    "name": "Melia Hanoi Hotel",
+    "accomodation": "Hotels",
+    "address": "44 Ly Thuong Kiet, Tran Hung Dao Ward, Hoan Kiem District",
+    "location": "Ha Noi, Vietnam",
+    "long": 21.024652453358215,
+    "lat": 105.85403960063866,
+    "summary": "Whether you are planning an event or other special occasions, Melia Hanoi Hotel is a great choice for you with a large and well-equipped function room to suit your requirements. This hotel is the perfect choice for couples seeking a romantic getaway or a honeymoon retreat. Enjoy the most memorable nights with your loved one by staying at Melia Hanoi Hotel. Melia Hanoi Hotel is the splendid choice for you who are seeking a luxurious treat for your holiday. Get pampered with the most excellent services and make your holiday memorable by staying here. Spa treatment is one of the main features of the hotel. Pamper yourself with the relaxing treatment that rejuvenates you. From business event to corporate gathering, Melia Hanoi Hotel provides complete services and facilities that you and your colleagues need. Have fun with various entertaining facilities for you and the whole family at Melia Hanoi Hotel, a wonderful accommodation for your family holiday. If you plan to have a long-term stay, staying at Melia Hanoi Hotel is the right choice for you. Providing wide range of facilities and great service quality, this accommodation certainly makes you feel at home.",
+    "facilities": "AC,Restaurant,Swimming pool,24-Hour Front Desk,Parking,Elevator,Wifi,Bar,Cloakroom"
+  },
+  {
+    "id": 5,
+    "name": "Ha Noi Le Grand Hotel",
+    "accomodation": "Hotels",
+    "address": "3 B9 Dam Trau , Bach Dang Ward, Hai Ba Trung District",
+    "location": "Ha Noi, Vietnam",
+    "long": 21.015746841533208,
+    "lat": 105.85735045552187,
+    "summary": "Not only located within easy reach of various places of interests for your adventure, but staying at Ha Noi Le Grand Hotel will also give you a pleasant stay. Ha Noi Le Grand Hotel is highly recommended for backpackers who want to get an affordable stay yet comfortable at the same time. For you, travelers who wish to travel comfortably on a budget, Ha Noi Le Grand Hotel is the perfect place to stay that provides decent facilities as well as great services. This hotel is the perfect choice for couples seeking a romantic getaway or a honeymoon retreat. Enjoy the most memorable nights with your loved one by staying at Ha Noi Le Grand Hotel. Ha Noi Le Grand Hotel is the splendid choice for you who are seeking a luxurious treat for your holiday. Get pampered with the most excellent services and make your holiday memorable by staying here. From business event to corporate gathering, Ha Noi Le Grand Hotel provides complete services and facilities that you and your colleagues need. Have fun with various entertaining facilities for you and the whole family at Ha Noi Le Grand Hotel, a wonderful accommodation for your family holiday. If you plan to have a long-term stay, staying at Ha Noi Le Grand Hotel is the right choice for you. Providing wide range of facilities and great service quality, this accommodation certainly makes you feel at home.",
+    "facilities": "AC,Restaurant,Swimming pool,24-Hour Front Desk,Parking,Elevator,Wifi,Coffee shop,Grocery,Beauty salon"
+  },
+  {
+    "id": 6,
+    "name": "Hotel Nikko Saigon",
+    "accomodation": "Hotels",
+    "address": "235 Nguyen Van Cu, Nguyen Cu Trinh ward, District 1",
+    "location": "Ho Chi Minh City, Vietnam",
+    "long": 10.781077950751747,
+    "lat": 106.68139745343159,
+    "summary": "Whether you are planning an event or other special occasions, Hotel Nikko Saigon is a great choice for you with a large and well-equipped function room to suit your requirements. Hotel Nikko Saigon is the splendid choice for you who are seeking a luxurious treat for your holiday. Get pampered with the most excellent services and make your holiday memorable by staying here. Are you a shopaholic? Staying at Hotel Nikko Saigon will surely spoil you for numerous shopping centers nearby. From business event to corporate gathering, Hotel Nikko Saigon provides complete services and facilities that you and your colleagues need. The highest quality service accompanying its extensive facilities will make you get the ultimate holiday experience. The hotel’s fitness center is a must-try during your stay here. Have an enjoyable and relaxing day at the pool, whether you’re traveling solo or with your loved ones. 24-hours front desk is available to serve you, from check-in to check-out, or any assistance you need. Should you desire more, do not hesitate to ask the front desk, we are always ready to accommodate you.",
+    "facilities": "AC,Restaurant,Swimming pool,24-Hour Front Desk,Parking,Elevator,Wifi"
+  },
+  {
+    "id": 7,
+    "name": "Silverland Ben Thanh",
+    "accomodation": "Hotels",
+    "address": "14-16 Le Lai, Ben Thanh Ward, Ben Thanh Ward, District 1",
+    "location": "Ho Chi Minh City, Vietnam",
+    "long": 10.774385966268508,
+    "lat": 106.69589749299243,
+    "summary": "Be ready to get the unforgettable stay experience by its exclusive service, completed by a full range of facilities to cater all your needs. The hotel’s fitness center is a must-try during your stay here. 24-hours front desk is available to serve you, from check-in to check-out, or any assistance you need. Should you desire more, do not hesitate to ask the front desk, we are always ready to accommodate you. WiFi is available within public areas of the property to help you to stay connected with family and friends. Silverland Ben Thanh is a hotel with great comfort and excellent service according to most hotel's guests. Get precious and unforgettable moment during your stay at Silverland Ben Thanh.",
+    "facilities": "AC,Restaurant,Swimming pool,24-Hour Front Desk,Parking,Elevator,Wifi,Coffee shop,Grocery,Supermarket"
+  }
+]
