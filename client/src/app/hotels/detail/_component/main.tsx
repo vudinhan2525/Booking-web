@@ -2,6 +2,7 @@ import React from "react";
 import Overview from "./Overview";
 import RoomList from "./RoomList";
 import HotelCart from "./HotelCart";
+import Rating from "./Rating";
 
 export default function MainHotelDetail() {
   return (
@@ -22,6 +23,12 @@ export default function MainHotelDetail() {
           <HotelCart />
         </div>
       </div>
+      <div className="bg-white px-4 py-4 mt-8 rounded-lg">
+        <header className="text-2xl font-bold">
+          What&apos;s around Seashore Hotel & Apartment
+        </header>
+      </div>
+      <Rating />
     </div>
   );
 }

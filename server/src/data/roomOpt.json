@@ -1,0 +1,352 @@
+[
+  {
+    "name": "Breakfast included for 1 pax",
+    "isRefundable": false,
+    "bed": "2 Twin Bed",
+    "numberOfGuest": 2,
+    "originalPrice": 2698413,
+    "price": 574309,
+    "roomLeft": 27,
+    "roomId": 1
+  },
+  {
+    "name": "Breakfast included for 1 pax",
+    "isRefundable": false,
+    "bed": "2 Twin Bed",
+    "numberOfGuest": 2,
+    "originalPrice": 768000,
+    "price": 576000,
+    "roomLeft": 25,
+    "roomId": 1
+  },
+  {
+    "name": "Breakfast included for 1 pax",
+    "isRefundable": true,
+    "bed": "2 Twin Bed",
+    "numberOfGuest": 2,
+    "originalPrice": 2700000,
+    "price": 647000,
+    "roomLeft": 36,
+    "roomId": 1
+  },
+  {
+    "name": "Breakfast included for 1 pax ",
+    "isRefundable": false,
+    "bed": "2 Double Bed",
+    "numberOfGuest": 2,
+    "originalPrice": 768000,
+    "price": 576000,
+    "roomLeft": 22,
+    "roomId": 2
+  },
+  {
+    "name": "Breakfast included for 1 pax ",
+    "isRefundable": true,
+    "bed": "2 Double Bed",
+    "numberOfGuest": 2,
+    "originalPrice": 2765000,
+    "price": 588000,
+    "roomLeft": 22,
+    "roomId": 2
+  },
+  {
+    "name": "Breakfast included for 1 pax",
+    "isRefundable": true,
+    "bed": "1 King Bed",
+    "numberOfGuest": 2,
+    "originalPrice": 2765000,
+    "price": 663000,
+    "roomLeft": 16,
+    "roomId": 3
+  },
+  {
+    "name": "Breakfast included for 1 pax ",
+    "isRefundable": true,
+    "bed": "1 King Bed",
+    "numberOfGuest": 2,
+    "originalPrice": 2765000,
+    "price": 670000,
+    "roomLeft": 22,
+    "roomId": 3
+  },
+  {
+    "name": "Without Breakfast + Extra Benefit",
+    "isRefundable": false,
+    "bed": "1 King Bed,Free Mini Bar",
+    "numberOfGuest": 2,
+    "originalPrice": 2200000,
+    "price": 1400000,
+    "roomLeft": 32,
+    "roomId": 4
+  },
+  {
+    "name": "Breakfast included for 1 pax + Extra Benefit",
+    "isRefundable": true,
+    "bed": "1 King Bed,Free Mini Bar",
+    "numberOfGuest": 2,
+    "originalPrice": 2760000,
+    "price": 1660000,
+    "roomLeft": 22,
+    "roomId": 4
+  },
+  {
+    "name": "Breakfast included for 1 pax + Extra Benefit",
+    "isRefundable": false,
+    "bed": "1 King Bed,Free Mini Bar",
+    "numberOfGuest": 2,
+    "originalPrice": 4100000,
+    "price": 2990000,
+    "roomLeft": 22,
+    "roomId": 5
+  },
+  {
+    "name": "Breakfast included for 1 pax ",
+    "isRefundable": true,
+    "bed": "1 Twin Bed",
+    "numberOfGuest": 2,
+    "originalPrice": 4100000,
+    "price": 3660000,
+    "roomLeft": 12,
+    "roomId": 5
+  },
+  {
+    "name": "Breakfast included for 1 pax + Extra Benefit",
+    "isRefundable": false,
+    "bed": "2 Single Bed",
+    "numberOfGuest": 2,
+    "originalPrice": 2400000,
+    "price": 1745000,
+    "roomLeft": 22,
+    "roomId": 6
+  },
+  {
+    "name": "Breakfast included for 1 pax ",
+    "isRefundable": false,
+    "bed": "2 Single Bed",
+    "numberOfGuest": 2,
+    "originalPrice": 3300000,
+    "price": 2150000,
+    "roomLeft": 21,
+    "roomId": 6
+  },
+  {
+    "name": "Without Breakfast + Extra Benefit",
+    "isRefundable": false,
+    "bed": "2 Single Bed Or 1 King Bed,20% Discount for Spa",
+    "numberOfGuest": 2,
+    "originalPrice": 1500000,
+    "price": 1290000,
+    "roomLeft": 7,
+    "roomId": 7
+  },
+  {
+    "name": "Without Breakfast ",
+    "isRefundable": false,
+    "bed": "2 Single Bed Or 1 King Bed",
+    "numberOfGuest": 2,
+    "originalPrice": 1600000,
+    "price": 1290000,
+    "roomLeft": 21,
+    "roomId": 7
+  },
+  {
+    "name": "Without Breakfast + Extra Benefit",
+    "isRefundable": false,
+    "bed": "2 Single Bed Or 1 King Bed,20% Discount for Spa",
+    "numberOfGuest": 2,
+    "originalPrice": 1600000,
+    "price": 1410000,
+    "roomLeft": 26,
+    "roomId": 8
+  },
+  {
+    "name": "Without Breakfast",
+    "isRefundable": false,
+    "bed": "2 Single Bed Or 1 King Bed",
+    "numberOfGuest": 2,
+    "originalPrice": 1600000,
+    "price": 1410000,
+    "roomLeft": 21,
+    "roomId": 8
+  },
+  {
+    "name": "Without Breakfast + Extra Benefit",
+    "isRefundable": false,
+    "bed": "1 King Bed",
+    "numberOfGuest": 2,
+    "originalPrice": 1700000,
+    "price": 1500000,
+    "roomLeft": 21,
+    "roomId": 9
+  },
+  {
+    "name": "Without Breakfast",
+    "isRefundable": false,
+    "bed": "1 King Bed",
+    "numberOfGuest": 2,
+    "originalPrice": 1700000,
+    "price": 1500000,
+    "roomLeft": 14,
+    "roomId": 9
+  },
+  {
+    "name": "Without Breakfast",
+    "isRefundable": false,
+    "bed": "2 Twin Bed Or 1 King Bed",
+    "numberOfGuest": 1,
+    "originalPrice": 3800000,
+    "price": 2670000,
+    "roomLeft": 21,
+    "roomId": 10
+  },
+  {
+    "name": "Without Breakfast",
+    "isRefundable": false,
+    "bed": "2 Twin Bed Or 1 King Bed",
+    "numberOfGuest": 1,
+    "originalPrice": 4330000,
+    "price": 3071000,
+    "roomLeft": 14,
+    "roomId": 10
+  },
+  {
+    "name": "Without Breakfast",
+    "isRefundable": false,
+    "bed": "2 Twin Bed Or 1 King Bed",
+    "numberOfGuest": 1,
+    "originalPrice": 4200000,
+    "price": 2900000,
+    "roomLeft": 32,
+    "roomId": 11
+  },
+  {
+    "name": "Breakfast included for 1 pax ",
+    "isRefundable": false,
+    "bed": "2 Twin Bed Or 1 King Bed",
+    "numberOfGuest": 1,
+    "originalPrice": 4730000,
+    "price": 3300000,
+    "roomLeft": 22,
+    "roomId": 11
+  },
+  {
+    "name": "Without Breakfast",
+    "isRefundable": false,
+    "bed": "1 Double Bed",
+    "numberOfGuest": 2,
+    "originalPrice": 1023000,
+    "price": 317000,
+    "roomLeft": 32,
+    "roomId": 12
+  },
+  {
+    "name": "Without Breakfast",
+    "isRefundable": false,
+    "bed": "1 Double Bed",
+    "numberOfGuest": 2,
+    "originalPrice": 1023000,
+    "price": 358000,
+    "roomLeft": 22,
+    "roomId": 12
+  },
+  {
+    "name": "Without Breakfast",
+    "isRefundable": false,
+    "bed": "1 Double Bed",
+    "numberOfGuest": 2,
+    "originalPrice": 1023000,
+    "price": 339000,
+    "roomLeft": 37,
+    "roomId": 13
+  },
+  {
+    "name": "Without Breakfast",
+    "isRefundable": true,
+    "bed": "1 Double Bed",
+    "numberOfGuest": 2,
+    "originalPrice": 1023000,
+    "price": 383000,
+    "roomLeft": 8,
+    "roomId": 13
+  },
+  {
+    "name": "Without Breakfast + Extra Benefit",
+    "isRefundable": false,
+    "bed": "1 King Bed",
+    "numberOfGuest": 2,
+    "originalPrice": 4062000,
+    "price": 2075000,
+    "roomLeft": 24,
+    "roomId": 14
+  },
+  {
+    "name": "Breakfast included for 1 pax + Extra Benefit",
+    "isRefundable": true,
+    "bed": "1 King Bed",
+    "numberOfGuest": 2,
+    "originalPrice": 5100000,
+    "price": 2630000,
+    "roomLeft": 8,
+    "roomId": 14
+  },
+  {
+    "name": "Without Breakfast + Extra Benefit  ",
+    "isRefundable": false,
+    "bed": "2 Single Bed",
+    "numberOfGuest": 2,
+    "originalPrice": 4062000,
+    "price": 2075000,
+    "roomLeft": 24,
+    "roomId": 15
+  },
+  {
+    "name": "Breakfast included for 1 pax + Extra Benefit",
+    "isRefundable": true,
+    "bed": "2 Single Bed",
+    "numberOfGuest": 2,
+    "originalPrice": 5100000,
+    "price": 2630000,
+    "roomLeft": 8,
+    "roomId": 15
+  },
+  {
+    "name": "Without Breakfast + Extra Benefit  ",
+    "isRefundable": false,
+    "bed": "2 Single Bed",
+    "numberOfGuest": 2,
+    "originalPrice": 3820000,
+    "price": 2075000,
+    "roomLeft": 24,
+    "roomId": 16
+  },
+  {
+    "name": "Breakfast included for 1 pax + Extra Benefit",
+    "isRefundable": true,
+    "bed": "2 Single Bed",
+    "numberOfGuest": 1,
+    "originalPrice": 4220000,
+    "price": 2630000,
+    "roomLeft": 8,
+    "roomId": 16
+  },
+  {
+    "name": "Without Breakfast + Extra Benefit",
+    "isRefundable": false,
+    "bed": "2 Single Bed,Free Mini Bar",
+    "numberOfGuest": 2,
+    "originalPrice": 3200000,
+    "price": 1868000,
+    "roomLeft": 24,
+    "roomId": 17
+  },
+  {
+    "name": "Without Breakfast",
+    "isRefundable": true,
+    "bed": "2 Single Bed",
+    "numberOfGuest": 2,
+    "originalPrice": 3440000,
+    "price": 3114000,
+    "roomLeft": 8,
+    "roomId": 17
+  }
+]

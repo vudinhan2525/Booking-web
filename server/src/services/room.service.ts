@@ -9,14 +9,16 @@ export class RoomService {
     private roomRepository: Repository<Room>,
   ) {}
   async importHotel(body) {
-    console.log(body);
-    const room = this.roomRepository.create({
-      area: 45,
-      facilitiesRoom: 'Non-smoking,Shower,Seating area,Wifi',
-      hotelId: 6,
-      images:
-        'https://shopcartimg2.blob.core.windows.net/shopcartctn/pexels-boonkong-boonpeng-442952-1134176.jpg',
-    });
-    await this.roomRepository.save(room);
+    for (let i = 0; i < body.length; i++) {
+      const room = this.roomRepository.create({
+        id: body[i].id,
+        name: body[i].name,
+        area: body[i].area,
+        facilitiesRoom: body[i].facilitiesRoom,
+        hotelId: body[i].hotelId,
+        images: body[i].images,
+      });
+      await this.roomRepository.save(room);
+    }
   }
 }

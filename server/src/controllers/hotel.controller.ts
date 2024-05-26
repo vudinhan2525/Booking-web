@@ -11,7 +11,7 @@ export class HotelController {
     res.status(200).json({ status: 'success' });
   }
   @Post('getHotel')
-  async getFlight(@Body() data, @Res() res: Response) {
+  async getHotel(@Body() data, @Res() res: Response) {
     const result = await this.hotelService.getHotel();
     res.status(200).json({ status: 'success', data: result });
   }

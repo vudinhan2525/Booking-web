@@ -3,11 +3,17 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Hotel } from 'src/entities/hotel.entity';
 import { HotelBody } from 'src/dtos/hotel/hotel.dto';
+import { Room } from 'src/entities/room.entity';
+import { RoomOpt } from 'src/entities/roomOpt.entity';
 @Injectable()
 export class HotelService {
   constructor(
     @InjectRepository(Hotel)
     private hotelRepository: Repository<Hotel>,
+    @InjectRepository(Room)
+    private roomRepository: Repository<Room>,
+    @InjectRepository(RoomOpt)
+    private roomOptRepository: Repository<RoomOpt>,
   ) {}
   async importHotel(body: HotelBody[]) {
     for (let i = 0; i < body.length; i++) {
@@ -28,6 +34,8 @@ export class HotelService {
     }
   }
   async getHotel() {
-    return await this.hotelRepository.find();
+    const result = await this.hotelRepository.find();
+
+    return result;
   }
 }

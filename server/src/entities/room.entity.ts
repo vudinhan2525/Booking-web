@@ -4,8 +4,10 @@ import {
   PrimaryGeneratedColumn,
   JoinColumn,
   ManyToOne,
+  OneToMany,
 } from 'typeorm';
 import { Hotel } from './hotel.entity';
+import { RoomOpt } from './roomOpt.entity';
 @Entity()
 export class Room {
   @PrimaryGeneratedColumn()
@@ -29,4 +31,6 @@ export class Room {
 
   @Column()
   hotelId: number;
+  @OneToMany(() => RoomOpt, (roomOpt) => roomOpt.room)
+  roomOpts: RoomOpt[];
 }
