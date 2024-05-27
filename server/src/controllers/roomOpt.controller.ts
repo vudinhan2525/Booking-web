@@ -6,8 +6,8 @@ import { RoomOptService } from 'src/services/roomOpt.service';
 export class RoomOptController {
   constructor(private roomOptService: RoomOptService) {}
   @Post('importRoomOpt')
-  async importHotel(@Body() body, @Res() res: Response) {
-    await this.roomOptService.importHotel(body);
+  async importRoomOpt(@Body() body, @Res() res: Response) {
+    await this.roomOptService.importRoomOpt(body);
     res.status(200).json({ status: 'success' });
   }
 }

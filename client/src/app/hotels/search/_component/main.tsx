@@ -21,6 +21,7 @@ export default function MainSearchHotelPages() {
   const getHotels = async () => {
     try {
       const hotels = await hotelApiRequest.getHotels({});
+      console.log(hotels.data);
       setHotels(hotels.data);
     } catch (error) {
       console.log(error);

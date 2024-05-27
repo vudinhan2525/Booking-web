@@ -9,16 +9,19 @@ export class RoomService {
     private roomRepository: Repository<Room>,
   ) {}
   async importHotel(body) {
-    for (let i = 0; i < body.length; i++) {
-      const room = this.roomRepository.create({
-        id: body[i].id,
-        name: body[i].name,
-        area: body[i].area,
-        facilitiesRoom: body[i].facilitiesRoom,
-        hotelId: body[i].hotelId,
-        images: body[i].images,
+    const rooms = body.map((item) => {
+      return this.roomRepository.create({
+        id: item.id,
+        name: item.name,
+        area: item.area,
+        facilitiesRoom: item.facilitiesRoom,
+        hotelId: item.hotelId,
+        images: item.images,
       });
-      await this.roomRepository.save(room);
-    }
+    });
+
+    const savePromises = rooms.map((room) => this.roomRepository.save(room));
+
+    await Promise.all(savePromises);
   }
 }

@@ -8,19 +8,24 @@ export class RoomOptService {
     @InjectRepository(RoomOpt)
     private roomOptRepository: Repository<RoomOpt>,
   ) {}
-  async importHotel(body) {
-    for (let i = 0; i < body.length; i++) {
-      const room = this.roomOptRepository.create({
-        name: body[i].name,
-        isRefundable: body[i].isRefundable,
-        numberOfGuest: body[i].numberOfGuest,
-        originalPrice: body[i].originalPrice,
-        bed: body[i].bed,
-        price: body[i].price,
-        roomLeft: body[i].roomLeft,
-        roomId: body[i].roomId,
+  async importRoomOpt(body) {
+    const roomOptions = body.map((item) => {
+      return this.roomOptRepository.create({
+        name: item.name,
+        isRefundable: item.isRefundable,
+        numberOfGuest: item.numberOfGuest,
+        originalPrice: item.originalPrice,
+        bed: item.bed,
+        price: item.price,
+        roomLeft: item.roomLeft,
+        roomId: item.roomId,
       });
-      await this.roomOptRepository.save(room);
-    }
+    });
+
+    const savePromises = roomOptions.map((room) =>
+      this.roomOptRepository.save(room),
+    );
+
+    await Promise.all(savePromises);
   }
 }

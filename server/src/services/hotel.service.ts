@@ -16,26 +16,46 @@ export class HotelService {
     private roomOptRepository: Repository<RoomOpt>,
   ) {}
   async importHotel(body: HotelBody[]) {
-    for (let i = 0; i < body.length; i++) {
-      const newHotel = this.hotelRepository.create({
-        id: body[i].id,
-        name: body[i].name,
-        accomodation: body[i].accomodation,
-        address: body[i].address,
-        location: body[i].location,
-        long: body[i].long,
-        lat: body[i].lat,
-        summary: body[i].summary,
-        facilities: body[i].facilities,
+    const hotels = body.map((item) => {
+      return this.hotelRepository.create({
+        id: item.id,
+        name: item.name,
+        accomodation: item.accomodation,
+        address: item.address,
+        location: item.location,
+        long: item.long,
+        lat: item.lat,
+        summary: item.summary,
+        facilities: item.facilities,
         images:
           'https://shopcartimg2.blob.core.windows.net/shopcartctn/pexels-boonkong-boonpeng-442952-1134176.jpg',
       });
-      await this.hotelRepository.save(newHotel);
-    }
+    });
+    const savePromises = hotels.map((hotel) => this.roomRepository.save(hotel));
+
+    await Promise.all(savePromises);
   }
   async getHotel() {
-    const result = await this.hotelRepository.find();
+    const hotels = await this.hotelRepository
+      .createQueryBuilder('hotel')
+      .getMany();
 
-    return result;
+    const hotelWithRooms = await Promise.all(
+      hotels.map(async (hotel) => {
+        const rooms = await this.roomRepository
+          .createQueryBuilder('room')
+          .leftJoinAndSelect('room.roomOpts', 'roomOpt')
+          .where('room.hotelId = :hotelId', { hotelId: hotel.id })
+          .orderBy('roomOpt.price')
+          .getMany();
+        const sortedRooms = rooms.sort((a, b) => {
+          const minPriceA = Math.min(...a.roomOpts.map((opt) => opt.price));
+          const minPriceB = Math.min(...b.roomOpts.map((opt) => opt.price));
+          return minPriceA - minPriceB;
+        });
+        return { ...hotel, rooms: sortedRooms };
+      }),
+    );
+    return hotelWithRooms;
   }
 }
