@@ -11,7 +11,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Combobox } from "./ComboBox";
 import { useEffect, useState } from "react";
 import { destinations } from "@/lib/dataHotel";
-import { getFutureDate, toDayMonthYear } from "@/utils/convertTime";
+import {
+  convertTime,
+  getFutureDate,
+  toDayMonthYear,
+} from "@/utils/convertTime";
+import { useRouter } from "next/navigation";
+import objectToQueryString from "@/utils/convertToQueryString";
 
 export default function SearchHotels({
   fromHotelsPage,
@@ -24,8 +30,11 @@ export default function SearchHotels({
   fromHotelsPage?: boolean;
   fromSearchHotelsPage?: boolean;
   iniDestination?: {
+    code: string;
     name: string;
     title: string;
+    long: number;
+    lat: number;
   };
   iniDeparture?: string;
   iniDuration?: number;
@@ -40,8 +49,11 @@ export default function SearchHotels({
       return iniDestination;
     }
     return {
+      code: "",
       name: "",
       title: "",
+      lat: "",
+      long: "",
     };
   });
   const [departureTime, setDepatureTime] = useState(() => {
@@ -67,12 +79,39 @@ export default function SearchHotels({
       bedroom: 1,
     };
   });
+  const router = useRouter();
   useEffect(() => {
     if (departureTime !== "") {
       setArrivalTime(getFutureDate(departureTime, duration));
     }
   }, [departureTime, duration]);
-
+  const handleNavigate = () => {
+    const obj: any = {};
+    if (destination.lat && destination.long && destination.code) {
+      obj.lat = destination.lat;
+      obj.long = destination.long;
+      obj.code = destination.code;
+    }
+    if (departureTime) {
+      obj.departureTime = convertTime(departureTime);
+    }
+    if (arrivalTime) {
+      obj.arrivalTime = convertTime(arrivalTime.value);
+    }
+    if (duration) {
+      obj.duration = duration;
+    }
+    if (numberPassenger) {
+      const res =
+        numberPassenger.adult +
+        "-" +
+        numberPassenger.child +
+        "-" +
+        numberPassenger.bedroom;
+      obj.numberPassenger = res;
+    }
+    router.push("/hotels/search?" + objectToQueryString(obj));
+  };
   return (
     <div
       className={`${
@@ -110,6 +149,7 @@ export default function SearchHotels({
             <Combobox
               isCalendar={true}
               value={departureTime}
+              departureDate={iniDeparture}
               setValue={setDepatureTime}
               child={
                 <div className="flex items-center gap-2 bg-gray-300/25 px-4 py-2 rounded-lg">
@@ -167,7 +207,10 @@ export default function SearchHotels({
               }
             />
           </div>
-          <div className="flex basis-[10%] hover:opacity-80 transition-all cursor-pointer items-center gap-2 bg-white px-4 py-2 rounded-lg">
+          <div
+            onClick={() => handleNavigate()}
+            className="flex basis-[10%] hover:opacity-80 transition-all cursor-pointer items-center gap-2 bg-white px-4 py-2 rounded-lg"
+          >
             <div>
               <FontAwesomeIcon
                 icon={faMagnifyingGlass}
@@ -330,6 +373,7 @@ export default function SearchHotels({
             </div>
             <div className="basis-[33%] ">
               <Button
+                onClick={() => handleNavigate()}
                 type="submit"
                 className="py-6 select-none w-full text-[16px] bg-orange-600 font-bold hover:bg-orange-700 transition-all"
               >

@@ -5,6 +5,7 @@ import { Hotel } from 'src/entities/hotel.entity';
 import { HotelBody } from 'src/dtos/hotel/hotel.dto';
 import { Room } from 'src/entities/room.entity';
 import { RoomOpt } from 'src/entities/roomOpt.entity';
+import { getDistance } from 'geolib';
 @Injectable()
 export class HotelService {
   constructor(
@@ -31,15 +32,25 @@ export class HotelService {
           'https://shopcartimg2.blob.core.windows.net/shopcartctn/pexels-boonkong-boonpeng-442952-1134176.jpg',
       });
     });
-    const savePromises = hotels.map((hotel) => this.roomRepository.save(hotel));
-
+    const savePromises = hotels.map((hotel) =>
+      this.hotelRepository.save(hotel),
+    );
     await Promise.all(savePromises);
   }
-  async getHotel() {
-    const hotels = await this.hotelRepository
+  async getHotel(body: { long: number; lat: number }) {
+    const datas = await this.hotelRepository
       .createQueryBuilder('hotel')
       .getMany();
-
+    const distanceFromPoint = (hotel) => {
+      const hotelLat = Number(hotel.lat);
+      const hotelLong = Number(hotel.long);
+      const distance = getDistance(
+        { latitude: body.lat, longitude: body.long },
+        { latitude: hotelLat, longitude: hotelLong },
+      );
+      return distance <= 30000;
+    };
+    const hotels = datas.filter(distanceFromPoint);
     const hotelWithRooms = await Promise.all(
       hotels.map(async (hotel) => {
         const rooms = await this.roomRepository

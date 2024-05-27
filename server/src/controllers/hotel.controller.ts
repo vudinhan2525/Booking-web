@@ -11,8 +11,11 @@ export class HotelController {
     res.status(200).json({ status: 'success' });
   }
   @Post('getHotels')
-  async getHotel(@Body() data, @Res() res: Response) {
-    const result = await this.hotelService.getHotel();
+  async getHotel(
+    @Body() data: { long: number; lat: number },
+    @Res() res: Response,
+  ) {
+    const result = await this.hotelService.getHotel(data);
     res.status(200).json({ status: 'success', data: result });
   }
   @Post('getOneHotel')

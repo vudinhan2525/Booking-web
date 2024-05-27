@@ -1,7 +1,7 @@
 import http from "@/lib/http";
 
 const hotelApiRequest = {
-  getHotels: (body: any) =>
+  getHotels: (body: { long: number; lat: number }) =>
     http.post<any>("/hotel/getHotels", body, {
       headers: { "Content-Type": "application/json" },
     }),

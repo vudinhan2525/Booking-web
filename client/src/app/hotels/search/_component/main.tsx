@@ -11,20 +11,25 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 const sortArr = ["Lowest Price", "Highest Price", "Top Rating", "Most Viewed"];
 export default function MainSearchHotelPages() {
   const [sortSelected, setSortSelected] = useState(0);
   const [hotels, setHotels] = useState<IHotel[]>();
   const router = useRouter();
-
+  const searchParams = useSearchParams();
   useEffect(() => {
-    getHotels();
-  }, []);
+    if (searchParams) {
+      getHotels();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
   const getHotels = async () => {
+    const long = Number(searchParams.get("long"));
+    const lat = Number(searchParams.get("lat"));
     try {
-      const hotels = await hotelApiRequest.getHotels({});
+      const hotels = await hotelApiRequest.getHotels({ long, lat });
       setHotels(hotels.data);
     } catch (error) {
       console.log(error);

@@ -40,6 +40,7 @@ export function Combobox({
   isDestination?: boolean;
   isDurationList?: boolean;
 }) {
+  const [isFirst, setIsFirst] = React.useState(true);
   const [open, setOpen] = React.useState(false);
   const dropdownRef = React.useRef<HTMLDivElement>(null);
   React.useEffect(() => {
@@ -64,14 +65,16 @@ export function Combobox({
   React.useEffect(() => {
     if (setValue && isCalendar) {
       setValue(date);
+      if (departureDate && isFirst) {
+        setValue(new Date(departureDate));
+        setIsFirst(false);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date]);
   React.useEffect(() => {
     if (departureDate && date) {
-      if (departureDate > date) {
-        setDate(departureDate);
-      }
+      setDate(new Date(departureDate));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [departureDate]);
