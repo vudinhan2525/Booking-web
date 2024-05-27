@@ -58,4 +58,26 @@ export class HotelService {
     );
     return hotelWithRooms;
   }
+  async getOneHotel(hotelId: number) {
+    const hotel = await this.hotelRepository
+      .createQueryBuilder('hotel')
+      .where('id = :hotelId', { hotelId })
+      .getOne();
+    if (!hotel) {
+      return { status: 'failed', message: 'Cannot found hotel with this id!' };
+    }
+    const rooms = await this.roomRepository
+      .createQueryBuilder('room')
+      .leftJoinAndSelect('room.roomOpts', 'roomOpt')
+      .where('room.hotelId = :hotelId', { hotelId: hotel.id })
+      .orderBy('roomOpt.price')
+      .getMany();
+    const sortedRooms = rooms.sort((a, b) => {
+      const minPriceA = Math.min(...a.roomOpts.map((opt) => opt.price));
+      const minPriceB = Math.min(...b.roomOpts.map((opt) => opt.price));
+      return minPriceA - minPriceB;
+    });
+    const result = { ...hotel, rooms: sortedRooms };
+    return { status: 'success', data: result };
+  }
 }

@@ -13,6 +13,7 @@ export class RoomService {
       return this.roomRepository.create({
         id: item.id,
         name: item.name,
+        isSmoking: item.isSmoking,
         area: item.area,
         facilitiesRoom: item.facilitiesRoom,
         hotelId: item.hotelId,

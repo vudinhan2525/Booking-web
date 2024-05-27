@@ -4,10 +4,7 @@ import MainHotelDetail from "./_component/main";
 export default function Page() {
   return (
     <div className="bg-[#F7F9FA]">
-      <HeaderDetailHotel />
-      <div className="">
-        <MainHotelDetail />
-      </div>
+      <MainHotelDetail />
     </div>
   );
 }

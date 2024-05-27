@@ -1,137 +1,154 @@
 [
   {
     "id": 1,
+    "isSmoking": false,
     "name": "Superior Twin",
     "area": 32,
-    "facilitiesRoom": "Non-smoking,Shower,Seating area,Wifi",
+    "facilitiesRoom": "Shower,Seating area,Wifi",
     "hotelId": 1,
     "images": "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
   },
   {
     "id": 2,
+    "isSmoking": false,
     "name": "Studio Twin Mountain View",
     "area": 45,
-    "facilitiesRoom": "Non-smoking,Shower,Seating area,Wifi,Hot water",
+    "facilitiesRoom": "Shower,Seating area,Wifi,Hot water",
     "hotelId": 1,
     "images": "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
   },
   {
     "id": 3,
+    "isSmoking": false,
     "name": "Deluxe Twin Mountain View",
     "area": 32,
-    "facilitiesRoom": "Non-smoking,Shower,Seating area,Wifi,Hot water",
+    "facilitiesRoom": "Shower,Seating area,Wifi,Hot water",
     "hotelId": 1,
     "images": "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
   },
   {
     "id": 4,
+    "isSmoking": false,
     "name": "Deluxe King",
     "area": 36,
-    "facilitiesRoom": "Non-smoking,Shower,Seating area,Wifi,Hot water,Bathtub,Refrigerator",
+    "facilitiesRoom": "Shower,Seating area,Wifi,Hot water,Bathtub,Refrigerator",
     "hotelId": 2,
     "images": "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
   },
   {
     "id": 5,
+    "isSmoking": false,
     "name": "Premium Club Twin",
     "area": 40,
-    "facilitiesRoom": "Non-smoking,Shower,Seating area,Wifi,Hot water,Bathtub,Refrigerator",
+    "facilitiesRoom": "Shower,Seating area,Wifi,Hot water,Bathtub,Refrigerator",
     "hotelId": 2,
     "images": "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
   },
   {
     "id": 6,
+    "isSmoking": false,
     "name": "Deluxe Twin",
     "area": 36,
-    "facilitiesRoom": "Non-smoking,Shower,Seating area,Wifi,Hot water,Bathtub,Refrigerator",
+    "facilitiesRoom": "Shower,Seating area,Wifi,Hot water,Bathtub,Refrigerator",
     "hotelId": 2,
     "images": "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
   },
   {
     "id": 7,
+    "isSmoking": false,
     "name": "Deluxe",
     "area": 36,
-    "facilitiesRoom": "Non-smoking,Shower,Seating area,Wifi,Hot water,Balcony,Refrigerator",
+    "facilitiesRoom": "Shower,Seating area,Wifi,Hot water,Balcony,Refrigerator",
     "hotelId": 3,
     "images": "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
   },
   {
     "id": 8,
+    "isSmoking": false,
     "name": "Deluxe Horizon View",
     "area": 41,
-    "facilitiesRoom": "Non-smoking,Shower,Seating area,Wifi,Hot water,Balcony,Refrigerator",
+    "facilitiesRoom": "Shower,Seating area,Wifi,Hot water,Balcony,Refrigerator",
     "hotelId": 3,
     "images": "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
   },
   {
     "id": 9,
+    "isSmoking": false,
     "name": "Grand Premium",
     "area": 42,
-    "facilitiesRoom": "Non-smoking,Shower,Seating area,Wifi,Hot water,Balcony,Refrigerator",
+    "facilitiesRoom": "Shower,Seating area,Wifi,Hot water,Balcony,Refrigerator",
     "hotelId": 3,
     "images": "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
   },
   {
     "id": 10,
+    "isSmoking": false,
     "name": "Deluxe",
     "area": 32,
-    "facilitiesRoom": "Non-smoking,Air conditioning,Seating area,Wifi",
+    "facilitiesRoom": "Air conditioning,Seating area,Wifi",
     "hotelId": 4,
     "images": "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
   },
   {
     "id": 11,
+    "isSmoking": false,
     "name": "Premium - Prepayment Short - 02 Occ",
     "area": 36,
-    "facilitiesRoom": "Non-smoking,Air conditioning,Seating area,Wifi",
+    "facilitiesRoom": "Air conditioning,Seating area,Wifi",
     "hotelId": 4,
     "images": "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
   },
   {
     "id": 12,
+    "isSmoking": false,
     "name": "Standard Double",
     "area": 18,
-    "facilitiesRoom": "Non-smoking,Air conditioning,Seating area,Wifi",
+    "facilitiesRoom": "Air conditioning,Seating area,Wifi",
     "hotelId": 5,
     "images": "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
   },
   {
     "id": 13,
+    "isSmoking": false,
     "name": "Superior Double",
     "area": 22,
-    "facilitiesRoom": "Non-smoking,Air conditioning,Seating area,Wifi",
+    "facilitiesRoom": "Air conditioning,Seating area,Wifi",
     "hotelId": 5,
     "images": "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
   },
   {
     "id": 14,
+    "isSmoking": false,
     "name": "Deluxe King",
     "area": 40,
-    "facilitiesRoom": "Non-smoking,Air conditioning,Seating area,Wifi",
+    "facilitiesRoom": "Air conditioning,Seating area,Wifi",
     "hotelId": 6,
     "images": "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
   },
   {
     "id": 15,
+    "isSmoking": false,
     "name": "Deluxe Twin",
     "area": 40,
-    "facilitiesRoom": "Non-smoking,Air conditioning,Seating area,Wifi",
+    "facilitiesRoom": "Air conditioning,Seating area,Wifi",
     "hotelId": 6,
     "images": "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
   },
   {
     "id": 16,
+    "isSmoking": false,
     "name": "Sunshine Garden Double Or Twin",
     "area": 26,
-    "facilitiesRoom": "Non-smoking,Air conditioning,Seating area,Wifi",
+    "facilitiesRoom": "Air conditioning,Seating area,Wifi",
     "hotelId": 7,
     "images": "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
   },
   {
     "id": 17,
+    "isSmoking": false,
     "name": "Spring Field Window",
     "area": 28,
-    "facilitiesRoom": "Non-smoking,Air conditioning,Seating area,Wifi",
+    "facilitiesRoom": "Air conditioning,Seating area,Wifi",
     "hotelId": 7,
     "images": "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
   }

@@ -20,6 +20,9 @@ export class Room {
   area: number;
 
   @Column()
+  isSmoking: boolean;
+
+  @Column()
   facilitiesRoom: string;
 
   @Column()

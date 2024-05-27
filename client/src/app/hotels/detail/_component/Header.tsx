@@ -1,4 +1,5 @@
 "use client";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function HeaderDetailHotel() {
@@ -10,7 +11,9 @@ export default function HeaderDetailHotel() {
           return (
             <div
               key={idx}
-              onClick={() => setShowSlt(idx)}
+              onClick={() => {
+                setShowSlt(idx);
+              }}
               className={`${
                 showSlt === idx
                   ? "bg-white text-primary-color"

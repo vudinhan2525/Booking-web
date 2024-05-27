@@ -3,6 +3,7 @@ import hotelApiRequest from "@/apiRequest/hotel";
 import SortBarHotels from "@/components/component/SortBar/SortBarHotels";
 import { Button } from "@/components/ui/button";
 import { IHotel } from "@/interfaces/IHotel";
+import { formatNumber } from "@/utils/convertTime";
 import {
   faHotel,
   faLocationDot,
@@ -10,18 +11,20 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 const sortArr = ["Lowest Price", "Highest Price", "Top Rating", "Most Viewed"];
 export default function MainSearchHotelPages() {
   const [sortSelected, setSortSelected] = useState(0);
   const [hotels, setHotels] = useState<IHotel[]>();
+  const router = useRouter();
+
   useEffect(() => {
     getHotels();
   }, []);
   const getHotels = async () => {
     try {
       const hotels = await hotelApiRequest.getHotels({});
-      console.log(hotels.data);
       setHotels(hotels.data);
     } catch (error) {
       console.log(error);
@@ -58,6 +61,9 @@ export default function MainSearchHotelPages() {
             return (
               <div
                 key={idx}
+                onClick={() => {
+                  router.push(`/hotels/detail?hotelId=${el.id}`);
+                }}
                 className="mt-4 flex gap-4 p-3 cursor-pointer hover:border-[1px] hover:border-primary-color border-[1px] border-transparent bg-white rounded-lg shadow-md"
               >
                 <div className="basis-[35%]">
@@ -162,13 +168,17 @@ export default function MainSearchHotelPages() {
                             className="text-[#02A851]"
                           />
                         </div>
-                        <p className="text-[#02A851] text-xs">Save 28%!</p>
+                        <p className="text-[#02A851] text-xs">{`Save ${Math.round(
+                          (el.rooms[0].roomOpts[0].price * 100) /
+                            el.rooms[0].roomOpts[0].originalPrice
+                        )}%!`}</p>
                       </div>
                       <div className="text-gray-500 mt-2 text-sm line-through">
-                        2.055.055 VNĐ
+                        {formatNumber(el.rooms[0].roomOpts[0].originalPrice) +
+                          " VNĐ"}
                       </div>
                       <p className="text-xl text-orange-600 font-bold">
-                        1.458.294 VNĐ
+                        {formatNumber(el.rooms[0].roomOpts[0].price) + " VNĐ"}
                       </p>
                       <p className="text-xs text-gray-500">
                         Included tax & fees
