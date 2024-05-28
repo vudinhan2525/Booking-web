@@ -8,18 +8,26 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Slider from "react-slider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { formatNumber } from "@/utils/convertTime";
 import { facilities } from "@/utils/facilities";
+import { IFilterHotel } from "@/interfaces/IfliterObj";
 
-export default function SortBarHotels() {
+export default function SortBarHotels({
+  setFilterObj,
+  filterObj,
+}: {
+  setFilterObj: React.Dispatch<React.SetStateAction<IFilterHotel>>;
+  filterObj: IFilterHotel;
+}) {
   const [showList, setShowList] = useState<string[]>([
     "rating",
     "facilities",
     "price",
     "type",
   ]);
-  const [values, setValues] = useState([0, 3000000]);
+  const [values, setValues] = useState([0, 10000000]);
+
   return (
     <div className="bg-white px-6 rounded-xl border-[1px] py-4">
       <header className="text-2xl font-bold">Filter:</header>
@@ -57,7 +65,28 @@ export default function SortBarHotels() {
             {[1, 2, 3, 4, 5].map((el, idx) => {
               return (
                 <div key={idx} className="flex items-center gap-2">
-                  <Checkbox id={`terms-${idx}`} onCheckedChange={() => {}} />
+                  <Checkbox
+                    id={`terms-${idx}`}
+                    onCheckedChange={() => {
+                      let newArr = filterObj.rating.split(",");
+                      if (filterObj.rating === "") {
+                        newArr = [];
+                      }
+                      if (newArr.includes(el.toString())) {
+                        const tmpArr = newArr.filter((item) => {
+                          return item !== el.toString();
+                        });
+                        setFilterObj((prev) => {
+                          return { ...prev, rating: tmpArr.join() };
+                        });
+                      } else {
+                        newArr.push(el.toString());
+                        setFilterObj((prev) => {
+                          return { ...prev, rating: newArr.join() };
+                        });
+                      }
+                    }}
+                  />
                   <label
                     htmlFor={`terms-${idx}`}
                     className="leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -115,7 +144,28 @@ export default function SortBarHotels() {
             {facilities.map((el, idx) => {
               return (
                 <div key={idx} className="flex items-center gap-2">
-                  <Checkbox id={`terms2-${idx}`} onCheckedChange={() => {}} />
+                  <Checkbox
+                    id={`terms2-${idx}`}
+                    onCheckedChange={() => {
+                      let newArr = filterObj.facilities.split(",");
+                      if (filterObj.facilities === "") {
+                        newArr = [];
+                      }
+                      if (newArr.includes(el.title)) {
+                        const tmpArr = newArr.filter((item) => {
+                          return item !== el.title;
+                        });
+                        setFilterObj((prev) => {
+                          return { ...prev, facilities: tmpArr.join() };
+                        });
+                      } else {
+                        newArr.push(el.title);
+                        setFilterObj((prev) => {
+                          return { ...prev, facilities: newArr.join() };
+                        });
+                      }
+                    }}
+                  />
                   <label
                     htmlFor={`terms2-${idx}`}
                     className="leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -162,14 +212,14 @@ export default function SortBarHotels() {
         {showList.includes("price") && (
           <div className="animate-fadeIn">
             <div className="text-end text-xs mt-2 text-gray-400">
-              1.000.000VND - 3.000.000 VND
+              1.000.000VND - 10.000.000 VND
             </div>
             <Slider
               className="slider w-[90%] mx-auto h-[3px] rounded-lg bg-gray-200 mt-5"
               value={values}
               onChange={setValues}
               min={0}
-              max={3000000}
+              max={10000000}
             />
             <div className="mt-4 flex justify-between">
               <p className="text-sm text-gray-700">
@@ -179,7 +229,14 @@ export default function SortBarHotels() {
                 {formatNumber(values[1]) + " VND"}
               </p>
             </div>
-            <div className="flex justify-center mt-2" onClick={() => {}}>
+            <div
+              className="flex justify-center mt-2"
+              onClick={() => {
+                setFilterObj((prev) => {
+                  return { ...prev, priceMin: values[0], priceMax: values[1] };
+                });
+              }}
+            >
               <p className="border-primary-color cursor-pointer hover:bg-primary-color hover:text-white  transition-all text-primary-color border-[1px] w-fit px-6 py-2 rounded-lg">
                 Filter by price
               </p>
@@ -221,7 +278,28 @@ export default function SortBarHotels() {
             {accomodationType.map((el, idx) => {
               return (
                 <div key={idx} className="flex items-center gap-2">
-                  <Checkbox id={`terms3-${idx}`} onCheckedChange={() => {}} />
+                  <Checkbox
+                    id={`terms3-${idx}`}
+                    onCheckedChange={() => {
+                      let newArr = filterObj.accomodation.split(",");
+                      if (filterObj.accomodation === "") {
+                        newArr = [];
+                      }
+                      if (newArr.includes(el)) {
+                        const tmpArr = newArr.filter((item) => {
+                          return item !== el;
+                        });
+                        setFilterObj((prev) => {
+                          return { ...prev, accomodation: tmpArr.join() };
+                        });
+                      } else {
+                        newArr.push(el);
+                        setFilterObj((prev) => {
+                          return { ...prev, accomodation: newArr.join() };
+                        });
+                      }
+                    }}
+                  />
                   <label
                     htmlFor={`terms3-${idx}`}
                     className="leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"

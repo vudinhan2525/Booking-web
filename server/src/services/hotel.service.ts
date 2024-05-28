@@ -6,6 +6,7 @@ import { HotelBody } from 'src/dtos/hotel/hotel.dto';
 import { Room } from 'src/entities/room.entity';
 import { RoomOpt } from 'src/entities/roomOpt.entity';
 import { getDistance } from 'geolib';
+import { IFilterHotel } from 'src/interfaces/filterObj';
 @Injectable()
 export class HotelService {
   constructor(
@@ -37,7 +38,7 @@ export class HotelService {
     );
     await Promise.all(savePromises);
   }
-  async getHotel(body: { long: number; lat: number }) {
+  async getHotel(body: { long: number; lat: number; filter: IFilterHotel }) {
     const datas = await this.hotelRepository
       .createQueryBuilder('hotel')
       .getMany();
@@ -67,6 +68,38 @@ export class HotelService {
         return { ...hotel, rooms: sortedRooms };
       }),
     );
+    if (body.filter.sortBy === 'Lowest Price') {
+      const result = hotelWithRooms.sort((a, b) => {
+        let minA = 10000000;
+        let minB = 10000000;
+        if (a?.rooms.length > 0 && a.rooms[0]?.roomOpts.length > 0) {
+          minA = a.rooms[0].roomOpts[0].price;
+        }
+        if (b?.rooms.length > 0 && b.rooms[0]?.roomOpts.length > 0) {
+          minB = b.rooms[0].roomOpts[0].price;
+        }
+        return minA - minB;
+      });
+      return result;
+    } else if (body.filter.sortBy === 'Highest Price') {
+      const result = hotelWithRooms.sort((a, b) => {
+        let minA = 10000000;
+        let minB = 10000000;
+        if (a?.rooms.length > 0 && a.rooms[0]?.roomOpts.length > 0) {
+          minA = a.rooms[0].roomOpts[0].price;
+        }
+        if (b?.rooms.length > 0 && b.rooms[0]?.roomOpts.length > 0) {
+          minB = b.rooms[0].roomOpts[0].price;
+        }
+        return minB - minA;
+      });
+      return result;
+    } else if (body.filter.sortBy === 'Top Rating') {
+      const result = hotelWithRooms.sort((a, b) => {
+        return b.rating - a.rating;
+      });
+      return result;
+    }
     return hotelWithRooms;
   }
   async getOneHotel(hotelId: number) {

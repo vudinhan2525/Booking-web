@@ -1,6 +1,7 @@
 import { Body, Controller, Post, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { HotelBody } from 'src/dtos/hotel/hotel.dto';
+import { IFilterHotel } from 'src/interfaces/filterObj';
 import { HotelService } from 'src/services/hotel.service';
 
 @Controller('hotel')
@@ -12,7 +13,7 @@ export class HotelController {
   }
   @Post('getHotels')
   async getHotel(
-    @Body() data: { long: number; lat: number },
+    @Body() data: { long: number; lat: number; filter: IFilterHotel },
     @Res() res: Response,
   ) {
     const result = await this.hotelService.getHotel(data);

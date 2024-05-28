@@ -3,6 +3,7 @@ import hotelApiRequest from "@/apiRequest/hotel";
 import SortBarHotels from "@/components/component/SortBar/SortBarHotels";
 import { Button } from "@/components/ui/button";
 import { IHotel } from "@/interfaces/IHotel";
+import { IFilterHotel } from "@/interfaces/IfliterObj";
 import { formatNumber } from "@/utils/convertTime";
 import {
   faHotel,
@@ -14,22 +15,35 @@ import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 const sortArr = ["Lowest Price", "Highest Price", "Top Rating", "Most Viewed"];
+const initialFilObj: IFilterHotel = {
+  rating: "",
+  facilities: "",
+  priceMin: 0,
+  priceMax: 10000000,
+  accomodation: "",
+  sortBy: "Lowest Price",
+};
 export default function MainSearchHotelPages() {
   const [sortSelected, setSortSelected] = useState(0);
   const [hotels, setHotels] = useState<IHotel[]>();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [filterObj, setFilterObj] = useState<IFilterHotel>(initialFilObj);
   useEffect(() => {
-    if (searchParams) {
+    if (searchParams && filterObj) {
       getHotels();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams]);
+  }, [searchParams, filterObj]);
   const getHotels = async () => {
     const long = Number(searchParams.get("long"));
     const lat = Number(searchParams.get("lat"));
     try {
-      const hotels = await hotelApiRequest.getHotels({ long, lat });
+      const hotels = await hotelApiRequest.getHotels({
+        long,
+        lat,
+        filter: filterObj,
+      });
       setHotels(hotels.data);
     } catch (error) {
       console.log(error);
@@ -38,7 +52,7 @@ export default function MainSearchHotelPages() {
   return (
     <div className=" bg-[#F7F9FA]  border-t-[1px] flex gap-8 px-16 py-10">
       <div className="basis-[27%] ">
-        <SortBarHotels />
+        <SortBarHotels filterObj={filterObj} setFilterObj={setFilterObj} />
       </div>
       <div className="basis-[73%]">
         <div className="flex items-center bg-white px-6 gap-4 py-4 shadow-md rounded-lg">
@@ -48,6 +62,12 @@ export default function MainSearchHotelPages() {
               <div
                 key={idx}
                 onClick={() => {
+                  if (idx === sortSelected) {
+                    return;
+                  }
+                  setFilterObj((prev) => {
+                    return { ...prev, sortBy: el };
+                  });
                   setSortSelected(idx);
                 }}
                 className={`${
