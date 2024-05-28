@@ -20,7 +20,7 @@ const initialFilObj: IFilterHotel = {
   facilities: "",
   priceMin: 0,
   priceMax: 10000000,
-  accomodation: "",
+  accomodation: "Hotels",
   sortBy: "Lowest Price",
 };
 export default function MainSearchHotelPages() {
@@ -139,16 +139,21 @@ export default function MainSearchHotelPages() {
                   <div className="basis-[70%]">
                     <h1 className="mt-1 text-lg font-bold">{el.name}</h1>
                     <div className="flex gap-[3px] items-end">
-                      {[1, 2, 3, 4, 5].map((el, idx) => {
+                      {[1, 2, 3, 4, 5].map((el2, idx) => {
                         return (
                           <div key={idx}>
                             <FontAwesomeIcon
                               icon={faStar}
-                              className="text-sm text-[#FFDC00]"
+                              className={`${
+                                el2 < el.rating
+                                  ? "text-[#FFDC00]"
+                                  : "text-[#E5E7EB]"
+                              }  text-sm `}
                             />
                           </div>
                         );
                       })}
+                      <p className="text-xs text-gray-700 mb-[2px] ml-[3px]">{`${el.rating} /5`}</p>
                       <p className="text-xs text-gray-500 mb-[2px] ml-[3px]">
                         {`(${el.numberOfRating} reviews)`}
                       </p>

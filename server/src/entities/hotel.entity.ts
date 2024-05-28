@@ -24,7 +24,9 @@ export class Hotel {
   long: number;
   @Column('decimal', { precision: 18, scale: 15 })
   lat: number;
-  @Column({
+  @Column('decimal', {
+    precision: 10,
+    scale: 2,
     default: 0,
   })
   rating: number;

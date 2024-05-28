@@ -280,6 +280,7 @@ export default function SortBarHotels({
                 <div key={idx} className="flex items-center gap-2">
                   <Checkbox
                     id={`terms3-${idx}`}
+                    defaultChecked={idx === 0 ? true : false}
                     onCheckedChange={() => {
                       let newArr = filterObj.accomodation.split(",");
                       if (filterObj.accomodation === "") {

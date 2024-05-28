@@ -7,7 +7,8 @@ export class HotelBody {
   @IsNotEmpty()
   @Expose()
   name: string;
-
+  @Expose()
+  rating: number;
   @IsNotEmpty()
   @Expose()
   accomodation: string;

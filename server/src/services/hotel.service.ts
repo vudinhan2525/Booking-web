@@ -27,6 +27,7 @@ export class HotelService {
         location: item.location,
         long: item.long,
         lat: item.lat,
+        rating: item.rating,
         summary: item.summary,
         facilities: item.facilities,
         images:
@@ -39,9 +40,42 @@ export class HotelService {
     await Promise.all(savePromises);
   }
   async getHotel(body: { long: number; lat: number; filter: IFilterHotel }) {
-    const datas = await this.hotelRepository
-      .createQueryBuilder('hotel')
-      .getMany();
+    const accomodations = body.filter.accomodation.split(',');
+    const facilities = body.filter.facilities.split(',');
+    const ratings = body.filter.rating.split(',').map(Number);
+    let query = this.hotelRepository.createQueryBuilder('hotel');
+
+    // Filter by accomodations
+    if (accomodations.length > 0) {
+      query = query.where('hotel.accomodation IN (:...accomodations)', {
+        accomodations,
+      });
+    }
+    if (body.filter.facilities !== '') {
+      // Filter by facilities
+      facilities.forEach((facility, index) => {
+        query = query.andWhere(
+          `FIND_IN_SET(:facility${index}, hotel.facilities)`,
+          { [`facility${index}`]: facility.trim() },
+        );
+      });
+    }
+    if (body.filter.rating !== '') {
+      const ratingConditions = ratings
+        .map((rating, index) => {
+          return `hotel.rating BETWEEN :ratingStart${index} AND :ratingEnd${index}`;
+        })
+        .join(' OR ');
+
+      const ratingParams = ratings.reduce((params, rating, index) => {
+        params[`ratingStart${index}`] = rating;
+        params[`ratingEnd${index}`] = rating + 0.99;
+        return params;
+      }, {});
+
+      query = query.andWhere(`(${ratingConditions})`, ratingParams);
+    }
+    const datas = await query.getMany();
     const distanceFromPoint = (hotel) => {
       const hotelLat = Number(hotel.lat);
       const hotelLong = Number(hotel.long);

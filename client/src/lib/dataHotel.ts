@@ -48,9 +48,9 @@ destinations.forEach((el, idx) => {
 });
 export { destinationsMap };
 export const accomodationType = [
+  "Hotels",
   "Homes",
   "Others",
-  "Hotels",
   "Apartments",
   "Guest Houses",
   "B&B",
