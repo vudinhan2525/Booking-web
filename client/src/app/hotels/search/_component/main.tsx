@@ -14,6 +14,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import SkeletonItem from "./skeletonItem";
+import useDebounce from "@/hooks/useDebounce";
 const sortArr = ["Lowest Price", "Highest Price", "Top Rating", "Most Viewed"];
 const initialFilObj: IFilterHotel = {
   rating: "",
@@ -25,17 +33,25 @@ const initialFilObj: IFilterHotel = {
 };
 export default function MainSearchHotelPages() {
   const [sortSelected, setSortSelected] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   const [hotels, setHotels] = useState<IHotel[]>();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [filterObj, setFilterObj] = useState<IFilterHotel>(initialFilObj);
+  const debouncedSearchParams = useDebounce(searchParams, 500);
+  const debouncedFilterObj = useDebounce(filterObj, 500);
   useEffect(() => {
-    if (searchParams && filterObj) {
+    if (debouncedSearchParams && debouncedFilterObj) {
       getHotels();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams, filterObj]);
+  }, [debouncedSearchParams, debouncedFilterObj]);
+  const delay = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
   const getHotels = async () => {
+    if (isLoading) return;
+    setIsLoading(true);
+    await delay(1000);
     const long = Number(searchParams.get("long"));
     const lat = Number(searchParams.get("lat"));
     try {
@@ -48,6 +64,7 @@ export default function MainSearchHotelPages() {
     } catch (error) {
       console.log(error);
     }
+    setIsLoading(false);
   };
   return (
     <div className=" bg-[#F7F9FA]  border-t-[1px] flex gap-8 px-16 py-10">
@@ -81,7 +98,8 @@ export default function MainSearchHotelPages() {
             );
           })}
         </div>
-        {hotels &&
+        {!isLoading &&
+          hotels &&
           hotels.map((el, idx) => {
             return (
               <div
@@ -184,9 +202,22 @@ export default function MainSearchHotelPages() {
                           </div>
                         );
                       })}
-                      <div className="text-sm px-3 py-1 bg-gray-200 rounded-full">
-                        ...
-                      </div>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <div className="text-sm px-3 py-1 bg-gray-200 rounded-full">
+                              ...
+                            </div>
+                          </TooltipTrigger>
+                          <TooltipContent side="bottom" sideOffset={10}>
+                            <div className="flex flex-wrap max-w-[230px] gap-2">
+                              {el.facilities.split(",").map((el2, idx2) => {
+                                return <p key={idx2}>{el2}</p>;
+                              })}
+                            </div>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
                     </div>
                   </div>
                   <div className="basis-[30%] border-l-[1px]">
@@ -223,6 +254,13 @@ export default function MainSearchHotelPages() {
               </div>
             );
           })}
+        {isLoading && (
+          <div>
+            <SkeletonItem />
+            <SkeletonItem />
+            <SkeletonItem />
+          </div>
+        )}
       </div>
     </div>
   );

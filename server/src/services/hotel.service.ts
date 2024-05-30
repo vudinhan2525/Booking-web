@@ -45,12 +45,13 @@ export class HotelService {
     const ratings = body.filter.rating.split(',').map(Number);
     let query = this.hotelRepository.createQueryBuilder('hotel');
 
-    // Filter by accomodations
+    //Filter by accomodations
     if (accomodations.length > 0) {
       query = query.where('hotel.accomodation IN (:...accomodations)', {
         accomodations,
       });
     }
+    //Filter by facilities
     if (body.filter.facilities !== '') {
       // Filter by facilities
       facilities.forEach((facility, index) => {
@@ -60,6 +61,7 @@ export class HotelService {
         );
       });
     }
+    //Filter by rating
     if (body.filter.rating !== '') {
       const ratingConditions = ratings
         .map((rating, index) => {
@@ -76,6 +78,8 @@ export class HotelService {
       query = query.andWhere(`(${ratingConditions})`, ratingParams);
     }
     const datas = await query.getMany();
+
+    //Filter by range
     const distanceFromPoint = (hotel) => {
       const hotelLat = Number(hotel.lat);
       const hotelLong = Number(hotel.long);
@@ -86,7 +90,7 @@ export class HotelService {
       return distance <= 30000;
     };
     const hotels = datas.filter(distanceFromPoint);
-    const hotelWithRooms = await Promise.all(
+    let hotelWithRooms = await Promise.all(
       hotels.map(async (hotel) => {
         const rooms = await this.roomRepository
           .createQueryBuilder('room')
@@ -102,6 +106,20 @@ export class HotelService {
         return { ...hotel, rooms: sortedRooms };
       }),
     );
+    //Filter by price
+    if (body.filter.priceMax) {
+      const newArr = hotelWithRooms.filter((hotel) => {
+        if (
+          hotel?.rooms[0]?.roomOpts[0].price <= body.filter.priceMax &&
+          hotel?.rooms[0]?.roomOpts[0].price >= body.filter.priceMin
+        ) {
+          return true;
+        }
+        return false;
+      });
+      hotelWithRooms = newArr;
+    }
+    //Sort hotels
     if (body.filter.sortBy === 'Lowest Price') {
       const result = hotelWithRooms.sort((a, b) => {
         let minA = 10000000;
