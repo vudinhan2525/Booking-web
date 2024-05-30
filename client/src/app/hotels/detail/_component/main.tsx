@@ -9,19 +9,28 @@ import hotelApiRequest from "@/apiRequest/hotel";
 import { IHotel } from "@/interfaces/IHotel";
 import { useSearchParams } from "next/navigation";
 import Location from "./Location";
+import { IFilterHotel } from "@/interfaces/IfliterObj";
 
 export default function MainHotelDetail() {
   const searchParams = useSearchParams();
   const [hotel, setHotel] = useState<IHotel>();
+  const [hotelsNearBy, setHotelsNearBy] = useState<IHotel[]>();
   const [showSlt, setShowSlt] = useState(0);
   const overviewRef = useRef<HTMLInputElement>(null);
   const roomRef = useRef<HTMLInputElement>(null);
   const reviewRef = useRef<HTMLInputElement>(null);
   const locationRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
+    window.scrollTo(0, 0);
     getHotel();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  useEffect(() => {
+    if (hotel && Object.keys(hotel).length > 0) {
+      getHotelNearBy();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hotel]);
   const getHotel = async () => {
     const result = await hotelApiRequest.getOneHotel({
       hotelId: searchParams.get("hotelId"),
@@ -55,6 +64,27 @@ export default function MainHotelDetail() {
         block: "center",
       });
     }
+  };
+  const getHotelNearBy = async () => {
+    if (!hotel) return;
+    try {
+      const tmpObj: IFilterHotel = {
+        priceMax: 10000000,
+        priceMin: 0,
+        accomodation: "Hotels",
+        facilities: "",
+        rating: "",
+        sortBy: "",
+      };
+      const result = await hotelApiRequest.getHotels({
+        long: Number(hotel.long),
+        lat: Number(hotel.lat),
+        filter: tmpObj,
+      });
+      if (result.status === "success") {
+        setHotelsNearBy(result.data);
+      }
+    } catch (error) {}
   };
   return (
     <div>
@@ -95,10 +125,12 @@ export default function MainHotelDetail() {
             Similar accommodations where other guests were also staying in
           </p>
           <div className="grid grid-cols-4 gap-3 mt-4">
-            <HotelCart />
-            <HotelCart />
-            <HotelCart />
-            <HotelCart />
+            {hotelsNearBy &&
+              hotelsNearBy.map((el, idx) => {
+                if (el.id != hotel?.id) {
+                  return <HotelCart key={idx} hotel={el} />;
+                }
+              })}
           </div>
         </div>
         <div className="bg-white px-4 py-4 mt-8 rounded-lg">
