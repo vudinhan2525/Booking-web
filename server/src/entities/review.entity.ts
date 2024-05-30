@@ -37,4 +37,10 @@ export class Review {
   @ManyToOne(() => User)
   @JoinColumn({ name: 'userId' })
   user: User;
+
+  @Column({
+    type: 'json',
+    nullable: true,
+  })
+  imageUrls: string;
 }
