@@ -7,7 +7,9 @@ import React from "react";
 export default function Location({ hotel }: { hotel: IHotel }) {
   return (
     <div className="bg-white mt-4 px-4 py-6 rounded-lg shadow-md ">
-      <header className="text-2xl font-bold">Location</header>
+      <header className="text-2xl font-bold">
+        What&apos;s around Seashore Hotel & Apartment
+      </header>
       <div className="flex flex-col items-center gap-2 mt-2">
         <div className="flex gap-2 items-center">
           <div>

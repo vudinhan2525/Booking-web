@@ -1,6 +1,7 @@
 import { accomodationType } from 'src/utils/dataHotel';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { Room } from './room.entity';
+import { Review } from './review.entity';
 @Entity()
 export class Hotel {
   @PrimaryGeneratedColumn()
@@ -43,10 +44,9 @@ export class Hotel {
   facilities: string;
   @Column()
   images: string;
-  @Column({
-    default: 0,
-  })
-  roomLeft: number;
   @OneToMany(() => Room, (room) => room.hotel)
   rooms: Room[];
+
+  @OneToMany(() => Review, (review) => review.hotel)
+  reviews: Review[];
 }

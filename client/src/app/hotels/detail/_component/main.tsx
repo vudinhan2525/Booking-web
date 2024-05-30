@@ -10,6 +10,7 @@ import { IHotel } from "@/interfaces/IHotel";
 import { useSearchParams } from "next/navigation";
 import Location from "./Location";
 import { IFilterHotel } from "@/interfaces/IfliterObj";
+import RatingModal from "@/components/modals/RatingModal";
 
 export default function MainHotelDetail() {
   const searchParams = useSearchParams();
@@ -20,6 +21,10 @@ export default function MainHotelDetail() {
   const roomRef = useRef<HTMLInputElement>(null);
   const reviewRef = useRef<HTMLInputElement>(null);
   const locationRef = useRef<HTMLInputElement>(null);
+  const [showRatingModal, setShowRatingModal] = useState(() => {
+    if (searchParams.get("rating") === "1") return true;
+    return false;
+  });
   useEffect(() => {
     window.scrollTo(0, 0);
     getHotel();
@@ -133,14 +138,12 @@ export default function MainHotelDetail() {
               })}
           </div>
         </div>
-        <div className="bg-white px-4 py-4 mt-8 rounded-lg">
-          <header className="text-2xl font-bold">
-            What&apos;s around Seashore Hotel & Apartment
-          </header>
-        </div>
         <div ref={reviewRef}></div>
         <Rating />
       </div>
+      {showRatingModal && hotel && (
+        <RatingModal hotel={hotel} setShowRatingModal={setShowRatingModal} />
+      )}
     </div>
   );
 }
