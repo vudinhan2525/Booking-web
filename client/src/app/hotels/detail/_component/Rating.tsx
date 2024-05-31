@@ -1,11 +1,12 @@
 "use client";
 import reviewApiRequest from "@/apiRequest/review";
+import RatingModal from "@/components/modals/RatingModal";
 import { Progress } from "@/components/ui/progress";
 import { IHotel } from "@/interfaces/IHotel";
 import { IReview } from "@/interfaces/IReview";
 import { IUser } from "@/interfaces/IUser";
 import { toDayMonthYear } from "@/utils/convertTime";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { faPen, faPencil, faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
@@ -17,6 +18,7 @@ export default function Rating({
   hotel: IHotel;
   user?: IUser | null;
 }) {
+  const [editRating, setEditRating] = useState<IReview>();
   const [reviews, setReviews] = useState<IReview[]>([]);
   //https://shopcartimg2.blob.core.windows.net/shopcartctn/profile-user-icon-isolated-on-white-background-eps10-free-vector.jpg
   useEffect(() => {
@@ -35,8 +37,16 @@ export default function Rating({
       setReviews(result.data);
     }
   };
+  const [showEditRating, setShowEditRating] = useState(false);
   return (
     <div className="bg-white px-4 py-4 mt-8 rounded-lg">
+      {showEditRating && editRating && (
+        <RatingModal
+          hotel={hotel}
+          editRating={editRating}
+          setShowRatingModal={setShowEditRating}
+        />
+      )}
       <header className="text-2xl font-bold">Overall Rating & Reviews</header>
       <div className="flex gap-4 mt-4">
         <div className="basis-[25%]">
@@ -144,6 +154,20 @@ export default function Rating({
                     );
                   })}
                   <p className="text-sm ml-2">{`${el.rating}/5`}</p>
+                  {el.user.id === user?.id && (
+                    <div
+                      onClick={() => {
+                        setShowEditRating(true);
+                        setEditRating(el);
+                      }}
+                      className="cursor-pointer ml-2 "
+                    >
+                      <FontAwesomeIcon
+                        icon={faPen}
+                        className="text-sm text-gray-600 hover:text-gray-800 transition-all"
+                      />
+                    </div>
+                  )}
                 </div>
                 <div className="text-sm text-gray-700">
                   {toDayMonthYear(el.dateRate)}

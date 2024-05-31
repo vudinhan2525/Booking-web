@@ -1,8 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Review } from 'src/entities/review.entity';
-import uploadToAzureBlobStorage from 'src/utils/azureBlob';
+import uploadToAzureBlobStorage, {
+  deleteFromAzureBlobStorage,
+} from 'src/utils/azureBlob';
 import { ReviewBodyDto } from 'src/dtos/review/review.dto';
 import { Hotel } from 'src/entities/hotel.entity';
 @Injectable()
@@ -39,51 +41,7 @@ export class ReviewService {
       imageUrls: JSON.stringify(uploadedUrls),
     });
     const result = await this.reviewRepository.save(review);
-    const allReviews = await this.reviewRepository.find({
-      where: { hotelId: Number(body.hotelId) },
-    });
-    const totalReviews = allReviews.length;
-    const totalRatings = allReviews.reduce(
-      (acc, review) => acc + review.rating,
-      0,
-    );
-    const newOverallRating = totalRatings / totalReviews;
-    const hotel = await this.hotelRepository.findOne({
-      where: { id: Number(body.hotelId) },
-    });
-    if (!hotel) {
-      throw new Error('Hotel not found');
-    }
-    hotel.rating = newOverallRating;
-    hotel.numberOfRating = totalReviews;
-    let one = 0;
-    let two = 0;
-    let three = 0;
-    let four = 0;
-    let five = 0;
-    allReviews.forEach((review) => {
-      if (review.rating <= 5 && review.rating > 4) {
-        five++;
-      }
-      if (review.rating <= 4 && review.rating > 3) {
-        four++;
-      }
-      if (review.rating <= 3 && review.rating > 2) {
-        three++;
-      }
-      if (review.rating <= 2 && review.rating > 1) {
-        two++;
-      }
-      if (review.rating <= 1 && review.rating >= 0) {
-        one++;
-      }
-    });
-    hotel.oneStar = one;
-    hotel.twoStar = two;
-    hotel.threeStar = three;
-    hotel.fourStar = four;
-    hotel.fiveStar = five;
-    await this.hotelRepository.save(hotel);
+    await this.updateHotel(body.hotelId);
     return result;
   }
   getFormattedDateTimeInTimeZone = (offset: number) => {
@@ -125,5 +83,109 @@ export class ReviewService {
     reviews.push(...reviewsNotFromUser);
 
     return reviews;
+  }
+  async checkCanReview(body: { hotelId: number; userId: number }) {
+    const review = await this.reviewRepository
+      .createQueryBuilder('review')
+      .where('hotelId = :hotelId', { hotelId: body.hotelId })
+      .andWhere('review.userId != :userId', { userId: body.userId })
+      .getOne();
+    if (!review) return true;
+    return false;
+  }
+  async updateReviews(files: Array<Express.Multer.File>, body: ReviewBodyDto) {
+    const connectionString = process.env.AZURE_CONNECTION_STRING as string;
+    const containerName = 'shopcartctn';
+    const uploadedUrls = await Promise.all(
+      files.map(async (file) => {
+        const imageBuffer = file.buffer;
+        const containerName = 'shopcartctn';
+        const blobName = `${file.originalname}-${Date.now()}`;
+        const connectionString = process.env.AZURE_CONNECTION_STRING as string;
+        const imageUrl = await uploadToAzureBlobStorage(
+          imageBuffer,
+          containerName,
+          blobName,
+          connectionString,
+        );
+        return imageUrl;
+      }),
+    );
+    //delete old image
+    if (files && files.length > 0) {
+      const oldImageUrls = JSON.parse(body.oldImageUrls);
+      await Promise.all(
+        oldImageUrls.map(async (oldImageUrl) => {
+          const oldBlobName = oldImageUrl.substring(
+            oldImageUrl.lastIndexOf('/') + 1,
+          );
+          await deleteFromAzureBlobStorage(
+            containerName,
+            oldBlobName,
+            connectionString,
+          );
+        }),
+      );
+    }
+
+    const review = await this.reviewRepository.findOne({
+      where: { hotelId: Number(body.hotelId), userId: body.userId },
+    });
+    if (!review) {
+      throw new HttpException('Review not found!!', HttpStatus.BAD_REQUEST);
+    }
+    review.rating = body.rating;
+    review.summary = body.summary;
+    review.imageUrls = JSON.stringify(uploadedUrls);
+    const result = await this.reviewRepository.save(review);
+    await this.updateHotel(body.hotelId);
+    return result;
+  }
+  async updateHotel(hotelId: number) {
+    const allReviews = await this.reviewRepository.find({
+      where: { hotelId: Number(hotelId) },
+    });
+    const totalReviews = allReviews.length;
+    const totalRatings = allReviews.reduce(
+      (acc, review) => acc + review.rating,
+      0,
+    );
+    const newOverallRating = totalRatings / totalReviews;
+    const hotel = await this.hotelRepository.findOne({
+      where: { id: Number(hotelId) },
+    });
+    if (!hotel) {
+      throw new Error('Hotel not found');
+    }
+    hotel.rating = newOverallRating;
+    hotel.numberOfRating = totalReviews;
+    let one = 0;
+    let two = 0;
+    let three = 0;
+    let four = 0;
+    let five = 0;
+    allReviews.forEach((review) => {
+      if (review.rating <= 5 && review.rating > 4) {
+        five++;
+      }
+      if (review.rating <= 4 && review.rating > 3) {
+        four++;
+      }
+      if (review.rating <= 3 && review.rating > 2) {
+        three++;
+      }
+      if (review.rating <= 2 && review.rating > 1) {
+        two++;
+      }
+      if (review.rating <= 1 && review.rating >= 0) {
+        one++;
+      }
+    });
+    hotel.oneStar = one;
+    hotel.twoStar = two;
+    hotel.threeStar = three;
+    hotel.fourStar = four;
+    hotel.fiveStar = five;
+    await this.hotelRepository.save(hotel);
   }
 }

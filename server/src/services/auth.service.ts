@@ -12,7 +12,6 @@ export class AuthService {
     private usersRepository: Repository<User>,
   ) {}
   async login(body: LoginBodyDto) {
-    console.log(body);
     const user = await this.usersRepository
       .createQueryBuilder('user')
       .where('email = :email', { email: body.email })

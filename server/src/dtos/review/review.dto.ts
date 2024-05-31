@@ -18,4 +18,7 @@ export class ReviewBodyDto extends BaseDto {
   @IsNotEmpty()
   @Expose()
   userId: number;
+
+  @Expose()
+  oldImageUrls: string;
 }

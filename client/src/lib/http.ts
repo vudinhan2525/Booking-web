@@ -27,6 +27,7 @@ const request = async <Response>(
   if (method !== "GET") {
     fetchOptions.method = method;
     fetchOptions.body = body ?? {};
+    fetchOptions.cache = "no-store";
   }
   const result = await fetch(fullUrl, fetchOptions);
 

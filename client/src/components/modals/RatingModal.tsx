@@ -13,6 +13,7 @@ import { Textarea } from "../ui/textarea";
 import { useAppContext } from "@/app/AppProvider";
 import { useToast } from "../ui/use-toast";
 import reviewApiRequest from "@/apiRequest/review";
+import { IReview } from "@/interfaces/IReview";
 export default function RatingModal({
   hotel,
   setShowRatingModal,
@@ -20,7 +21,7 @@ export default function RatingModal({
 }: {
   hotel: IHotel;
   setShowRatingModal: React.Dispatch<React.SetStateAction<boolean>>;
-  editRating?: boolean;
+  editRating?: IReview;
 }) {
   const [preview, setPreview] = useState<string[]>([]);
   const [files, setFiles] = useState<File[]>([]);
@@ -29,6 +30,7 @@ export default function RatingModal({
   const inputRef = useRef<HTMLInputElement>(null);
   const { user } = useAppContext();
   const { toast } = useToast();
+  const [canReview, setCanReview] = useState(true);
   useEffect(() => {
     if (!files) return;
     let tmp = [];
@@ -59,6 +61,37 @@ export default function RatingModal({
     files.forEach((file, index) => {
       formData.append("files", file);
     });
+    if (editRating && Object.keys(editRating).length > 0) {
+      formData.append("oldImageUrls", JSON.stringify(editRating.imageUrls));
+      // handle update rating
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_ENDPOINT}/review/updateReview`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+        const result = await response.json();
+        if (result.status === "success") {
+          toast({
+            title: "",
+            status: "success",
+            description: "Review added successfully !",
+          });
+          setShowRatingModal(false);
+          window.location.reload();
+        }
+      } catch (error) {
+        toast({
+          title: "",
+          status: "error",
+          description: "Review added failed !",
+        });
+      }
+      return;
+    }
+
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_ENDPOINT}/review/addReview`,
@@ -84,6 +117,33 @@ export default function RatingModal({
       });
     }
   };
+  useEffect(() => {
+    if (editRating && Object.keys(editRating).length > 0) {
+      setContentRating(editRating.summary);
+      setRating(editRating.rating);
+      setPreview(editRating.imageUrls);
+    }
+  }, [editRating]);
+
+  useEffect(() => {
+    if (user) {
+      checkCanReview();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+  const checkCanReview = async () => {
+    if (!user) return;
+    const result = await reviewApiRequest.checkCanReview({
+      hotelId: hotel.id,
+      userId: user.id,
+    });
+    if (result.status === "success") {
+      if (editRating && Object.keys(editRating).length > 0) {
+        return;
+      }
+      setCanReview(result.data);
+    }
+  };
   return (
     <div className="fixed animate-slideTopDown z-[999] top-0 bottom-0 right-0 left-0 bg-black/30">
       <div className="fixed w-[580px]  px-6 pt-6 pb-3 bg-white top-[50%] dark:bg-dark-flat translate-y-[-50%] left-[50%] translate-x-[-50%] rounded-3xl">
@@ -105,7 +165,20 @@ export default function RatingModal({
             </Button>
           </div>
         )}
-        {user && (
+        {canReview === false && (
+          <div className="h-[100px] text-center mt-4">
+            <div>You already rated this hotel.</div>
+            <Button
+              onClick={() => {
+                setShowRatingModal(false);
+              }}
+              className="bg-white mt-4 border-[1px] border-gray-800 text-gray-700 hover:bg-gray-100 font-bold"
+            >
+              Cancel
+            </Button>
+          </div>
+        )}
+        {user && canReview && (
           <div>
             <div className="w-full h-[1px] bg-gray-200 dark:bg-gray-700 my-4"></div>
             <div className="overflow-y-scroll max-h-[400px] px-3">
@@ -218,7 +291,9 @@ export default function RatingModal({
                 }}
                 className="bg-primary-color font-bold hover:bg-blue-600 dark:bg-primary-dark-color"
               >
-                Post
+                {editRating && Object.keys(editRating).length > 0
+                  ? "Save"
+                  : "Post"}
               </Button>
             </div>
           </div>
