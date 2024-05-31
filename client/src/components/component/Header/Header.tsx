@@ -41,6 +41,7 @@ export default function Header() {
         "fixed"
       } top-0 left-0 pt-2 right-0 `}
     >
+      <div className="absolute z-[100] right-0"></div>
       <div className="flex  items-center justify-between ">
         <div
           onClick={() => {

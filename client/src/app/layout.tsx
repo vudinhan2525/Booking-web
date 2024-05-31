@@ -5,6 +5,7 @@ import { AppProvider } from "./AppProvider";
 import ShowModal from "../components/modals/ShowModal";
 import Header from "@/components/component/Header/Header";
 import Footer from "@/components/component/Footer/Footer";
+import { Toaster } from "@/components/ui/toaster";
 const nunito = Nunito({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -26,6 +27,7 @@ export default async function RootLayout({
           <ShowModal />
           <Footer />
         </AppProvider>
+        <Toaster />
       </body>
     </html>
   );

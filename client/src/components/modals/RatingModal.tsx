@@ -11,7 +11,8 @@ import { Button } from "../ui/button";
 import { IHotel } from "@/interfaces/IHotel";
 import { Textarea } from "../ui/textarea";
 import { useAppContext } from "@/app/AppProvider";
-
+import { useToast } from "../ui/use-toast";
+import reviewApiRequest from "@/apiRequest/review";
 export default function RatingModal({
   hotel,
   setShowRatingModal,
@@ -21,12 +22,13 @@ export default function RatingModal({
   setShowRatingModal: React.Dispatch<React.SetStateAction<boolean>>;
   editRating?: boolean;
 }) {
-  const [files, setFiles] = useState<File[]>([]);
   const [preview, setPreview] = useState<string[]>([]);
+  const [files, setFiles] = useState<File[]>([]);
   const [rating, setRating] = useState(1);
   const [contentRating, setContentRating] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const { user } = useAppContext();
+  const { toast } = useToast();
   useEffect(() => {
     if (!files) return;
     let tmp = [];
@@ -44,6 +46,43 @@ export default function RatingModal({
   const handleClickDeleteImage = (idx: number) => {
     const updatedFiles = files.filter((el, id) => id !== idx);
     setFiles(updatedFiles);
+  };
+  const handleAddReview = async () => {
+    if (!user || Object.keys(user).length === 0 || contentRating.trim() === "")
+      return;
+
+    const formData = new FormData();
+    formData.append("rating", rating.toString()); // Convert number to string
+    formData.append("summary", contentRating);
+    formData.append("hotelId", hotel.id.toString());
+    formData.append("userId", user.id.toString());
+    files.forEach((file, index) => {
+      formData.append("files", file);
+    });
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_ENDPOINT}/review/addReview`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+      const result = await response.json();
+      if (result.status === "success") {
+        toast({
+          title: "",
+          status: "success",
+          description: "Review added successfully !",
+        });
+        setShowRatingModal(false);
+      }
+    } catch (error) {
+      toast({
+        title: "",
+        status: "error",
+        description: "Review added failed !",
+      });
+    }
   };
   return (
     <div className="fixed animate-slideTopDown z-[999] top-0 bottom-0 right-0 left-0 bg-black/30">
@@ -174,7 +213,9 @@ export default function RatingModal({
                 Cancel
               </Button>
               <Button
-                onClick={() => {}}
+                onClick={() => {
+                  handleAddReview();
+                }}
                 className="bg-primary-color font-bold hover:bg-blue-600 dark:bg-primary-dark-color"
               >
                 Post
