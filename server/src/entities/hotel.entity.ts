@@ -49,4 +49,15 @@ export class Hotel {
 
   @OneToMany(() => Review, (review) => review.hotel)
   reviews: Review[];
+
+  @Column({ default: 0 })
+  oneStar: number;
+  @Column({ default: 0 })
+  twoStar: number;
+  @Column({ default: 0 })
+  threeStar: number;
+  @Column({ default: 0 })
+  fourStar: number;
+  @Column({ default: 0 })
+  fiveStar: number;
 }

@@ -12,9 +12,12 @@ export class AuthService {
     private usersRepository: Repository<User>,
   ) {}
   async login(body: LoginBodyDto) {
-    const user = await this.usersRepository.findOne({
-      where: { email: body.email },
-    });
+    console.log(body);
+    const user = await this.usersRepository
+      .createQueryBuilder('user')
+      .where('email = :email', { email: body.email })
+      .addSelect('user.password')
+      .getOne();
     if (!user || !(await bcrypt.compare(body.password, user.password))) {
       throw new HttpException(
         'Email or password is not correct',

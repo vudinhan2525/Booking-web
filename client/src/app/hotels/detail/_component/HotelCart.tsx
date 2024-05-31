@@ -33,7 +33,9 @@ export default function HotelCart({ hotel }: { hotel: IHotel }) {
                   <FontAwesomeIcon
                     icon={faStar}
                     className={` ${
-                      el <= hotel.rating ? "text-[#FFDC00]" : "text-[#E5E7EB]"
+                      el <= Number(hotel.rating)
+                        ? "text-[#FFDC00]"
+                        : "text-[#E5E7EB]"
                     } text-sm`}
                   />
                 </div>

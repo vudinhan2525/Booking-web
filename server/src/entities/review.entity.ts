@@ -43,4 +43,13 @@ export class Review {
     nullable: true,
   })
   imageUrls: string;
+
+  @Column({
+    type: 'nvarchar',
+    length: 5000,
+    nullable: true,
+  })
+  reply: string;
+  @Column({ nullable: true })
+  replyDate: Date;
 }

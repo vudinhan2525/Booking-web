@@ -11,6 +11,7 @@ import { useSearchParams } from "next/navigation";
 import Location from "./Location";
 import { IFilterHotel } from "@/interfaces/IfliterObj";
 import RatingModal from "@/components/modals/RatingModal";
+import { useAppContext } from "@/app/AppProvider";
 
 export default function MainHotelDetail() {
   const searchParams = useSearchParams();
@@ -21,6 +22,7 @@ export default function MainHotelDetail() {
   const roomRef = useRef<HTMLInputElement>(null);
   const reviewRef = useRef<HTMLInputElement>(null);
   const locationRef = useRef<HTMLInputElement>(null);
+  const { user } = useAppContext();
   const [showRatingModal, setShowRatingModal] = useState(() => {
     if (searchParams.get("rating") === "1") return true;
     return false;
@@ -139,7 +141,7 @@ export default function MainHotelDetail() {
           </div>
         </div>
         <div ref={reviewRef}></div>
-        <Rating />
+        {hotel && <Rating hotel={hotel} user={user} />}
       </div>
       {showRatingModal && hotel && (
         <RatingModal hotel={hotel} setShowRatingModal={setShowRatingModal} />

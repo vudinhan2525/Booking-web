@@ -27,10 +27,9 @@ export class AuthMiddleWare implements NestMiddleware {
           token,
           process.env.JWT_SECRET,
         );
-
         //3) Check if user still exists
         const curUser = await this.usersRepository.findOne({
-          where: { id: decoded.id },
+          where: { id: decoded.userId },
         });
         if (!curUser) {
           return res.status(401).json({ message: 'Unauthorized' });

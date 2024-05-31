@@ -7,8 +7,13 @@ export interface IHotel {
   location: string;
   address: string;
   long: string;
+  oneStar: number;
+  twoStar: number;
+  threeStar: number;
+  fourStar: number;
+  fiveStar: number;
   lat: string;
-  rating: number;
+  rating: string;
   numberOfRating: number;
   summary: string;
   facilities: string;

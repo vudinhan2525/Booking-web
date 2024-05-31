@@ -51,7 +51,15 @@ export class ReviewController {
     @Body() data: ReviewBodyDto,
     @Res() res: Response,
   ) {
-    await this.reviewService.createReview(files, data);
-    res.status(200).json({ status: 'success' });
+    const result = await this.reviewService.createReview(files, data);
+    res.status(200).json({ status: 'success', data: result });
+  }
+  @Post('getReviews')
+  async getReviews(
+    @Body() data: { hotelId: number; userId?: number },
+    @Res() res: Response,
+  ) {
+    const result = await this.reviewService.getReviews(data);
+    res.status(200).json({ status: 'success', data: result });
   }
 }
