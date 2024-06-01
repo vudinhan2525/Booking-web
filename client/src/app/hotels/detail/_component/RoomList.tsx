@@ -5,6 +5,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { SheetTrigger } from "@/components/ui/sheet";
 import { IHotel } from "@/interfaces/IHotel";
 import { RefundableIcon } from "@/lib/icon";
 import { formatNumber } from "@/utils/convertTime";
@@ -18,7 +19,15 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 
-export default function RoomList({ hotel }: { hotel: IHotel }) {
+export default function RoomList({
+  hotel,
+  setRoomSelected,
+  setRoomOptSelected,
+}: {
+  hotel: IHotel;
+  setRoomSelected: React.Dispatch<React.SetStateAction<number>>;
+  setRoomOptSelected: React.Dispatch<React.SetStateAction<number>>;
+}) {
   return (
     <div className="mt-4">
       <header className="text-xl font-bold">
@@ -154,9 +163,17 @@ export default function RoomList({ hotel }: { hotel: IHotel }) {
                         </p>
                       </div>
                       <div className="basis-[20%] px-3  py-3 border-l-[1px]">
-                        <div className="px-6 mt-4 text-center cursor-pointer hover:bg-orange-700 transition-all py-2 rounded-lg text-sm font-bold bg-orange-600 text-white ">
-                          Choose
-                        </div>
+                        <SheetTrigger
+                          onClick={() => {
+                            setRoomOptSelected(id);
+                            setRoomSelected(idx);
+                          }}
+                        >
+                          <div className="px-6 mt-4 text-center cursor-pointer hover:bg-orange-700 transition-all py-2 rounded-lg text-sm font-bold bg-orange-600 text-white ">
+                            Choose
+                          </div>
+                        </SheetTrigger>
+
                         <p className="text-xs text-orange-600  mt-1">
                           {roomOpt.roomLeft < 10
                             ? `Only ${roomOpt.roomLeft} room(s) available`

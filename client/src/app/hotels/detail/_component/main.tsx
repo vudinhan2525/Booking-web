@@ -12,12 +12,24 @@ import Location from "./Location";
 import { IFilterHotel } from "@/interfaces/IfliterObj";
 import RatingModal from "@/components/modals/RatingModal";
 import { useAppContext } from "@/app/AppProvider";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import SheetSelectRoom from "./SheetSelectRoom";
+import { IRoomOpt } from "@/interfaces/IRoomOpt";
 
 export default function MainHotelDetail() {
   const searchParams = useSearchParams();
   const [hotel, setHotel] = useState<IHotel>();
   const [hotelsNearBy, setHotelsNearBy] = useState<IHotel[]>();
   const [showSlt, setShowSlt] = useState(0);
+  const [roomSelected, setRoomSelected] = useState(0);
+  const [roomOptSelected, setRoomOptSelected] = useState(0);
   const overviewRef = useRef<HTMLInputElement>(null);
   const roomRef = useRef<HTMLInputElement>(null);
   const reviewRef = useRef<HTMLInputElement>(null);
@@ -94,58 +106,75 @@ export default function MainHotelDetail() {
     } catch (error) {}
   };
   return (
-    <div>
-      <div className="sticky py-2 gap-2 flex top-0 px-24 z-10 bg-flight-ct">
-        {["Overview", "Room", "Location", "Facilities", "Reviews"].map(
-          (el, idx) => {
-            return (
-              <div
-                key={idx}
-                onClick={() => {
-                  setShowSlt(idx);
-                  handleScrollToView(idx);
-                }}
-                className={`${
-                  showSlt === idx
-                    ? "bg-white text-primary-color"
-                    : "text-white hover:bg-gray-300/25"
-                } px-3 py-2 text-sm  font-semibold rounded-lg cursor-pointer transition-all `}
-              >
-                {el}
-              </div>
-            );
-          }
+    <Sheet>
+      <div>
+        <SheetContent className="xl:w-[600px] xl:max-w-none sm:w-[400px] sm:max-w-[540px]">
+          {hotel && (
+            <SheetSelectRoom
+              hotel={hotel}
+              roomSelected={roomSelected}
+              roomOptSelected={roomOptSelected}
+            />
+          )}
+        </SheetContent>
+        <div className="sticky py-2 gap-2 flex top-0 px-24 z-10 bg-flight-ct">
+          {["Overview", "Room", "Location", "Facilities", "Reviews"].map(
+            (el, idx) => {
+              return (
+                <div
+                  key={idx}
+                  onClick={() => {
+                    setShowSlt(idx);
+                    handleScrollToView(idx);
+                  }}
+                  className={`${
+                    showSlt === idx
+                      ? "bg-white text-primary-color"
+                      : "text-white hover:bg-gray-300/25"
+                  } px-3 py-2 text-sm  font-semibold rounded-lg cursor-pointer transition-all `}
+                >
+                  {el}
+                </div>
+              );
+            }
+          )}
+        </div>
+        <div className="px-36 ">
+          <div ref={overviewRef}></div>
+          {hotel && <Overview hotel={hotel} />}
+          <div ref={roomRef}></div>
+          {hotel && (
+            <RoomList
+              hotel={hotel}
+              setRoomSelected={setRoomSelected}
+              setRoomOptSelected={setRoomOptSelected}
+            />
+          )}
+          <div ref={locationRef}></div>
+          {hotel && <Location hotel={hotel} />}
+          <div className="bg-[#D8F1FF]/90 px-4 py-8 rounded-xl mt-12">
+            <header className="text-2xl font-bold">
+              Other Accommodations You Might Like
+            </header>
+            <p className="text-sm">
+              Similar accommodations where other guests were also staying in
+            </p>
+            <div className="grid grid-cols-4 gap-3 mt-4">
+              {hotelsNearBy &&
+                hotelsNearBy.map((el, idx) => {
+                  if (el.id != hotel?.id) {
+                    return <HotelCart key={idx} hotel={el} />;
+                  }
+                })}
+            </div>
+          </div>
+          <div ref={reviewRef}></div>
+          {hotel && <Rating hotel={hotel} user={user} />}
+        </div>
+        {showRatingModal && hotel && (
+          <RatingModal hotel={hotel} setShowRatingModal={setShowRatingModal} />
         )}
       </div>
-      <div className="px-36 ">
-        <div ref={overviewRef}></div>
-        {hotel && <Overview hotel={hotel} />}
-        <div ref={roomRef}></div>
-        {hotel && <RoomList hotel={hotel} />}
-        <div ref={locationRef}></div>
-        {hotel && <Location hotel={hotel} />}
-        <div className="bg-[#D8F1FF]/90 px-4 py-8 rounded-xl mt-12">
-          <header className="text-2xl font-bold">
-            Other Accommodations You Might Like
-          </header>
-          <p className="text-sm">
-            Similar accommodations where other guests were also staying in
-          </p>
-          <div className="grid grid-cols-4 gap-3 mt-4">
-            {hotelsNearBy &&
-              hotelsNearBy.map((el, idx) => {
-                if (el.id != hotel?.id) {
-                  return <HotelCart key={idx} hotel={el} />;
-                }
-              })}
-          </div>
-        </div>
-        <div ref={reviewRef}></div>
-        {hotel && <Rating hotel={hotel} user={user} />}
-      </div>
-      {showRatingModal && hotel && (
-        <RatingModal hotel={hotel} setShowRatingModal={setShowRatingModal} />
-      )}
-    </div>
+    </Sheet>
   );
 }
