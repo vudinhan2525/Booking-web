@@ -1,4 +1,5 @@
 "use client";
+import Dialog from "@/components/modals/Dialog";
 import { Button } from "@/components/ui/button";
 import {
   Carousel,
@@ -7,19 +8,21 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { Checkbox } from "@/components/ui/checkbox";
 import { IHotel } from "@/interfaces/IHotel";
-import { RefundableIcon } from "@/lib/icon";
+import { PayPalIcon, RefundableIcon } from "@/lib/icon";
 import { convertTime4, formatNumber } from "@/utils/convertTime";
 import {
   faBanSmoking,
   faBed,
+  faHotel,
   faStar,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 export default function SheetSelectRoom({
   hotel,
@@ -95,6 +98,8 @@ export default function SheetSelectRoom({
     return new Date(Number(year), Number(month) - 1, Number(day));
   });
   const [arrivalTime, setArrivalTime] = useState<Date>();
+  const [price, setPrice] = useState(0);
+  const [methods, setMethod] = useState([1, 0]);
   useEffect(() => {
     if (departureTime && duration) {
       const durationInMilliseconds = duration * 24 * 60 * 60 * 1000;
@@ -104,6 +109,20 @@ export default function SheetSelectRoom({
       setArrivalTime(arrival);
     }
   }, [departureTime, duration]);
+  useEffect(() => {
+    if (
+      hotel &&
+      roomOptSelected !== undefined &&
+      roomSelected !== undefined &&
+      numberOfPassenger
+    ) {
+      setPrice(
+        hotel.rooms[roomSelected].roomOpts[roomOptSelected].price *
+          (numberOfPassenger.room + duration)
+      );
+    }
+  }, [hotel, roomOptSelected, roomSelected, numberOfPassenger, duration]);
+  const [showPaymentDialog, setShowPaymentDialog] = useState(false);
   return (
     <div>
       <div>
@@ -166,7 +185,7 @@ export default function SheetSelectRoom({
           </div>
         </div>
         <div className="basis-[20%] flex items-center gap-1 flex-col justify-center">
-          <p className="text-xs text-gray-600 font-semibold">{`${duration} Night`}</p>
+          <p className="text-xs text-gray-600 font-semibold">{`${duration} Night(s)`}</p>
           <div className="w-full h-[1px] bg-gray-200 relative">
             <div className="absolute w-[10px] h-[10px] border-[1px] rounded-full top-0 translate-y-[-50%] bg-white"></div>
             <div className="absolute w-[10px] h-[10px] border-[1px] border-gray-600 rounded-full right-0 translate-y-[-50%] bg-gray-600"></div>
@@ -235,14 +254,100 @@ export default function SheetSelectRoom({
           </p>
         </div>
       </div>
-      <div className="h-[2000px]">res</div>
+      <div className="w-full h-[1px] bg-gray-300 my-4"></div>
+      <div className=" mt-2">
+        <header className="text-xl text-black font-bold">
+          Payment methods
+        </header>
+        <div
+          onClick={() => {
+            setMethod([1, 0]);
+          }}
+          className={`${
+            methods[0] === 1 ? "bg-gray-100" : ""
+          } mt-2 flex items-center cursor-pointer transition-all px-4 py-4 border-[1px] rounded-lg`}
+        >
+          <Checkbox
+            id="terms1"
+            defaultChecked={!!methods[0]}
+            checked={!!methods[0]}
+          />
+          <div className="ml-3 mt-[2px]">
+            <FontAwesomeIcon icon={faHotel} className="text-gray-600" />
+          </div>
+          <p className="ml-[6px] select-none font-semibold cursor-pointer">
+            Pay at hotel
+          </p>
+        </div>
+        <div
+          onClick={() => {
+            setMethod([0, 1]);
+          }}
+          className={`${
+            methods[1] === 1 ? "bg-gray-100" : ""
+          } mt-2 flex items-center cursor-pointer transition-all px-4 py-4 border-[1px] rounded-lg`}
+        >
+          <Checkbox
+            id="terms2"
+            defaultChecked={!!methods[1]}
+            checked={!!methods[1]}
+          />
+          <div className="ml-3 mt-[2px] relative w-[40px] h-[20px] ">
+            <Image
+              alt="img"
+              fill
+              priority
+              sizes="100%"
+              quality={60}
+              style={{
+                objectFit: "cover",
+                objectPosition: "center",
+              }}
+              src="https://shopcartimg2.blob.core.windows.net/shopcartctn/paypal.png"
+            />
+          </div>
+          <p className="ml-[10px] mt-[2px] select-none font-semibold cursor-pointer">
+            Paypal
+          </p>
+        </div>
+      </div>
+      <div className="w-full h-[1px] bg-gray-300 my-5"></div>
+      <div className="px-4 py-4 border-[1px] rounded-lg mt-2">
+        <header className="text-xl text-black font-bold">Price detail</header>
+        <div className="flex mt-2 justify-between items-center">
+          <div>
+            <p className="font-bold">Price: </p>
+            <p className="text-sm">{`${numberOfPassenger.room} Room(s), ${duration} Night(s)`}</p>
+          </div>
+          <p className="text-sm font-semibold text-black">
+            {formatNumber(price) + " VNĐ"}
+          </p>
+        </div>
+        <div className="flex mt-1 justify-between items-center">
+          <div>
+            <p className="font-bold">Tax (10%): </p>
+          </div>
+          <p className="text-sm font-semibold text-black">
+            {formatNumber((price * 10) / 100) + " VNĐ"}
+          </p>
+        </div>
+        <div className="w-full h-[1px] bg-gray-300 my-4"></div>
+        <div className="flex mt-2 justify-between items-center">
+          <div>
+            <p className="font-bold">Total price: </p>
+          </div>
+          <p className=" font-bold text-black">
+            {formatNumber((price * 110) / 100) + " VNĐ"}
+          </p>
+        </div>
+      </div>
       <div className="sticky py-2 justify-between bottom-0 flex border-t-[1px] w-full h-[60px] bg-white">
         <div>
           <p className=" font-bold">Total price:</p>
-          <p className="text-sm">{`1 Room(s), 1 Night(s)`}</p>
+          <p className="text-sm">{`${numberOfPassenger.room} Room(s), ${duration} Night(s)`}</p>
         </div>
         <div className="flex gap-4">
-          <div>
+          <div className="flex flex-col items-end">
             <p className="text-sm line-through text-gray-600">
               {formatNumber(
                 hotel.rooms[roomSelected].roomOpts[roomOptSelected]
@@ -250,16 +355,32 @@ export default function SheetSelectRoom({
               ) + " VNĐ"}
             </p>
             <p className=" text-orange-600 font-bold">
-              {formatNumber(
-                hotel.rooms[roomSelected].roomOpts[roomOptSelected].price
-              ) + " VNĐ"}
+              {formatNumber((price * 110) / 100) + " VNĐ"}
             </p>
           </div>
-          <Button className="font-bold bg-orange-600 hover:bg-orange-700 text-white">
+          <Button
+            onClick={() => {
+              setShowPaymentDialog(true);
+            }}
+            className="font-bold bg-orange-600 hover:bg-orange-700 text-white"
+          >
             Payment
           </Button>
         </div>
       </div>
+      {showPaymentDialog && (
+        <Dialog
+          onYes={() => {}}
+          onClose={() => {
+            setShowPaymentDialog(false);
+          }}
+          buttonContent={"Yes"}
+          message={"Are you sure want to booking this hotel."}
+          content={
+            "You will get a ticket to booking this hotel, , you cannot undo this action !!"
+          }
+        />
+      )}
     </div>
   );
 }
