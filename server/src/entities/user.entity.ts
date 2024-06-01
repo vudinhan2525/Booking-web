@@ -20,6 +20,13 @@ export class User {
   @Column({ unique: true })
   email: string;
 
+  @Column({
+    type: 'enum',
+    enum: ['user', 'admin'],
+    default: 'user',
+  })
+  role: string;
+
   @Column({ select: false })
   password: string;
   @Column({ nullable: true })

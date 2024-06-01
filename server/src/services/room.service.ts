@@ -8,7 +8,7 @@ export class RoomService {
     @InjectRepository(Room)
     private roomRepository: Repository<Room>,
   ) {}
-  async importHotel(body) {
+  async importRoom(body) {
     const rooms = body.map((item) => {
       return this.roomRepository.create({
         id: item.id,

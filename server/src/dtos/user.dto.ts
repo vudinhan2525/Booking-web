@@ -11,6 +11,9 @@ export class UserBodyDto extends BaseDto {
   @Expose()
   lastName: string;
 
+  @Expose()
+  role: string;
+
   @IsNotEmpty()
   @IsEmail()
   @Expose()

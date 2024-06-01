@@ -279,6 +279,7 @@ export function Combobox({
                   <div className="flex items-center gap-2">
                     <div
                       onClick={() => {
+                        setShowWarningInfant(false);
                         setValue((prev: any) => {
                           if (prev.bedroom <= 0) return prev;
                           return { ...prev, bedroom: prev.bedroom - 1 };
@@ -293,6 +294,10 @@ export function Combobox({
                     </div>
                     <div
                       onClick={() => {
+                        if (value.bedroom + 1 > value.adult) {
+                          setShowWarningInfant(true);
+                          return;
+                        }
                         setValue((prev: any) => {
                           return { ...prev, bedroom: prev.bedroom + 1 };
                         });
@@ -306,8 +311,10 @@ export function Combobox({
               )}
               {showWarningInfant && (
                 <p className="text-sm italic">
-                  *The number of infants must not exceed the number of adult
-                  passenger(s)
+                  {` *The number of ${
+                    value.infant !== undefined ? "infants" : "bedrooms"
+                  } must not exceed the number of adult
+                  passenger(s)`}
                 </p>
               )}
             </div>

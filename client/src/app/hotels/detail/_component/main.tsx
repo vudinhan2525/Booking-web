@@ -108,7 +108,7 @@ export default function MainHotelDetail() {
   return (
     <Sheet>
       <div>
-        <SheetContent className="xl:w-[600px] xl:max-w-none sm:w-[400px] sm:max-w-[540px]">
+        <SheetContent className="xl:w-[550px] xl:max-w-none max-h-full pb-0 overflow-scroll sm:w-[400px] sm:max-w-[540px]">
           {hotel && (
             <SheetSelectRoom
               hotel={hotel}

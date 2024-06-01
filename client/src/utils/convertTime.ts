@@ -174,3 +174,23 @@ export function getFutureDate(isoString: string, n: number) {
     value: date.toString(),
   };
 }
+//return type like "Sun, 2 Jun 2024"
+export function convertTime4(inputDate: string): string {
+  const date = new Date(inputDate);
+
+  const formattedDate = date.toLocaleDateString("en-US", {
+    weekday: "short",
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+
+  // Adjust the day format to remove leading zero
+  const [, day, month, year] = formattedDate.split(" ");
+  const formattedDateWithoutLeadingZero = `${day.replace(
+    /^0+/,
+    ""
+  )}, ${month} ${year}`;
+
+  return formattedDateWithoutLeadingZero;
+}

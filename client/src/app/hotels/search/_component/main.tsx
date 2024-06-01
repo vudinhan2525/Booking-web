@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/tooltip";
 import SkeletonItem from "./skeletonItem";
 import useDebounce from "@/hooks/useDebounce";
+import objectToQueryString from "@/utils/convertToQueryString";
 const sortArr = ["Lowest Price", "Highest Price", "Top Rating", "Most Viewed"];
 const initialFilObj: IFilterHotel = {
   rating: "",
@@ -66,6 +67,20 @@ export default function MainSearchHotelPages() {
     }
     setIsLoading(false);
   };
+  const handleNavigate = (hotelId: number) => {
+    const obj: any = {};
+    obj.hotelId = hotelId;
+    if (searchParams.get("departureTime") !== "") {
+      obj.departureTime = searchParams.get("departureTime");
+    }
+    if (searchParams.get("duration") !== "") {
+      obj.duration = searchParams.get("duration");
+    }
+    if (searchParams.get("numberPassenger") !== "") {
+      obj.numberPassenger = searchParams.get("numberPassenger");
+    }
+    router.push("/hotels/detail?" + objectToQueryString(obj));
+  };
   return (
     <div className=" bg-[#F7F9FA]  border-t-[1px] flex gap-8 px-16 py-10">
       <div className="basis-[27%] ">
@@ -105,7 +120,7 @@ export default function MainSearchHotelPages() {
               <div
                 key={idx}
                 onClick={() => {
-                  router.push(`/hotels/detail?hotelId=${el.id}`);
+                  handleNavigate(el.id);
                 }}
                 className="mt-4 flex gap-4 p-3 cursor-pointer hover:border-[1px] hover:border-primary-color border-[1px] border-transparent bg-white rounded-lg shadow-md"
               >
@@ -163,7 +178,7 @@ export default function MainSearchHotelPages() {
                             <FontAwesomeIcon
                               icon={faStar}
                               className={`${
-                                el2 < el.rating
+                                el2 < Number(el.rating)
                                   ? "text-[#FFDC00]"
                                   : "text-[#E5E7EB]"
                               }  text-sm `}

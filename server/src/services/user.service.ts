@@ -30,6 +30,7 @@ export class UserService {
       firstName: body.firstName,
       lastName: body.lastName,
       email: body.email,
+      role: body.role,
       password: hashedPassword,
       createdAt: formattedDateTime,
       updatedAt: formattedDateTime,
