@@ -70,6 +70,9 @@ export default function MainSearchHotelPages() {
   const handleNavigate = (hotelId: number) => {
     const obj: any = {};
     obj.hotelId = hotelId;
+    if (searchParams.get("code") !== "") {
+      obj.code = searchParams.get("code");
+    }
     if (searchParams.get("departureTime") !== "") {
       obj.departureTime = searchParams.get("departureTime");
     }

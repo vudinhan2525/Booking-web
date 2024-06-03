@@ -41,4 +41,16 @@ export class UserController {
       status: 'success',
     });
   }
+  @Post('updateUser')
+  async updateUser(
+    @Body()
+    body: { email: string; phone: string; firstName: string; lastName: string },
+    @Res() response: Response,
+  ) {
+    const result = await this.userService.updateUser(body);
+    response.status(200).json({
+      status: 'success',
+      data: result,
+    });
+  }
 }

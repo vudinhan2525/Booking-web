@@ -1,5 +1,4 @@
 import { Suspense } from "react";
-import HeaderDetailHotel from "./_component/Header";
 import MainHotelDetail from "./_component/main";
 
 export default function Page() {

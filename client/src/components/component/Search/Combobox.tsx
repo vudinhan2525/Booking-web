@@ -157,6 +157,21 @@ export function Combobox({
                 <div className="flex items-center gap-2">
                   <div
                     onClick={() => {
+                      if (
+                        value.bedroom !== undefined &&
+                        value.adult - 1 < value.bedroom
+                      ) {
+                        setShowWarningInfant(true);
+                        return;
+                      }
+                      if (
+                        value.infant !== undefined &&
+                        value.adult - 1 < value.infant
+                      ) {
+                        setShowWarningInfant(true);
+
+                        return;
+                      }
                       setValue((prev: any) => {
                         if (prev.adult <= 1) return prev;
                         return { ...prev, adult: prev.adult - 1 };
@@ -171,6 +186,7 @@ export function Combobox({
                   </div>
                   <div
                     onClick={() => {
+                      setShowWarningInfant(false);
                       setValue((prev: any) => {
                         return { ...prev, adult: prev.adult + 1 };
                       });

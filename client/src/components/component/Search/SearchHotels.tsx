@@ -26,6 +26,8 @@ export default function SearchHotels({
   iniDeparture,
   iniDuration,
   iniNumberPassenger,
+  fromDetailHotelPage,
+  hotelId,
 }: {
   fromHotelsPage?: boolean;
   fromSearchHotelsPage?: boolean;
@@ -43,6 +45,8 @@ export default function SearchHotels({
     child: number;
     bedroom: number;
   };
+  fromDetailHotelPage?: boolean;
+  hotelId?: number;
 }) {
   const [destination, setDestination] = useState(() => {
     if (iniDestination && iniDestination.name !== "") {
@@ -110,6 +114,12 @@ export default function SearchHotels({
         numberPassenger.bedroom;
       obj.numberPassenger = res;
     }
+    if (fromDetailHotelPage && hotelId) {
+      router.push(
+        `/hotels/detail?hotelId=${hotelId}` + objectToQueryString(obj)
+      );
+      return;
+    }
     router.push("/hotels/search?" + objectToQueryString(obj));
   };
   return (
@@ -123,27 +133,44 @@ export default function SearchHotels({
       {fromSearchHotelsPage && (
         <div className="flex px-16 py-2 gap-3">
           <div className="basis-[35%]">
-            <Combobox
-              isDestination={true}
-              value={destination}
-              frameworks={destinations}
-              setValue={setDestination}
-              child={
-                <div className="flex  items-center gap-2 bg-gray-300/25 px-4 py-2 rounded-lg">
-                  <div>
-                    <FontAwesomeIcon
-                      icon={faLocationDot}
-                      className="text-white"
-                    />
+            <div className={`${fromDetailHotelPage && "hidden"}`}>
+              <Combobox
+                isDestination={true}
+                value={destination}
+                frameworks={destinations}
+                setValue={setDestination}
+                child={
+                  <div className="flex  items-center gap-2 bg-gray-300/25 px-4 py-2 rounded-lg">
+                    <div>
+                      <FontAwesomeIcon
+                        icon={faLocationDot}
+                        className="text-white"
+                      />
+                    </div>
+                    <p className="text-white font-semibold mt-[2px]">
+                      {destination.name
+                        ? destination.name + ", Việt Nam"
+                        : "Select city, destination,..."}
+                    </p>
                   </div>
-                  <p className="text-white font-semibold mt-[2px]">
-                    {destination.name
-                      ? destination.name + ", Việt Nam"
-                      : "Select city, destination,..."}
-                  </p>
+                }
+              />
+            </div>
+            {fromDetailHotelPage && (
+              <div className="flex  items-center gap-2 bg-gray-300/25 px-4 py-2 rounded-lg">
+                <div>
+                  <FontAwesomeIcon
+                    icon={faLocationDot}
+                    className="text-white"
+                  />
                 </div>
-              }
-            />
+                <p className="text-white font-semibold mt-[2px]">
+                  {destination.name
+                    ? destination.name + ", Việt Nam"
+                    : "Select city, destination,..."}
+                </p>
+              </div>
+            )}
           </div>
           <div className="basis-[15%]">
             <Combobox
@@ -217,7 +244,9 @@ export default function SearchHotels({
                 className="text-primary-color"
               />
             </div>
-            <p className="text-primary-color font-semibold mt-[2px]">Search</p>
+            <p className="text-primary-color font-semibold mt-[2px]">{`${
+              fromDetailHotelPage ? "Apply" : "Search"
+            }`}</p>
           </div>
         </div>
       )}

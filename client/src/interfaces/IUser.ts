@@ -8,4 +8,5 @@ export interface IUser {
   createdAt: Date;
   updatedAt: Date;
   isActive: boolean;
+  phone: string;
 }

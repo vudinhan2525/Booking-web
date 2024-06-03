@@ -20,6 +20,9 @@ export class User {
   @Column({ unique: true })
   email: string;
 
+  @Column()
+  phone: string;
+
   @Column({
     type: 'enum',
     enum: ['user', 'admin'],

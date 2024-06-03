@@ -20,5 +20,15 @@ const userApiRequest = {
       headers: { "Content-Type": "application/json" },
       withCredentials: true,
     }),
+  updateme: (body: {
+    email: string;
+    phone: string;
+    firstName: string;
+    lastName: string;
+  }) =>
+    http.post<any>("users/updateUser", body, {
+      headers: { "Content-Type": "application/json" },
+      withCredentials: true,
+    }),
 };
 export default userApiRequest;

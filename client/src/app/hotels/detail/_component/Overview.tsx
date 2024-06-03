@@ -13,7 +13,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import React from "react";
 
-export default function Overview({ hotel }: { hotel: IHotel }) {
+export default function Overview({
+  hotel,
+  roomRef,
+}: {
+  hotel: IHotel;
+  roomRef: React.RefObject<HTMLInputElement>;
+}) {
   return (
     <div>
       <div className="flex mt-8 justify-between items-center">
@@ -49,7 +55,15 @@ export default function Overview({ hotel }: { hotel: IHotel }) {
           <p className="text-2xl font-bold text-orange-600">{`${formatNumber(
             hotel.rooms[0].roomOpts[0].price
           )} VNĐ`}</p>
-          <Button className="bg-orange-600 px-12 text-lg font-bold mt-1 hover:bg-orange-700 transition-all">
+          <Button
+            onClick={() => {
+              roomRef.current?.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+              });
+            }}
+            className="bg-orange-600 px-12 text-lg font-bold mt-1 hover:bg-orange-700 transition-all"
+          >
             Select room
           </Button>
         </div>

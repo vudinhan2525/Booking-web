@@ -110,4 +110,19 @@ export class UserService {
     //3) Update passwordchangeat property for user
     await this.usersRepository.save(user);
   }
+  async updateUser(body: {
+    email: string;
+    phone: string;
+    firstName: string;
+    lastName: string;
+  }) {
+    const user = await this.usersRepository.findOne({
+      where: { email: body.email },
+    });
+    user.firstName = body.firstName;
+    user.lastName = body.lastName;
+    user.phone = body.phone;
+    user.email = body.email;
+    return await this.usersRepository.save(user);
+  }
 }

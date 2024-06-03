@@ -7,12 +7,14 @@ import { useEffect, useState } from "react";
 import useDebounce from "@/hooks/useDebounce";
 import { useAppContext } from "@/app/AppProvider";
 import { useRouter, usePathname } from "next/navigation";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
 export default function Header() {
   const pathname = usePathname();
   const router = useRouter();
   const [onTop, setOnTop] = useState(false);
   const debounce = useDebounce(onTop, 500);
-  const { isAuthenticated } = useAppContext();
+  const { isAuthenticated, user } = useAppContext();
   useEffect(() => {
     function handleScroll() {
       if (pathname === "/") {
@@ -39,7 +41,7 @@ export default function Header() {
         pathname !== "/hotels/detail" &&
         pathname !== "/hotels/search" &&
         "fixed"
-      } top-0 left-0 pt-2 right-0 `}
+      } top-0 left-0 pt-2 right-0 ${pathname === "/user" && "border-b-[1px]"}`}
     >
       <div className="absolute z-[100] right-0"></div>
       <div className="flex  items-center justify-between ">
@@ -105,6 +107,24 @@ export default function Header() {
                 Register
               </CustomButton>
             </div>
+          )}
+          {isAuthenticated && user && (
+            <Button
+              onClick={() => {
+                router.push("/user");
+              }}
+              variant={onTop ? "transparent" : "outline"}
+              className={`${
+                onTop
+                  ? "text-white hover:bg-black/30"
+                  : "text-gray-600 hover:text-gray-600 border-[0px]"
+              } text-[15px] font-bold flex items-center gap-2`}
+            >
+              <div className="mb-[2px] border-r-[1px] pr-2 border-gray-400">
+                <FontAwesomeIcon icon={faUser}></FontAwesomeIcon>
+              </div>
+              <p>{user.firstName + " " + user.lastName}</p>
+            </Button>
           )}
           {isAuthenticated && (
             <CustomButton

@@ -22,6 +22,8 @@ import {
 } from "@/components/ui/sheet";
 import SheetSelectRoom from "./SheetSelectRoom";
 import { IRoomOpt } from "@/interfaces/IRoomOpt";
+import SearchHotels from "@/components/component/Search/SearchHotels";
+import { destinationsMap } from "@/lib/dataHotel";
 
 export default function MainHotelDetail() {
   const searchParams = useSearchParams();
@@ -80,7 +82,7 @@ export default function MainHotelDetail() {
     if (idx === 4) {
       reviewRef.current?.scrollIntoView({
         behavior: "smooth",
-        block: "center",
+        block: "start",
       });
     }
   };
@@ -117,31 +119,47 @@ export default function MainHotelDetail() {
             />
           )}
         </SheetContent>
-        <div className="sticky py-2 gap-2 flex top-0 px-24 z-10 bg-flight-ct">
-          {["Overview", "Room", "Location", "Facilities", "Reviews"].map(
-            (el, idx) => {
-              return (
-                <div
-                  key={idx}
-                  onClick={() => {
-                    setShowSlt(idx);
-                    handleScrollToView(idx);
-                  }}
-                  className={`${
-                    showSlt === idx
-                      ? "bg-white text-primary-color"
-                      : "text-white hover:bg-gray-300/25"
-                  } px-3 py-2 text-sm  font-semibold rounded-lg cursor-pointer transition-all `}
-                >
-                  {el}
-                </div>
-              );
-            }
-          )}
+        <div className="sticky top-0 z-10">
+          <div className="bg-[#219ebc]">
+            {hotel && (
+              <SearchHotels
+                fromSearchHotelsPage={true}
+                fromDetailHotelPage={true}
+                hotelId={hotel.id}
+                iniDestination={destinationsMap.get(searchParams.get("code"))}
+                iniDuration={Number(searchParams.get("duration"))}
+                iniDeparture={
+                  searchParams.get("departureTime") + "T00:00:00.000Z"
+                }
+              />
+            )}
+          </div>
+          <div className=" py-2 gap-2 flex  px-24 bg-flight-ct">
+            {["Overview", "Room", "Location", "Facilities", "Reviews"].map(
+              (el, idx) => {
+                return (
+                  <div
+                    key={idx}
+                    onClick={() => {
+                      setShowSlt(idx);
+                      handleScrollToView(idx);
+                    }}
+                    className={`${
+                      showSlt === idx
+                        ? "bg-white text-primary-color"
+                        : "text-white hover:bg-gray-300/25"
+                    } px-3 py-2 text-sm  font-semibold rounded-lg cursor-pointer transition-all `}
+                  >
+                    {el}
+                  </div>
+                );
+              }
+            )}
+          </div>
         </div>
         <div className="px-36 ">
           <div ref={overviewRef}></div>
-          {hotel && <Overview hotel={hotel} />}
+          {hotel && <Overview roomRef={roomRef} hotel={hotel} />}
           <div ref={roomRef}></div>
           {hotel && (
             <RoomList
