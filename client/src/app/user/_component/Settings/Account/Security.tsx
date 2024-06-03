@@ -145,7 +145,7 @@ export default function Security() {
             error.includes("confirm password")
               ? "text-red-500"
               : "text-gray-700"
-          } mt-6 text-sm font-bold `}
+          } mt-2 text-sm font-bold `}
         >
           Confirm password
         </p>

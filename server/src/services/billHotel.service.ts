@@ -18,9 +18,13 @@ export class BillHotelService {
     const billHotel = await this.billHotelRepository.create({
       id: uniqueId,
       price: body.price,
+      status: body.status,
       isRefundable: body.isRefundable,
       isReschedule: body.isReschedule,
       numberOfPassenger: body.numberOfPassenger,
+      numberOfRoom: body.numberOfRoom,
+      dateCheckIn: body.dateCheckIn,
+      dateCheckOut: body.dateCheckOut,
       bed: body.bed,
       nameRoom: body.nameRoom,
       nameHotel: body.nameHotel,

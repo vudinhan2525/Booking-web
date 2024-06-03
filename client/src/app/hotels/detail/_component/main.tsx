@@ -14,6 +14,7 @@ import RatingModal from "@/components/modals/RatingModal";
 import { useAppContext } from "@/app/AppProvider";
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetDescription,
   SheetHeader,
@@ -45,7 +46,7 @@ export default function MainHotelDetail() {
     window.scrollTo(0, 0);
     getHotel();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [searchParams]);
   useEffect(() => {
     if (hotel && Object.keys(hotel).length > 0) {
       getHotelNearBy();
@@ -111,14 +112,16 @@ export default function MainHotelDetail() {
     <Sheet>
       <div>
         <SheetContent className="xl:w-[550px] xl:max-w-none max-h-full pb-0 overflow-scroll sm:w-[400px] sm:max-w-[540px]">
-          {hotel && (
+          {hotel && user && (
             <SheetSelectRoom
               hotel={hotel}
               roomSelected={roomSelected}
               roomOptSelected={roomOptSelected}
+              user={user}
             />
           )}
         </SheetContent>
+
         <div className="sticky top-0 z-10">
           <div className="bg-[#219ebc]">
             {hotel && (

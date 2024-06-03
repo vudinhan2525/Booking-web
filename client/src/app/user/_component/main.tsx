@@ -6,15 +6,16 @@ import {
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Account from "./Settings/Account";
+import Account from "./Settings/Account/Account";
 import { useAppContext } from "@/app/AppProvider";
+import Booking from "./Settings/Bookings/Booking";
 const settings = [
   {
     title: "Account",
     icon: <FontAwesomeIcon icon={faUser} />,
   },
   {
-    title: "Bookings",
+    title: "My Bookings",
     icon: <FontAwesomeIcon icon={faFileInvoice} />,
   },
   {
@@ -52,7 +53,10 @@ export default function MainUserPage() {
             </div>
           </div>
           <div className="h-[500px] w-[1px] bg-gray-300"></div>
-          <div className="basis-[70%]">{optSlt === 0 && <Account />}</div>
+          <div className="basis-[70%]">
+            {optSlt === 0 && <Account />}
+            {optSlt === 1 && <Booking />}
+          </div>
         </div>
       )}
     </div>

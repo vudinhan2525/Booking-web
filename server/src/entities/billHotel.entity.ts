@@ -21,11 +21,21 @@ export class BillHotel {
   @Column()
   isReschedule: boolean;
 
-  @Column({ nullable: true })
+  @Column()
   dateCheckIn: Date;
 
-  @Column({ nullable: true })
+  @Column()
   dateCheckOut: Date;
+
+  @Column({
+    default: false,
+  })
+  isCheckIn: boolean;
+
+  @Column({
+    default: false,
+  })
+  isCheckOut: boolean;
 
   @Column()
   numberOfPassenger: number;

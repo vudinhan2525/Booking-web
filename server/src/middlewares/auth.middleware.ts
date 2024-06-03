@@ -31,7 +31,6 @@ export class AuthMiddleWare implements NestMiddleware {
         const curUser = await this.usersRepository
           .createQueryBuilder('user')
           .where('user.id = :id', { id: decoded.userId })
-          .addSelect('user.password')
           .getOne();
         if (!curUser) {
           return res.status(401).json({ message: 'Unauthorized' });

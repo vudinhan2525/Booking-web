@@ -66,6 +66,7 @@ export class AppModule implements NestModule {
         { path: 'users/getMe', method: RequestMethod.GET },
         { path: 'users/updateUser', method: RequestMethod.POST },
         { path: 'users/updatePassword', method: RequestMethod.POST },
+        { path: 'billHotel/addBillHotel', method: RequestMethod.POST },
       );
   }
 }

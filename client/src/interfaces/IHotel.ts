@@ -19,5 +19,6 @@ export interface IHotel {
   facilities: string;
   images: string;
   roomLeft: number;
+  adminId: number;
   rooms: IRoom[];
 }

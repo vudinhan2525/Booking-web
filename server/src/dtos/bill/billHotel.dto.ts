@@ -15,7 +15,22 @@ export class BillHotelBody {
 
   @IsNotEmpty()
   @Expose()
+  status: 'pending' | 'completed';
+
+  @IsNotEmpty()
+  @Expose()
   numberOfPassenger: number;
+  @IsNotEmpty()
+  @Expose()
+  numberOfRoom: number;
+
+  @IsNotEmpty()
+  @Expose()
+  dateCheckIn: Date;
+
+  @IsNotEmpty()
+  @Expose()
+  dateCheckOut: Date;
 
   @IsNotEmpty()
   @Expose()

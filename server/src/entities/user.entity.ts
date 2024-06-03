@@ -1,5 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import * as crypto from 'crypto';
+import { Hotel } from './hotel.entity';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -60,4 +61,7 @@ export class User {
     this.passwordResetExpires = new Date(Date.now() + 10 * 60 * 1000);
     return resetToken;
   }
+
+  @OneToMany(() => Hotel, (hotel) => hotel.admin)
+  hotels: Hotel[];
 }

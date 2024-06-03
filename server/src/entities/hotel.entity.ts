@@ -1,7 +1,15 @@
 import { accomodationType } from 'src/utils/dataHotel';
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 import { Room } from './room.entity';
 import { Review } from './review.entity';
+import { User } from './user.entity';
 @Entity()
 export class Hotel {
   @PrimaryGeneratedColumn()
@@ -60,4 +68,11 @@ export class Hotel {
   fourStar: number;
   @Column({ default: 0 })
   fiveStar: number;
+
+  @ManyToOne(() => User, (user) => user.hotels)
+  @JoinColumn({ name: 'adminId' })
+  admin: User;
+
+  @Column()
+  adminId: number;
 }

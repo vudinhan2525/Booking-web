@@ -1,4 +1,5 @@
 "use client";
+import billHotelApiRequest from "@/apiRequest/billHotel";
 import Dialog from "@/components/modals/Dialog";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,8 +10,11 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Checkbox } from "@/components/ui/checkbox";
+import { SheetClose } from "@/components/ui/sheet";
+import { useToast } from "@/components/ui/use-toast";
 import { IHotel } from "@/interfaces/IHotel";
-import { PayPalIcon, RefundableIcon } from "@/lib/icon";
+import { IUser } from "@/interfaces/IUser";
+import { RefundableIcon } from "@/lib/icon";
 import { convertTime4, formatNumber } from "@/utils/convertTime";
 import {
   faBanSmoking,
@@ -28,10 +32,12 @@ export default function SheetSelectRoom({
   hotel,
   roomSelected,
   roomOptSelected,
+  user,
 }: {
   hotel: IHotel;
   roomSelected: number;
   roomOptSelected: number;
+  user: IUser;
 }) {
   const searchParams = useSearchParams();
   const [duration, setDuration] = useState(() => {
@@ -98,8 +104,10 @@ export default function SheetSelectRoom({
     return new Date(Number(year), Number(month) - 1, Number(day));
   });
   const [arrivalTime, setArrivalTime] = useState<Date>();
+  const { toast } = useToast();
   const [price, setPrice] = useState(0);
   const [methods, setMethod] = useState([1, 0]);
+  const closeRef = useRef<HTMLButtonElement>(null);
   useEffect(() => {
     if (departureTime && duration) {
       const durationInMilliseconds = duration * 24 * 60 * 60 * 1000;
@@ -118,10 +126,35 @@ export default function SheetSelectRoom({
     ) {
       setPrice(
         hotel.rooms[roomSelected].roomOpts[roomOptSelected].price *
-          (numberOfPassenger.room + duration)
+          numberOfPassenger.room *
+          duration
       );
     }
   }, [hotel, roomOptSelected, roomSelected, numberOfPassenger, duration]);
+
+  const handleAddBill = async () => {
+    const body = {
+      price: (price * 110) / 100,
+      status: "pending",
+      isRefundable:
+        hotel.rooms[roomSelected].roomOpts[roomOptSelected].isRefundable,
+      isReschedule: false,
+      numberOfPassenger: numberOfPassenger.adult + numberOfPassenger.child,
+      numberOfRoom: numberOfPassenger.room,
+      bed: hotel.rooms[roomSelected].roomOpts[roomOptSelected].bed,
+      dateCheckIn: departureTime,
+      dateCheckOut: arrivalTime,
+      nameRoom: hotel.rooms[roomSelected].name,
+      nameHotel: hotel.name,
+      userId: user.id,
+      adminId: hotel.adminId,
+    };
+    try {
+      const response = await billHotelApiRequest.addBillHotel(body);
+      if (response.status === "success") {
+      }
+    } catch (error) {}
+  };
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
   return (
     <div>
@@ -367,17 +400,29 @@ export default function SheetSelectRoom({
             Payment
           </Button>
         </div>
+        <SheetClose ref={closeRef} className="hidden">
+          close
+        </SheetClose>
       </div>
       {showPaymentDialog && (
         <Dialog
-          onYes={() => {}}
+          onYes={() => {
+            handleAddBill();
+            setShowPaymentDialog(false);
+            closeRef.current?.click();
+            toast({
+              title: "",
+              status: "success",
+              description: "Booking successfully !",
+            });
+          }}
           onClose={() => {
             setShowPaymentDialog(false);
           }}
           buttonContent={"Yes"}
           message={"Are you sure want to booking this hotel."}
           content={
-            "You will get a ticket to booking this hotel, , you cannot undo this action !!"
+            "You will get a ticket to booking this hotel, you cannot undo this action !!"
           }
         />
       )}

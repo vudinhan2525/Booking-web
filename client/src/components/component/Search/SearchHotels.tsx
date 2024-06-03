@@ -116,7 +116,7 @@ export default function SearchHotels({
     }
     if (fromDetailHotelPage && hotelId) {
       router.push(
-        `/hotels/detail?hotelId=${hotelId}` + objectToQueryString(obj)
+        `/hotels/detail?hotelId=${hotelId}&` + objectToQueryString(obj)
       );
       return;
     }

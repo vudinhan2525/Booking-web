@@ -36,4 +36,8 @@ export class HotelBody {
   @IsNotEmpty()
   @Expose()
   facilities: string;
+
+  @IsNotEmpty()
+  @Expose()
+  adminId: number;
 }
