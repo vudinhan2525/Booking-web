@@ -194,3 +194,16 @@ export function convertTime4(inputDate: string): string {
 
   return formattedDateWithoutLeadingZero;
 }
+//return like 2024-06-03 17:10:19
+export function formatISODate(isoString: string): string {
+  const date = new Date(isoString);
+
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // getUTCMonth() is zero-based
+  const day = String(date.getDate()).padStart(2, "0");
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  const seconds = String(date.getSeconds()).padStart(2, "0");
+
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}

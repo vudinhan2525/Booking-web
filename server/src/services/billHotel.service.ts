@@ -14,6 +14,7 @@ export class BillHotelService {
     //can you generate id here and check if if duplicate 5 times
 
     const uniqueId = await this.generateUniqueBillHotelId();
+    const now = new Date();
 
     const billHotel = await this.billHotelRepository.create({
       id: uniqueId,
@@ -26,6 +27,8 @@ export class BillHotelService {
       dateCheckIn: body.dateCheckIn,
       dateCheckOut: body.dateCheckOut,
       bed: body.bed,
+      createdAt: now,
+      duration: body.duration,
       nameRoom: body.nameRoom,
       nameHotel: body.nameHotel,
       userId: body.userId,
@@ -49,5 +52,12 @@ export class BillHotelService {
     }
 
     return this.generateUniqueBillHotelId(attempts + 1);
+  }
+  async getBillHotel(body: { userId: number }) {
+    const billHotels = await this.billHotelRepository
+      .createQueryBuilder('bill_hotel')
+      .where('userId = :userId', { userId: body.userId })
+      .getMany();
+    return billHotels;
   }
 }

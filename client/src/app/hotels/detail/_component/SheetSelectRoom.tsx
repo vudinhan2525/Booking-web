@@ -146,6 +146,7 @@ export default function SheetSelectRoom({
       dateCheckOut: arrivalTime,
       nameRoom: hotel.rooms[roomSelected].name,
       nameHotel: hotel.name,
+      duration: duration,
       userId: user.id,
       adminId: hotel.adminId,
     };

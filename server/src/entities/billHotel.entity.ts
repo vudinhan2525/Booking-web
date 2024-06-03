@@ -50,6 +50,12 @@ export class BillHotel {
   nameRoom: string;
 
   @Column()
+  createdAt: Date;
+
+  @Column()
+  duration: number;
+
+  @Column()
   nameHotel: string;
 
   @Column({ default: '' })

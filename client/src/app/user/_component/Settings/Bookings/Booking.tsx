@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import HotelBooking from "./HotelBooking";
 
 export default function Booking() {
   const [tabSlt, setTabSlt] = useState(0);
@@ -28,6 +29,7 @@ export default function Booking() {
           Flights
         </div>
       </div>
+      {tabSlt === 0 && <HotelBooking />}
     </div>
   );
 }

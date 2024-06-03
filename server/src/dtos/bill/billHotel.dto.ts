@@ -30,6 +30,10 @@ export class BillHotelBody {
 
   @IsNotEmpty()
   @Expose()
+  duration: number;
+
+  @IsNotEmpty()
+  @Expose()
   dateCheckOut: Date;
 
   @IsNotEmpty()

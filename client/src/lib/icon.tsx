@@ -82,13 +82,15 @@ export const SeatAirPlaneIcons = ({
 export const RefundableIcon = ({
   width = "",
   height = "",
+  fill = "#05A569",
 }: {
   width: string;
   height: string;
+  fill?: string;
 }) => {
   return (
     <svg
-      fill="#05A569"
+      fill={fill}
       height={height}
       width={width}
       version="1.1"
@@ -121,9 +123,11 @@ export const RefundableIcon = ({
 export const RescheduleIcon = ({
   width = "",
   height = "",
+  fill = "#05A569",
 }: {
   width: string;
   height: string;
+  fill?: string;
 }) => {
   return (
     <svg
@@ -132,7 +136,7 @@ export const RescheduleIcon = ({
       textRendering="geometricPrecision"
       imageRendering="optimizeQuality"
       fillRule="evenodd"
-      fill="#05A569"
+      fill={fill}
       width={width}
       height={height}
       clipRule="evenodd"

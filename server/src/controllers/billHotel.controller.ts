@@ -11,4 +11,9 @@ export class BillHotelController {
     const result = await this.billHotelService.addBillHotel(body);
     res.status(200).json({ status: 'success', data: result });
   }
+  @Post('getBillHotel')
+  async getBillHotel(@Body() body: { userId: number }, @Res() res: Response) {
+    const result = await this.billHotelService.getBillHotel(body);
+    res.status(200).json({ status: 'success', data: result });
+  }
 }
