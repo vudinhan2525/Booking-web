@@ -53,4 +53,16 @@ export class UserController {
       data: result,
     });
   }
+  @Post('updatePassword')
+  async updatePassword(
+    @Body()
+    body: { oldPassword: string; newPassword: string; confirmPassword: string },
+    @Res() response: Response,
+  ) {
+    const result = await this.userService.updatePassword(
+      body,
+      response.locals.user.id,
+    );
+    response.status(200).json(result);
+  }
 }

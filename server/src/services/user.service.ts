@@ -57,7 +57,7 @@ export class UserService {
     await this.usersRepository.save(user);
     //3) Send it to user's email
     const url = `${process.env.CLIENT_ENDPOINT}/resetPassword/${token}`;
-    console.log(url);
+
     try {
       await sendMail(email, 'Reset your password', url);
       return { status: 'success', message: 'Email sent successfully' };
@@ -124,5 +124,32 @@ export class UserService {
     user.phone = body.phone;
     user.email = body.email;
     return await this.usersRepository.save(user);
+  }
+  async updatePassword(
+    body: {
+      oldPassword: string;
+      newPassword: string;
+      confirmPassword: string;
+    },
+    idUser: number,
+  ) {
+    const user = await this.usersRepository
+      .createQueryBuilder('user')
+      .where('user.id = :id', { id: idUser })
+      .addSelect('user.password')
+      .getOne();
+    if (!user || !(await bcrypt.compare(body.oldPassword, user.password))) {
+      return { status: 'failed', message: 'Old password is not correct' };
+    }
+    if (body.newPassword !== body.confirmPassword) {
+      throw new HttpException(
+        'Password and password confirm is not correct!',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    const hashedPassword = await bcrypt.hash(body.newPassword, 10);
+    user.password = hashedPassword;
+    await this.usersRepository.save(user);
+    return { status: 'success' };
   }
 }

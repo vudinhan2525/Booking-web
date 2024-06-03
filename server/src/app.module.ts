@@ -65,6 +65,7 @@ export class AppModule implements NestModule {
       .forRoutes(
         { path: 'users/getMe', method: RequestMethod.GET },
         { path: 'users/updateUser', method: RequestMethod.POST },
+        { path: 'users/updatePassword', method: RequestMethod.POST },
       );
   }
 }

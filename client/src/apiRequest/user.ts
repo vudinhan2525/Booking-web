@@ -30,5 +30,15 @@ const userApiRequest = {
       headers: { "Content-Type": "application/json" },
       withCredentials: true,
     }),
+
+  updatePassword: (body: {
+    oldPassword: string;
+    newPassword: string;
+    confirmPassword: string;
+  }) =>
+    http.post<any>("users/updatePassword", body, {
+      headers: { "Content-Type": "application/json" },
+      withCredentials: true,
+    }),
 };
 export default userApiRequest;
