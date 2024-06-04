@@ -21,8 +21,6 @@ export class Flight {
   @Column()
   flightCode: string;
   @Column()
-  seatType: string;
-  @Column()
   airplane: string;
   @Column()
   departureTime: Date;

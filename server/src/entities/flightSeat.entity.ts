@@ -31,6 +31,14 @@ export class FlightSeat {
 
   @Column()
   facilities: string;
+
+  @Column({
+    type: 'enum',
+    enum: ['Economy', 'Business', 'First Class'],
+    default: 'Economy',
+  })
+  seatType: string;
+
   @Column()
   seatLeft: number;
   @ManyToOne(() => Flight, (flight) => flight.flightSeats)

@@ -41,5 +41,9 @@ export class FlightSeatBody {
 
   @IsNotEmpty()
   @Expose()
+  seatType: string;
+
+  @IsNotEmpty()
+  @Expose()
   flightId: number;
 }

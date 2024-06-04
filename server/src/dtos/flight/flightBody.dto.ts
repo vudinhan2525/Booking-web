@@ -28,9 +28,7 @@ export class FlightBody {
   @IsNotEmpty()
   @Expose()
   flightCode: string;
-  @IsNotEmpty()
-  @Expose()
-  seatType: string;
+
   @IsNotEmpty()
   @Expose()
   airplane: string;

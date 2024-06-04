@@ -21,7 +21,6 @@ export class FlightService {
         toCode: flight.toCode,
         airline: flight.airline,
         flightCode: flight.flightCode,
-        seatType: flight.seatType,
         airplane: flight.airplane,
         departureTime: flight.departureTime,
         arrivalTime: flight.arrivalTime,
@@ -31,9 +30,27 @@ export class FlightService {
     await Promise.all(flightPromises);
   }
   async getFlight(body: FlightQuery) {
-    let query = this.flightRepository
-      .createQueryBuilder('flight')
-      .leftJoinAndSelect('flight.flightSeats', 'flightSeat');
+    // i have body.seatType if a type of this seat how i can leftJoin with flightSeat that have flightSeat.seatType = body.seatType
+    let query;
+    if (body.seatType === 'Business') {
+      query = this.flightRepository
+        .createQueryBuilder('flight')
+        .leftJoinAndSelect('flight.flightSeats', 'flightSeat')
+        .where(`flightSeat.seatType IN (:...seatTypes)`, {
+          seatTypes: ['Business', 'First Class'],
+        });
+    } else if (body.seatType === 'First Class') {
+      query = this.flightRepository
+        .createQueryBuilder('flight')
+        .leftJoinAndSelect('flight.flightSeats', 'flightSeat')
+        .where(`flightSeat.seatType = :seatType`, {
+          seatType: 'First Class',
+        });
+    } else {
+      query = this.flightRepository
+        .createQueryBuilder('flight')
+        .leftJoinAndSelect('flight.flightSeats', 'flightSeat');
+    }
     //can you join it here after createQueryBuilder
     if (body.from) {
       query = query.andWhere('fromCode = :fromCode', { fromCode: body.from });

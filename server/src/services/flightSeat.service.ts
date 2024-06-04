@@ -20,6 +20,7 @@ export class FlightSeatService {
         isReschedule: flightSeat.isReschedule,
         refundablePrice: flightSeat.refundablePrice,
         reschedulePrice: flightSeat.reschedulePrice,
+        seatType: flightSeat.seatType,
         facilities: flightSeat.facilities,
         seatLeft: flightSeat.seatLeft,
         flightId: flightSeat.flightId,

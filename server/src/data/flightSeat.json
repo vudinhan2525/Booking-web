@@ -10,6 +10,7 @@
     "reschedulePrice": 450000,
     "facilities": "No-Meal,Has-Entertaiment,No-Power,No-Wifi",
     "seatLeft": 160,
+    "seatType": "Economy",
     "flightId": 1
   },
   {
@@ -23,6 +24,7 @@
     "reschedulePrice": 300000,
     "facilities": "Has-Meal,Has-Entertaiment,No-Power,No-Wifi",
     "seatLeft": 40,
+    "seatType": "Business",
     "flightId": 1
   },
   {
@@ -36,6 +38,7 @@
     "reschedulePrice": 450000,
     "facilities": "No-Meal,Has-Entertaiment,No-Power,No-Wifi",
     "seatLeft": 360,
+    "seatType": "Economy",
     "flightId": 2
   },
   {
@@ -49,6 +52,7 @@
     "reschedulePrice": 500000,
     "facilities": "Has-Meal,Has-Entertaiment,Has-Power,No-Wifi",
     "seatLeft": 100,
+    "seatType": "Business",
     "flightId": 2
   },
   {
@@ -62,6 +66,7 @@
     "reschedulePrice": 500000,
     "facilities": "No-Meal,Has-Entertaiment,No-Power,No-Wifi",
     "seatLeft": 460,
+    "seatType": "Economy",
     "flightId": 3
   },
   {
@@ -75,6 +80,7 @@
     "reschedulePrice": 350000,
     "facilities": "No-Meal,Has-Entertaiment,No-Power,No-Wifi",
     "seatLeft": 260,
+    "seatType": "Economy",
     "flightId": 4
   },
   {
@@ -88,6 +94,7 @@
     "reschedulePrice": 500000,
     "facilities": "Has-Meal,Has-Entertaiment,Has-Power,No-Wifi",
     "seatLeft": 60,
+    "seatType": "Business",
     "flightId": 4
   },
   {
@@ -101,6 +108,7 @@
     "reschedulePrice": 350000,
     "facilities": "No-Meal,Has-Entertaiment,No-Power,No-Wifi",
     "seatLeft": 162,
+    "seatType": "Economy",
     "flightId": 5
   },
   {
@@ -114,6 +122,7 @@
     "reschedulePrice": 350000,
     "facilities": "No-Meal,Has-Entertaiment,No-Power,No-Wifi",
     "seatLeft": 228,
+    "seatType": "Economy",
     "flightId": 6
   },
   {
@@ -127,10 +136,11 @@
     "reschedulePrice": 350000,
     "facilities": "No-Meal,Has-Entertaiment,No-Power,No-Wifi",
     "seatLeft": 228,
+    "seatType": "Economy",
     "flightId": 7
   },
   {
-    "name": "Standard",
+    "name": "Business",
     "cabinBaggage": 7,
     "baggage": 0,
     "price": 4724000,
@@ -140,6 +150,7 @@
     "reschedulePrice": 350000,
     "facilities": "Has-Meal,Has-Entertaiment,Has-Power,No-Wifi",
     "seatLeft": 82,
+    "seatType": "Business",
     "flightId": 7
   },
   {
@@ -153,6 +164,7 @@
     "reschedulePrice": 350000,
     "facilities": "No-Meal,Has-Entertaiment,No-Power,No-Wifi",
     "seatLeft": 428,
+    "seatType": "Economy",
     "flightId": 8
   }
 ]

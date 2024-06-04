@@ -39,75 +39,17 @@ export default function MainSearchFlightPage() {
   const [filterObj, setFilterObj] = useState(initialObj);
   const [flightData, setFlightData] = useState<IFlight[]>();
   const [showSearchFlightForm, setShowSearchFlightForm] = useState(false);
-  const [seatType, setSeatType] = useState({ name: "" });
-  const [numberPassenger, setNumberPassenger] = useState({
-    adult: 1,
-    child: 0,
-    infant: 0,
-  });
+
   useEffect(() => {
     if (searchParams) {
       getFlightList();
-      updateSeatType();
-      updateNumberPassenger();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
-  const updateSeatType = async () => {
-    const string = searchParams.get("seatType");
-    if (string !== undefined && string !== null) {
-      if (
-        string !== "Economy" &&
-        string !== "Business" &&
-        string !== "First Class"
-      ) {
-        return setSeatType({ name: "Economy" });
-      }
-      return setSeatType({ name: string });
-    }
-    return setSeatType({ name: "Economy" });
-  };
-  const updateNumberPassenger = async () => {
-    const string = searchParams.get("numberPassenger");
-    if (string !== null && string !== undefined) {
-      const numberStringArr = string.split("-");
-      for (let i = 0; i < numberStringArr.length; i++) {
-        if (Number.isNaN(Number(numberStringArr[i]))) {
-          return setNumberPassenger({
-            adult: 1,
-            child: 0,
-            infant: 0,
-          });
-        }
-      }
-      if (Number(numberStringArr[0]) === 0) {
-        return setNumberPassenger({
-          adult: 1,
-          child: 0,
-          infant: 0,
-        });
-      }
-      if (Number(numberStringArr[2]) > Number(numberStringArr[0])) {
-        return setNumberPassenger({
-          adult: Number(numberStringArr[0]),
-          child: Number(numberStringArr[1]),
-          infant: Number(numberStringArr[0]),
-        });
-      }
-      return setNumberPassenger({
-        adult: Number(numberStringArr[0]),
-        child: Number(numberStringArr[1]),
-        infant: Number(numberStringArr[2]),
-      });
-    }
-    return setNumberPassenger({
-      adult: 1,
-      child: 0,
-      infant: 0,
-    });
-  };
+
   const getFlightList = async () => {
     let obj: any = {};
+    const numberPassenger = searchParams.get("numberPassenger")?.split("-");
     if (searchParams.get("from")) {
       obj.from = searchParams.get("from");
     }
@@ -120,13 +62,13 @@ export default function MainSearchFlightPage() {
     if (searchParams.get("arrivalTime")) {
       obj.arrivalTime = searchParams.get("arrivalTime") + "T00:00:00.000Z";
     }
-    if (seatType) {
-      obj.seatType = seatType.name;
+    if (searchParams.get("seatType")) {
+      obj.seatType = searchParams.get("seatType");
     }
     if (numberPassenger) {
-      obj.numberAdult = numberPassenger.adult;
-      obj.numberChild = numberPassenger.child;
-      obj.numberInfant = numberPassenger.infant;
+      obj.numberAdult = Number(numberPassenger[0]);
+      obj.numberChild = Number(numberPassenger[1]);
+      obj.numberInfant = Number(numberPassenger[2]);
     }
     if (filterObj.airline.length > 0) {
       obj.airline = filterObj.airline;
@@ -154,9 +96,12 @@ export default function MainSearchFlightPage() {
       }
   };
   const calcNoPassenger = () => {
+    const numberPassenger = searchParams.get("numberPassenger")?.split("-");
     if (numberPassenger) {
       return (
-        numberPassenger.adult + numberPassenger.child + numberPassenger.infant
+        Number(numberPassenger[0]) +
+        Number(numberPassenger[1]) +
+        Number(numberPassenger[2])
       );
     }
     return "0";
@@ -211,7 +156,7 @@ export default function MainSearchFlightPage() {
             <SearchFlight
               fromFlightPage={true}
               iniNumberOfPassenger={searchParams.get("numberPassenger")}
-              iniSeattype={seatType.name}
+              iniSeattype={searchParams.get("seatType")}
               iniFromCode={searchParams.get("from")}
               iniToCode={searchParams.get("to")}
               iniDepartureTime={
@@ -238,7 +183,9 @@ export default function MainSearchFlightPage() {
               <p className="text-sm text-gray-700">
                 {`${toDayMonthYear(
                   searchParams.get("departureTime") + "T00:00:00.000Z"
-                )} | ${calcNoPassenger()} passenger(s) | ${seatType.name}`}
+                )} | ${calcNoPassenger()} passenger(s) | ${searchParams.get(
+                  "seatType"
+                )}`}
               </p>
             </div>
             <div
