@@ -24,6 +24,7 @@ import { IFlight } from "@/interfaces/IFlight";
 import { getAirport } from "@/lib/dataAir";
 import { useRouter } from "next/navigation";
 import { IfilterObj } from "@/interfaces/IfliterObj";
+import SearchFlight from "@/components/component/Search/SearchFlight";
 const initialObj: IfilterObj = {
   airline: [],
   depatureTime: 0,
@@ -37,14 +38,75 @@ export default function MainSearchFlightPage() {
   const pathname = usePathname();
   const [filterObj, setFilterObj] = useState(initialObj);
   const [flightData, setFlightData] = useState<IFlight[]>();
+  const [showSearchFlightForm, setShowSearchFlightForm] = useState(false);
+  const [seatType, setSeatType] = useState({ name: "" });
+  const [numberPassenger, setNumberPassenger] = useState({
+    adult: 1,
+    child: 0,
+    infant: 0,
+  });
   useEffect(() => {
     if (searchParams) {
       getFlightList();
+      updateSeatType();
+      updateNumberPassenger();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
+  const updateSeatType = async () => {
+    const string = searchParams.get("seatType");
+    if (string !== undefined && string !== null) {
+      if (
+        string !== "Economy" &&
+        string !== "Business" &&
+        string !== "First Class"
+      ) {
+        return setSeatType({ name: "Economy" });
+      }
+      return setSeatType({ name: string });
+    }
+    return setSeatType({ name: "Economy" });
+  };
+  const updateNumberPassenger = async () => {
+    const string = searchParams.get("numberPassenger");
+    if (string !== null && string !== undefined) {
+      const numberStringArr = string.split("-");
+      for (let i = 0; i < numberStringArr.length; i++) {
+        if (Number.isNaN(Number(numberStringArr[i]))) {
+          return setNumberPassenger({
+            adult: 1,
+            child: 0,
+            infant: 0,
+          });
+        }
+      }
+      if (Number(numberStringArr[0]) === 0) {
+        return setNumberPassenger({
+          adult: 1,
+          child: 0,
+          infant: 0,
+        });
+      }
+      if (Number(numberStringArr[2]) > Number(numberStringArr[0])) {
+        return setNumberPassenger({
+          adult: Number(numberStringArr[0]),
+          child: Number(numberStringArr[1]),
+          infant: Number(numberStringArr[0]),
+        });
+      }
+      return setNumberPassenger({
+        adult: Number(numberStringArr[0]),
+        child: Number(numberStringArr[1]),
+        infant: Number(numberStringArr[2]),
+      });
+    }
+    return setNumberPassenger({
+      adult: 1,
+      child: 0,
+      infant: 0,
+    });
+  };
   const getFlightList = async () => {
-    const numberPassenger = searchParams.get("numberPassenger")?.split("-");
     let obj: any = {};
     if (searchParams.get("from")) {
       obj.from = searchParams.get("from");
@@ -58,13 +120,13 @@ export default function MainSearchFlightPage() {
     if (searchParams.get("arrivalTime")) {
       obj.arrivalTime = searchParams.get("arrivalTime") + "T00:00:00.000Z";
     }
-    if (searchParams.get("seatType")) {
-      obj.seatType = searchParams.get("seatType");
+    if (seatType) {
+      obj.seatType = seatType.name;
     }
     if (numberPassenger) {
-      obj.numberAdult = parseInt(numberPassenger[0]);
-      obj.numberChild = parseInt(numberPassenger[1]);
-      obj.numberInfant = parseInt(numberPassenger[2]);
+      obj.numberAdult = numberPassenger.adult;
+      obj.numberChild = numberPassenger.child;
+      obj.numberInfant = numberPassenger.infant;
     }
     if (filterObj.airline.length > 0) {
       obj.airline = filterObj.airline;
@@ -92,12 +154,9 @@ export default function MainSearchFlightPage() {
       }
   };
   const calcNoPassenger = () => {
-    const numberPassenger = searchParams.get("numberPassenger")?.split("-");
     if (numberPassenger) {
       return (
-        parseInt(numberPassenger[0]) +
-        parseInt(numberPassenger[1]) +
-        parseInt(numberPassenger[2])
+        numberPassenger.adult + numberPassenger.child + numberPassenger.infant
       );
     }
     return "0";
@@ -136,10 +195,40 @@ export default function MainSearchFlightPage() {
       <div className="basis-[32%] ">
         <SortBarFlight filterObj={filterObj} setFilterObj={setFilterObj} />
       </div>
-
+      {showSearchFlightForm && (
+        <div
+          onClick={(e) => {
+            if (!(e.target as HTMLElement).closest(".modal")) {
+              setShowSearchFlightForm(false);
+            }
+            if ((e.target as HTMLElement).closest(".btnsearch")) {
+              setShowSearchFlightForm(false);
+            }
+          }}
+          className="fixed flex items-center justify-center bg-black/30 top-0 right-0 left-0 bottom-0 z-[10]"
+        >
+          <div className="basis-[70%] modal mb-[200px]">
+            <SearchFlight
+              fromFlightPage={true}
+              iniNumberOfPassenger={searchParams.get("numberPassenger")}
+              iniSeattype={seatType.name}
+              iniFromCode={searchParams.get("from")}
+              iniToCode={searchParams.get("to")}
+              iniDepartureTime={
+                searchParams.get("departureTime") + "T00:00:00.000Z"
+              }
+              iniArrivalTime={
+                searchParams.get("arrivalTime") !== null
+                  ? searchParams.get("arrivalTime") + "T00:00:00.000Z"
+                  : searchParams.get("departureTime") + "T00:00:00.000Z"
+              }
+            />
+          </div>
+        </div>
+      )}
       <div className="basis-[68%]">
         <div className="w-full  bg-flight-ct rounded-xl px-4 py-4">
-          <div className="bg-white rounded-lg flex justify-between items-center w-[70%] h-[70px]">
+          <div className="bg-white rounded-lg flex justify-between items-center w-[70%]   ">
             <div className="px-4 py-3">
               <p className="font-bold">{`${
                 getAirport.get(searchParams.get("from"))?.name || "From"
@@ -149,16 +238,24 @@ export default function MainSearchFlightPage() {
               <p className="text-sm text-gray-700">
                 {`${toDayMonthYear(
                   searchParams.get("departureTime") + "T00:00:00.000Z"
-                )} | ${calcNoPassenger()} passenger(s) | ${searchParams.get(
-                  "seatType"
-                )}`}
+                )} | ${calcNoPassenger()} passenger(s) | ${seatType.name}`}
               </p>
             </div>
-            <div className="cursor-pointer py-4 px-6 items-center">
-              <FontAwesomeIcon
-                icon={faSearch}
-                className="text-primary-color text-xl"
-              />
+            <div
+              onClick={() => {
+                setShowSearchFlightForm(true);
+              }}
+              className="cursor-pointer flex hover:bg-blue-100 gap-2 bg-blue-50 transition-all py-2 mr-[15px] rounded-lg px-6 items-center"
+            >
+              <p className="text-[14px] font-bold text-primary-color">
+                Change search
+              </p>
+              <div>
+                <FontAwesomeIcon
+                  icon={faSearch}
+                  className="text-primary-color text-[17px] "
+                />
+              </div>
             </div>
           </div>
           <div className="flex justify-center  mt-4">

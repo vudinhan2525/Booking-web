@@ -19,14 +19,17 @@ const getAirport = new Map();
 getAirport.set("HAN", {
   nameAirport: "HAN - Noibai International Airport",
   name: "Ha Noi",
+  code: "HAN",
 });
 getAirport.set("SGN", {
   nameAirport: "SGN - Tan Son Nhat International Airport",
   name: "Ho Chi Minh",
+  code: "SGN",
 });
 getAirport.set("DAD", {
   nameAirport: "DAD - Da Nang Airport",
   name: "Da Nang",
+  code: "DAD",
 });
 export { getAirport };
 const getAirline = new Map();

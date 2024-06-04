@@ -12,10 +12,10 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
-import { Combobox } from "./ComboBox";
-import { airports } from "@/lib/dataAir";
+import { airports, getAirport } from "@/lib/dataAir";
 import { convertTime, toDayMonthYear } from "@/utils/convertTime";
 import objectToQueryString from "@/utils/convertToQueryString";
+import { Combobox } from "./Combobox";
 const initialFrom = {
   name: "",
   nameAirport: "",
@@ -23,20 +23,92 @@ const initialFrom = {
 };
 export default function SearchFlight({
   fromFlightPage,
+  iniNumberOfPassenger,
+  iniSeattype,
+  iniFromCode,
+  iniToCode,
+  iniDepartureTime,
+  iniArrivalTime,
 }: {
   fromFlightPage: boolean;
+  iniNumberOfPassenger?: string | null;
+  iniSeattype?: string | null;
+  iniFromCode?: string | null;
+  iniToCode?: string | null;
+  iniDepartureTime?: string | null;
+  iniArrivalTime?: string | null;
 }) {
-  const [airportFrom, setAirportFrom] = useState(initialFrom);
-  const [airportTo, setAirportTo] = useState(initialFrom);
+  const [airportFrom, setAirportFrom] = useState(() => {
+    if (iniFromCode !== null && iniFromCode !== undefined) {
+      if (getAirport.has(iniFromCode)) {
+        return getAirport.get(iniFromCode);
+      } else return initialFrom;
+    }
+    return initialFrom;
+  });
+  const [airportTo, setAirportTo] = useState(() => {
+    if (iniToCode !== null && iniToCode !== undefined) {
+      if (getAirport.has(iniToCode)) {
+        return getAirport.get(iniToCode);
+      } else return initialFrom;
+    }
+    return initialFrom;
+  });
   const [departureTime, setDepatureTime] = useState("");
   const [isRoundTrip, setIsRoundTrip] = useState(false);
   const [arrivalTime, setArrivalTime] = useState("");
   const router = useRouter();
-  const [seatType, setSeatType] = useState({ name: "Economy" });
-  const [numberPassenger, setNumberPassenger] = useState({
-    adult: 1,
-    child: 0,
-    infant: 0,
+  const [seatType, setSeatType] = useState(() => {
+    if (iniSeattype !== undefined && iniSeattype !== null) {
+      if (
+        iniSeattype !== "Economy" &&
+        iniSeattype !== "Business" &&
+        iniSeattype !== "First Class"
+      ) {
+        return { name: "Economy" };
+      }
+      return { name: iniSeattype };
+    }
+    return { name: "Economy" };
+  });
+  const [numberPassenger, setNumberPassenger] = useState(() => {
+    const string = iniNumberOfPassenger;
+    if (string !== null && string !== undefined) {
+      const numberStringArr = string.split("-");
+      for (let i = 0; i < numberStringArr.length; i++) {
+        if (Number.isNaN(Number(numberStringArr[i]))) {
+          return {
+            adult: 1,
+            child: 0,
+            infant: 0,
+          };
+        }
+      }
+      if (Number(numberStringArr[0]) === 0) {
+        return {
+          adult: 1,
+          child: 0,
+          infant: 0,
+        };
+      }
+      if (Number(numberStringArr[2]) > Number(numberStringArr[0])) {
+        return {
+          adult: Number(numberStringArr[0]),
+          child: Number(numberStringArr[1]),
+          infant: Number(numberStringArr[0]),
+        };
+      }
+      return {
+        adult: Number(numberStringArr[0]),
+        child: Number(numberStringArr[1]),
+        infant: Number(numberStringArr[2]),
+      };
+    }
+    return {
+      adult: 1,
+      child: 0,
+      infant: 0,
+    };
   });
   const handleNavigate = () => {
     const obj: any = {};
@@ -170,6 +242,7 @@ export default function SearchFlight({
               isCalendar={true}
               value={departureTime}
               setValue={setDepatureTime}
+              departureDate={iniDepartureTime}
               child={
                 <div className="w-full cursor-pointer flex items-center relative">
                   <div
@@ -219,7 +292,7 @@ export default function SearchFlight({
               isCalendar={true}
               value={arrivalTime}
               setValue={setArrivalTime}
-              departureDate={departureTime}
+              departureDate={iniArrivalTime}
               child={
                 <div className="w-full cursor-pointer flex items-center relative">
                   <div
@@ -309,7 +382,7 @@ export default function SearchFlight({
         <Button
           type="submit"
           onClick={() => handleNavigate()}
-          className="mt-4 w-full text-[16px] bg-orange-600 font-bold hover:bg-orange-700 transition-all"
+          className="mt-4 btnsearch w-full text-[16px] bg-orange-600 font-bold hover:bg-orange-700 transition-all"
         >
           Search flights
         </Button>

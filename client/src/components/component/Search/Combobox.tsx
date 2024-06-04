@@ -136,7 +136,8 @@ export function Combobox({
               onSelect={setDate}
               disabled={(date) => {
                 if (departureDate) {
-                  return date < departureDate;
+                  const newDate = new Date(departureDate);
+                  return date < newDate;
                 }
                 var currentDate = new Date();
                 currentDate.setDate(currentDate.getDate() - 1);
