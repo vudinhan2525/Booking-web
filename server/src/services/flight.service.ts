@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FlightBody, FlightQuery } from 'src/dtos/flight/flightBody.dto';
 import { Flight } from 'src/entities/flight.entity';
-import { Between, In, MoreThan, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 @Injectable()
 export class FlightService {
   constructor(
@@ -10,83 +10,74 @@ export class FlightService {
     private flightRepository: Repository<Flight>,
   ) {}
   async createFlight(body: FlightBody[]) {
-    for (let i = 0; i < body.length; i++) {
+    const flightPromises = body.map(async (flight) => {
       const newFlight = this.flightRepository.create({
-        fromAirport: body[i].fromAirport,
-        toAirport: body[i].toAirport,
-        from: body[i].from,
-        to: body[i].to,
-        fromCode: body[i].fromCode,
-        toCode: body[i].toCode,
-        airline: body[i].airline,
-        flightCode: body[i].flightCode,
-        seatType: body[i].seatType,
-        airplane: body[i].airplane,
-        departureTime: body[i].departureTime,
-        arrivalTime: body[i].arrivalTime,
-        price: body[i].price,
-        seatLeft: body[i].seatLeft,
+        id: flight.id,
+        fromAirport: flight.fromAirport,
+        toAirport: flight.toAirport,
+        from: flight.from,
+        to: flight.to,
+        fromCode: flight.fromCode,
+        toCode: flight.toCode,
+        airline: flight.airline,
+        flightCode: flight.flightCode,
+        seatType: flight.seatType,
+        airplane: flight.airplane,
+        departureTime: flight.departureTime,
+        arrivalTime: flight.arrivalTime,
       });
       await this.flightRepository.save(newFlight);
-    }
-    // try {
-    //   const newFlight = this.flightRepository.create({
-    //     fromAirport: body.fromAirport,
-    //     toAirport: body.toAirport,
-    //     from: body.from,
-    //     to: body.to,
-    //     airline: body.airline,
-    //     flightCode: body.flightCode,
-    //     seatType: body.seatType,
-    //     airplane: body.airplane,
-    //     departureTime: body.departureTime,
-    //     arrivalTime: body.arrivalTime,
-    //     price: body.price,
-    //   });
-    //   await this.flightRepository.save(newFlight);
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    });
+    await Promise.all(flightPromises);
   }
   async getFlight(body: FlightQuery) {
-    let totalPassenger = 0;
-    if (body.numberAdult) {
-      totalPassenger += body.numberAdult;
-    }
-    if (body.numberChild) {
-      totalPassenger += body.numberChild;
-    }
-    const obj: any = {
-      seatLeft: MoreThan(totalPassenger),
-    };
+    let query = this.flightRepository
+      .createQueryBuilder('flight')
+      .leftJoinAndSelect('flight.flightSeats', 'flightSeat');
+    //can you join it here after createQueryBuilder
     if (body.from) {
-      obj.fromCode = body.from;
+      query = query.andWhere('fromCode = :fromCode', { fromCode: body.from });
     }
     if (body.to) {
-      obj.toCode = body.to;
+      query = query.andWhere('toCode = :toCode', { toCode: body.to });
     }
     if (body.departureTime) {
       if (body.arrivalTime) {
-        obj.departureTime = Between(
-          new Date(body.departureTime),
-          new Date(body.arrivalTime),
-        );
+        query = query.andWhere(`departureTime BETWEEN :from AND :to`, {
+          from: new Date(body.departureTime),
+          to: new Date(body.arrivalTime),
+        });
       } else {
         const departureTime = new Date(body.departureTime);
         const nextDay = new Date(departureTime);
         nextDay.setDate(departureTime.getDate() + 1);
-        obj.departureTime = Between(new Date(body.departureTime), nextDay);
+        query = query.andWhere(`departureTime BETWEEN :from AND :to`, {
+          from: new Date(body.departureTime),
+          to: nextDay,
+        });
       }
     }
-    if (body.priceFrom && body.priceTo) {
-      obj.price = Between(body.priceFrom, body.priceTo);
-    }
     if (body.airline && body.airline.length > 0) {
-      obj.airline = In(body.airline);
+      query = query.andWhere(`airline IN (:...airlines)`, {
+        airlines: body.airline,
+      });
     }
-    const flights = await this.flightRepository.find({
-      where: obj,
+    let flights = await query.getMany();
+    flights.forEach((flight) => {
+      flight.flightSeats.sort((a, b) => a.price - b.price);
     });
+    if (!Number.isNaN(body.priceFrom) && body.priceFrom >= 0 && body.priceTo) {
+      const tmp = flights.filter((flight) => {
+        if (
+          flight.flightSeats[0].price <= body.priceTo &&
+          flight.flightSeats[0].price >= body.priceFrom
+        ) {
+          return true;
+        }
+        return false;
+      });
+      flights = tmp;
+    }
     if (body.departureHour) {
       const result = flights.filter((el) => {
         if (this.isTimeInRange(el.departureTime, body.departureHour))

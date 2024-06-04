@@ -39,7 +39,7 @@ export default function SortBarFlight({
     "time",
     "price",
   ]);
-  const [values, setValues] = useState([0, 3000000]);
+  const [values, setValues] = useState([0, 10000000]);
   const handleChangeAirline = (idx: number) => {
     if (filterObj.airline.includes(airlines[idx].label)) {
       setFilterObj((prev) => {
@@ -290,14 +290,14 @@ export default function SortBarFlight({
         {showList.includes("price") && (
           <div className="animate-fadeIn">
             <div className="text-end text-xs mt-2 text-gray-400">
-              1.000.000VND - 3.000.000 VND
+              1.000.000VND - 10.000.000 VND
             </div>
             <Slider
               className="slider w-[90%] mx-auto h-[3px] rounded-lg bg-gray-200 mt-5"
               value={values}
               onChange={setValues}
               min={0}
-              max={3000000}
+              max={10000000}
             />
             <div className="mt-4 flex justify-between">
               <p className="text-sm text-gray-700">

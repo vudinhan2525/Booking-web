@@ -2,6 +2,8 @@ import { Expose } from 'class-transformer';
 import { IsNotEmpty } from 'class-validator';
 
 export class FlightBody {
+  @Expose()
+  id: number;
   @IsNotEmpty()
   @Expose()
   fromAirport: string;
@@ -38,12 +40,6 @@ export class FlightBody {
   @IsNotEmpty()
   @Expose()
   arrivalTime: Date;
-  @IsNotEmpty()
-  @Expose()
-  price: number;
-  @IsNotEmpty()
-  @Expose()
-  seatLeft: number;
 }
 export class FlightQuery {
   @Expose()

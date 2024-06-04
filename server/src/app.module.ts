@@ -24,6 +24,8 @@ import { ReviewModule } from './modules/review.module';
 import { Review } from './entities/review.entity';
 import { BillHotelModule } from './modules/billHotel.module';
 import { BillHotel } from './entities/billHotel.entity';
+import { FlightSeat } from './entities/flightSeat.entity';
+import { FlightSeatModule } from './modules/flightSeat.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -34,7 +36,16 @@ import { BillHotel } from './entities/billHotel.entity';
       username: process.env.MYSQL_USERNAMELOCAL,
       password: process.env.MYSQL_PASSWORDLOCAL,
       database: process.env.MYSQL_DATABASENAMELOCAL,
-      entities: [User, Flight, Hotel, Room, RoomOpt, Review, BillHotel],
+      entities: [
+        User,
+        Flight,
+        Hotel,
+        Room,
+        RoomOpt,
+        Review,
+        BillHotel,
+        FlightSeat,
+      ],
       synchronize: true,
     }),
     TypeOrmModule.forFeature([
@@ -45,6 +56,7 @@ import { BillHotel } from './entities/billHotel.entity';
       RoomOpt,
       Review,
       BillHotel,
+      FlightSeat,
     ]),
     UserModule,
     AuthModule,
@@ -54,6 +66,7 @@ import { BillHotel } from './entities/billHotel.entity';
     RoomOptModule,
     ReviewModule,
     BillHotelModule,
+    FlightSeatModule,
   ],
   controllers: [AppController],
   providers: [AppService],

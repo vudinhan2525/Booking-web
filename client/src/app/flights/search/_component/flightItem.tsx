@@ -12,14 +12,66 @@ import {
 import {
   faCheckCircle,
   faCircleInfo,
+  faCircleXmark,
   faSuitcase,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 export default function FlightItem({ flight }: { flight: IFlight }) {
   const [opt, setOpt] = useState("");
+  const searchParams = useSearchParams();
+  const [numberOfPassenger, setNumberOfPassenger] = useState(() => {
+    const string = searchParams.get("numberPassenger");
+    if (string !== null) {
+      const numberStringArr = string.split("-");
+      for (let i = 0; i < numberStringArr.length; i++) {
+        if (Number.isNaN(Number(numberStringArr[i]))) {
+          return {
+            adult: 1,
+            child: 0,
+            infant: 0,
+          };
+        }
+      }
+      if (Number(numberStringArr[0]) === 0) {
+        return {
+          adult: 1,
+          child: 0,
+          infant: 0,
+        };
+      }
+      if (Number(numberStringArr[2]) > Number(numberStringArr[0])) {
+        return {
+          adult: Number(numberStringArr[0]),
+          child: Number(numberStringArr[1]),
+          infant: Number(numberStringArr[0]),
+        };
+      }
+      return {
+        adult: Number(numberStringArr[0]),
+        child: Number(numberStringArr[1]),
+        infant: Number(numberStringArr[2]),
+      };
+    }
+    return {
+      adult: 1,
+      child: 0,
+      infant: 0,
+    };
+  });
+  const [price, setPrice] = useState({ adult: 0, child: 0 });
+  useEffect(() => {
+    if (numberOfPassenger && flight) {
+      setPrice({
+        adult: flight.flightSeats[0].price * numberOfPassenger.adult,
+        child:
+          ((flight.flightSeats[0].price * 90) / 100) * numberOfPassenger.child,
+      });
+    }
+  }, [flight, numberOfPassenger]);
   return (
     <div className="bg-white  transition-all hover:border-primary-color border-[1px] border-transparent cursor-pointer pb-4 w-full mt-4 shadow-md rounded-xl">
       <div
@@ -74,7 +126,7 @@ export default function FlightItem({ flight }: { flight: IFlight }) {
           </div>
           <div className="basis-[25%] mr-[10px] flex justify-end gap-[2px]">
             <p className="text-orange-600 font-bold">{`${formatNumber(
-              flight.price
+              flight.flightSeats[0].price
             )} VND`}</p>
             <p className="text-xs mt-[5px] text-gray-500">/pax</p>
           </div>
@@ -244,18 +296,50 @@ export default function FlightItem({ flight }: { flight: IFlight }) {
               </p>
               <div className="flex items-center gap-2 mt-2">
                 <div className="mt-[-5px]">
-                  <RefundableIcon width="16px" height="16px" />
+                  <RefundableIcon
+                    width="16px"
+                    height="16px"
+                    fill={
+                      flight.flightSeats[0].isRefundable ? "#05A569" : "#000000"
+                    }
+                  />
                 </div>
-                <p className="text-xs font-semibold text-[#05A569]">
-                  Refundable
+                <p
+                  className={`${
+                    flight.flightSeats[0].isRefundable
+                      ? "text-[#05A569]"
+                      : "text-gray-700"
+                  } text-xs font-semibold `}
+                >
+                  {`${
+                    flight.flightSeats[0].isRefundable
+                      ? "Refundable"
+                      : "Non-Refundable"
+                  }`}
                 </p>
               </div>
               <div className="flex items-center gap-2 mt-2">
                 <div className="mt-[-2px]">
-                  <RescheduleIcon width="16px" height="16px" />
+                  <RescheduleIcon
+                    width="16px"
+                    height="16px"
+                    fill={
+                      flight.flightSeats[0].isReschedule ? "#05A569" : "#000000"
+                    }
+                  />
                 </div>
-                <p className="text-xs font-semibold text-[#05A569]">
-                  Reschedule Available
+                <p
+                  className={`${
+                    flight.flightSeats[0].isReschedule
+                      ? "text-[#05A569]"
+                      : "text-gray-700"
+                  } text-xs font-semibold `}
+                >
+                  {`${
+                    flight.flightSeats[0].isReschedule
+                      ? "Reschedule Available"
+                      : "Reschedule Available"
+                  }`}
                 </p>
               </div>
             </div>
@@ -264,13 +348,17 @@ export default function FlightItem({ flight }: { flight: IFlight }) {
             <header className="font-bold mb-2">Price Details</header>
             <div className="px-4 py-3 shadow-md bg-white rounded-lg">
               <div className=" flex justify-between">
-                <p className="text-sm text-gray-700 ">{`Adult Basic Fare (x2)`}</p>
-                <p className="text-sm">1.029.715 VND</p>
+                <p className="text-sm text-gray-700 ">{`Adult Basic Fare (x${numberOfPassenger.adult})`}</p>
+                <p className="text-sm">{`${formatNumber(price.adult)} VND`}</p>
               </div>
-              <div className="flex mt-2 justify-between">
-                <p className="text-sm text-gray-700 ">Child Basic Fare (x2)</p>
-                <p className="text-sm">1.977.430 VND</p>
-              </div>
+              {numberOfPassenger.child > 0 && (
+                <div className="flex mt-2 justify-between">
+                  <p className="text-sm text-gray-700 ">{`Child Basic Fare (x${numberOfPassenger.child})`}</p>
+                  <p className="text-sm">{`${formatNumber(
+                    price.child
+                  )} VND`}</p>
+                </div>
+              )}
               <div className="flex mt-2 justify-between">
                 <p className="text-sm text-gray-700 ">Tax</p>
                 <p className="text-sm">Included</p>
@@ -278,7 +366,9 @@ export default function FlightItem({ flight }: { flight: IFlight }) {
               <div className="w-full h-[1px] bg-gray-300 my-2"></div>
               <div className="flex justify-between">
                 <p className="text-sm text-gray-700 ">You pay</p>
-                <p className="text-sm font-bold">3.007.145 VND</p>
+                <p className="text-sm font-bold">{`${formatNumber(
+                  price.child + price.adult
+                )} VND`}</p>
               </div>
             </div>
           </div>
@@ -308,9 +398,25 @@ export default function FlightItem({ flight }: { flight: IFlight }) {
               </div>
               <p className="text-sm text-gray-500">Promo</p>
             </div>
-            <div className="text-[#0BC175] rounded-lg mt-2 flex items-center gap-2 py-4 px-4 w-full bg-gray-100">
-              <FontAwesomeIcon icon={faCheckCircle} />
-              <p className="font-bold">Refundable</p>
+            <div
+              className={`${
+                flight.flightSeats[0].isRefundable
+                  ? "text-[#0BC175]"
+                  : "text-gray-800"
+              } rounded-lg mt-2 flex items-center gap-2 py-4 px-4 w-full bg-gray-100`}
+            >
+              <FontAwesomeIcon
+                icon={
+                  flight.flightSeats[0].isRefundable
+                    ? faCheckCircle
+                    : faCircleXmark
+                }
+              />
+              <p className="font-bold mt-[2px]">
+                {flight.flightSeats[0].isRefundable
+                  ? "Refundable"
+                  : "Non-Refundable"}
+              </p>
             </div>
           </div>
         </div>
@@ -339,9 +445,25 @@ export default function FlightItem({ flight }: { flight: IFlight }) {
               </div>
               <p className="text-sm text-gray-500">Promo</p>
             </div>
-            <div className="text-[#0BC175] rounded-lg mt-2 flex items-center gap-2 py-4 px-4 w-full bg-gray-100">
-              <FontAwesomeIcon icon={faCheckCircle} />
-              <p className="font-bold">Reschedule Available</p>
+            <div
+              className={`${
+                flight.flightSeats[0].isReschedule
+                  ? "text-[#0BC175]"
+                  : "text-gray-800"
+              } rounded-lg mt-2 flex items-center gap-2 py-4 px-4 w-full bg-gray-100`}
+            >
+              <FontAwesomeIcon
+                icon={
+                  flight.flightSeats[0].isReschedule
+                    ? faCheckCircle
+                    : faCircleXmark
+                }
+              />
+              <p className="font-bold mt-[2px]">
+                {flight.flightSeats[0].isReschedule
+                  ? "Reschedule Available"
+                  : "Non-Reschedule Available"}
+              </p>
             </div>
           </div>
         </div>

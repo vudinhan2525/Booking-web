@@ -29,7 +29,7 @@ const initialObj: IfilterObj = {
   depatureTime: 0,
   arrivalTime: 0,
   priceFrom: 0,
-  priceTo: 3000000,
+  priceTo: 10000000,
 };
 export default function MainSearchFlightPage() {
   const searchParams = useSearchParams();

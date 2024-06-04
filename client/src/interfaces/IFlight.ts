@@ -1,3 +1,5 @@
+import { IFlightSeat } from "./IFlightSeat";
+
 export interface IFlight {
   id: number;
   fromAirport: string;
@@ -12,6 +14,5 @@ export interface IFlight {
   airplane: string;
   departureTime: string;
   arrivalTime: string;
-  price: number;
-  seatLeft: number;
+  flightSeats: IFlightSeat[];
 }

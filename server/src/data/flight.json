@@ -1,5 +1,6 @@
 [
   {
+    "id": 1,
     "fromAirport": "Noi Bai",
     "toAirport": "Tan Son Nhat",
     "from": "Ha Noi",
@@ -11,13 +12,10 @@
     "airplane": "Airbus A330",
     "flightCode": "VN-124",
     "departureTime": "2024-12-10T10:45:00.000Z",
-    "arrivalTime": "2024-12-10T12:30:00.000Z",
-    "price": 1259000,
-    "seatLeft": 650,
-    "isRefundable": false,
-    "isReschedule": true
+    "arrivalTime": "2024-12-10T12:30:00.000Z"
   },
   {
+    "id": 2,
     "fromAirport": "Da Nang Airport",
     "toAirport": "Noi Bai",
     "from": "Da Nang",
@@ -29,13 +27,10 @@
     "airplane": "Airbus A332",
     "flightCode": "VJ-256",
     "departureTime": "2024-12-10T11:45:00.000Z",
-    "arrivalTime": "2024-12-10T12:45:00.000Z",
-    "price": 1459000,
-    "seatLeft": 720,
-    "isRefundable": false,
-    "isReschedule": true
+    "arrivalTime": "2024-12-10T12:45:00.000Z"
   },
   {
+    "id": 3,
     "fromAirport": "Tan Son Nhat",
     "toAirport": "Noi Bai",
     "from": "Ho Chi Minh",
@@ -47,13 +42,10 @@
     "airplane": "Airbus A220",
     "flightCode": "VJ-190",
     "departureTime": "2024-12-10T13:45:00.000Z",
-    "arrivalTime": "2024-12-10T15:30:00.000Z",
-    "price": 1159000,
-    "seatLeft": 640,
-    "isRefundable": false,
-    "isReschedule": true
+    "arrivalTime": "2024-12-10T15:30:00.000Z"
   },
   {
+    "id": 4,
     "fromAirport": "Tan Son Nhat",
     "toAirport": "Da Nang",
     "from": "Ho Chi Minh",
@@ -65,13 +57,10 @@
     "airplane": "Airbus A370",
     "flightCode": "VN-240",
     "departureTime": "2024-12-10T15:45:00.000Z",
-    "arrivalTime": "2024-12-10T16:45:00.000Z",
-    "price": 1859000,
-    "seatLeft": 720,
-    "isRefundable": false,
-    "isReschedule": true
+    "arrivalTime": "2024-12-10T16:45:00.000Z"
   },
   {
+    "id": 5,
     "fromAirport": "Tan Son Nhat",
     "toAirport": "Noi Bai",
     "from": "Ho Chi Minh",
@@ -83,13 +72,10 @@
     "airplane": "Airbus A320",
     "flightCode": "VN-281",
     "departureTime": "2024-12-10T17:45:00.000Z",
-    "arrivalTime": "2024-12-10T19:30:00.000Z",
-    "price": 2159000,
-    "seatLeft": 570,
-    "isRefundable": false,
-    "isReschedule": true
+    "arrivalTime": "2024-12-10T19:30:00.000Z"
   },
   {
+    "id": 6,
     "fromAirport": "Noi Bai",
     "toAirport": "Tan Son Nhat",
     "from": "Ha Noi",
@@ -101,13 +87,10 @@
     "airplane": "Airbus A370",
     "flightCode": "VN-270",
     "departureTime": "2024-12-10T19:45:00.000Z",
-    "arrivalTime": "2024-12-10T21:30:00.000Z",
-    "price": 2159000,
-    "seatLeft": 570,
-    "isRefundable": true,
-    "isReschedule": true
+    "arrivalTime": "2024-12-10T21:30:00.000Z"
   },
   {
+    "id": 7,
     "fromAirport": "Noi Bai",
     "toAirport": "Tan Son Nhat",
     "from": "Ha Noi",
@@ -119,13 +102,10 @@
     "airplane": "Airbus A370",
     "flightCode": "VN-270",
     "departureTime": "2024-12-10T07:45:00.000Z",
-    "arrivalTime": "2024-12-10T09:30:00.000Z",
-    "price": 1859000,
-    "seatLeft": 450,
-    "isRefundable": true,
-    "isReschedule": true
+    "arrivalTime": "2024-12-10T09:30:00.000Z"
   },
   {
+    "id": 8,
     "fromAirport": "Noi Bai",
     "toAirport": "Tan Son Nhat",
     "from": "Ha Noi",
@@ -137,10 +117,6 @@
     "airplane": "Airbus A330",
     "flightCode": "VN-252",
     "departureTime": "2024-12-10T05:45:00.000Z",
-    "arrivalTime": "2024-12-10T07:30:00.000Z",
-    "price": 1859000,
-    "seatLeft": 320,
-    "isRefundable": true,
-    "isReschedule": true
+    "arrivalTime": "2024-12-10T07:30:00.000Z"
   }
 ]
