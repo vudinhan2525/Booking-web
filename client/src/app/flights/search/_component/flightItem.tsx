@@ -1,5 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { SheetTrigger } from "@/components/ui/sheet";
 import { IFlight } from "@/interfaces/IFlight";
 import { getAirline } from "@/lib/dataAir";
 import { RefundableIcon, RescheduleIcon } from "@/lib/icon";
@@ -20,7 +21,13 @@ import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
-export default function FlightItem({ flight }: { flight: IFlight }) {
+export default function FlightItem({
+  flight,
+  handleSelectFlight,
+}: {
+  flight: IFlight;
+  handleSelectFlight: () => void;
+}) {
   const [opt, setOpt] = useState("");
   const searchParams = useSearchParams();
   const [numberOfPassenger, setNumberOfPassenger] = useState(() => {
@@ -202,9 +209,11 @@ export default function FlightItem({ flight }: { flight: IFlight }) {
           </div>
         </div>
         <div className="basis-[20%]">
-          <Button className="bg-primary-color  text-white font-semibold px-8 hover:bg-primary-color hover:opacity-80 transition-all text-[15px]">
-            Choose
-          </Button>
+          <SheetTrigger onClick={handleSelectFlight}>
+            <div className="bg-primary-color py-2 rounded-md  text-white font-semibold px-8 hover:bg-primary-color hover:opacity-80 transition-all text-[15px]">
+              Choose
+            </div>
+          </SheetTrigger>
         </div>
       </div>
       {opt === "flightdetail" && (

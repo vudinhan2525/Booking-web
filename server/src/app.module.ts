@@ -26,6 +26,8 @@ import { BillHotelModule } from './modules/billHotel.module';
 import { BillHotel } from './entities/billHotel.entity';
 import { FlightSeat } from './entities/flightSeat.entity';
 import { FlightSeatModule } from './modules/flightSeat.module';
+import { BillFlight } from './entities/billFlight.entity';
+import { BillFlightModule } from './modules/billFlight.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -45,6 +47,7 @@ import { FlightSeatModule } from './modules/flightSeat.module';
         Review,
         BillHotel,
         FlightSeat,
+        BillFlight,
       ],
       synchronize: true,
     }),
@@ -57,6 +60,7 @@ import { FlightSeatModule } from './modules/flightSeat.module';
       Review,
       BillHotel,
       FlightSeat,
+      BillFlight,
     ]),
     UserModule,
     AuthModule,
@@ -67,19 +71,20 @@ import { FlightSeatModule } from './modules/flightSeat.module';
     ReviewModule,
     BillHotelModule,
     FlightSeatModule,
+    BillFlightModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(AuthMiddleWare)
-      .forRoutes(
-        { path: 'users/getMe', method: RequestMethod.GET },
-        { path: 'users/updateUser', method: RequestMethod.POST },
-        { path: 'users/updatePassword', method: RequestMethod.POST },
-        { path: 'billHotel/addBillHotel', method: RequestMethod.POST },
-      );
+    consumer.apply(AuthMiddleWare).forRoutes(
+      { path: 'users/getMe', method: RequestMethod.GET },
+      { path: 'users/updateUser', method: RequestMethod.POST },
+      { path: 'users/updatePassword', method: RequestMethod.POST },
+      { path: 'billHotel/addBillHotel', method: RequestMethod.POST },
+      { path: 'billHotel/getBillHotel', method: RequestMethod.POST },
+      //{ path: 'billFlight/addBillFlight', method: RequestMethod.POST },
+    );
   }
 }

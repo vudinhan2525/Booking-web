@@ -131,7 +131,7 @@ export default function SheetSelectRoom({
       );
     }
   }, [hotel, roomOptSelected, roomSelected, numberOfPassenger, duration]);
-
+  const [showPaymentDialog, setShowPaymentDialog] = useState(false);
   const handleAddBill = async () => {
     const body = {
       price: (price * 110) / 100,
@@ -156,7 +156,7 @@ export default function SheetSelectRoom({
       }
     } catch (error) {}
   };
-  const [showPaymentDialog, setShowPaymentDialog] = useState(false);
+
   return (
     <div>
       <div>

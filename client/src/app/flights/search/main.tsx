@@ -25,6 +25,8 @@ import { getAirport } from "@/lib/dataAir";
 import { useRouter } from "next/navigation";
 import { IfilterObj } from "@/interfaces/IfliterObj";
 import SearchFlight from "@/components/component/Search/SearchFlight";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
+import SheetSelectFlight from "./_component/SheetSelectFlight";
 const initialObj: IfilterObj = {
   airline: [],
   depatureTime: 0,
@@ -39,7 +41,7 @@ export default function MainSearchFlightPage() {
   const [filterObj, setFilterObj] = useState(initialObj);
   const [flightData, setFlightData] = useState<IFlight[]>();
   const [showSearchFlightForm, setShowSearchFlightForm] = useState(false);
-
+  const [idSlt, setIdSlt] = useState(0);
   useEffect(() => {
     if (searchParams) {
       getFlightList();
@@ -104,8 +106,9 @@ export default function MainSearchFlightPage() {
         Number(numberPassenger[2])
       );
     }
-    return "0";
+    return 1;
   };
+
   const [api, setApi] = useState<CarouselApi>();
   useEffect(() => {
     if (api) {
@@ -136,112 +139,130 @@ export default function MainSearchFlightPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterObj]);
   return (
-    <div className=" bg-[#F7F9FA] border-t-[1px] flex gap-8 px-28 py-10">
-      <div className="basis-[32%] ">
-        <SortBarFlight filterObj={filterObj} setFilterObj={setFilterObj} />
-      </div>
-      {showSearchFlightForm && (
-        <div
-          onClick={(e) => {
-            if (!(e.target as HTMLElement).closest(".modal")) {
-              setShowSearchFlightForm(false);
-            }
-            if ((e.target as HTMLElement).closest(".btnsearch")) {
-              setShowSearchFlightForm(false);
-            }
-          }}
-          className="fixed flex items-center justify-center bg-black/30 top-0 right-0 left-0 bottom-0 z-[10]"
-        >
-          <div className="basis-[70%] modal mb-[200px]">
-            <SearchFlight
-              fromFlightPage={true}
-              iniNumberOfPassenger={searchParams.get("numberPassenger")}
-              iniSeattype={searchParams.get("seatType")}
-              iniFromCode={searchParams.get("from")}
-              iniToCode={searchParams.get("to")}
-              iniDepartureTime={
-                searchParams.get("departureTime") + "T00:00:00.000Z"
-              }
-              iniArrivalTime={
-                searchParams.get("arrivalTime") !== null
-                  ? searchParams.get("arrivalTime") + "T00:00:00.000Z"
-                  : searchParams.get("departureTime") + "T00:00:00.000Z"
-              }
-            />
-          </div>
+    <Sheet>
+      <SheetContent className="xl:w-[650px] px-0 xl:max-w-none max-h-full pb-0 overflow-scroll sm:w-[400px] sm:max-w-[540px]">
+        {flightData && (
+          <SheetSelectFlight
+            flight={flightData[idSlt]}
+            iniNumberPassenger={searchParams.get("numberPassenger")}
+          />
+        )}
+      </SheetContent>
+      <div className=" bg-[#F7F9FA] border-t-[1px] flex gap-8 px-28 py-10">
+        <div className="basis-[32%] ">
+          <SortBarFlight filterObj={filterObj} setFilterObj={setFilterObj} />
         </div>
-      )}
-      <div className="basis-[68%]">
-        <div className="w-full  bg-flight-ct rounded-xl px-4 py-4">
-          <div className="bg-white rounded-lg flex justify-between items-center w-[70%]   ">
-            <div className="px-4 py-3">
-              <p className="font-bold">{`${
-                getAirport.get(searchParams.get("from"))?.name || "From"
-              } (${searchParams.get("from") || ""}) → ${
-                getAirport.get(searchParams.get("to"))?.name || "To"
-              } (${searchParams.get("to") || ""})`}</p>
-              <p className="text-sm text-gray-700">
-                {`${toDayMonthYear(
+        {showSearchFlightForm && (
+          <div
+            onClick={(e) => {
+              if (!(e.target as HTMLElement).closest(".modal")) {
+                setShowSearchFlightForm(false);
+              }
+              if ((e.target as HTMLElement).closest(".btnsearch")) {
+                setShowSearchFlightForm(false);
+              }
+            }}
+            className="fixed flex items-center justify-center bg-black/30 top-0 right-0 left-0 bottom-0 z-[10]"
+          >
+            <div className="basis-[70%] modal mb-[200px]">
+              <SearchFlight
+                fromFlightPage={true}
+                iniNumberOfPassenger={searchParams.get("numberPassenger")}
+                iniSeattype={searchParams.get("seatType")}
+                iniFromCode={searchParams.get("from")}
+                iniToCode={searchParams.get("to")}
+                iniDepartureTime={
                   searchParams.get("departureTime") + "T00:00:00.000Z"
-                )} | ${calcNoPassenger()} passenger(s) | ${searchParams.get(
-                  "seatType"
-                )}`}
-              </p>
+                }
+                iniArrivalTime={
+                  searchParams.get("arrivalTime") !== null
+                    ? searchParams.get("arrivalTime") + "T00:00:00.000Z"
+                    : searchParams.get("departureTime") + "T00:00:00.000Z"
+                }
+              />
             </div>
-            <div
-              onClick={() => {
-                setShowSearchFlightForm(true);
-              }}
-              className="cursor-pointer flex hover:bg-blue-100 gap-2 bg-blue-50 transition-all py-2 mr-[15px] rounded-lg px-6 items-center"
-            >
-              <p className="text-[14px] font-bold text-primary-color">
-                Change search
-              </p>
-              <div>
-                <FontAwesomeIcon
-                  icon={faSearch}
-                  className="text-primary-color text-[17px] "
-                />
+          </div>
+        )}
+        <div className="basis-[68%]">
+          <div className="w-full  bg-flight-ct rounded-xl px-4 py-4">
+            <div className="bg-white rounded-lg flex justify-between items-center w-[70%]   ">
+              <div className="px-4 py-3">
+                <p className="font-bold">{`${
+                  getAirport.get(searchParams.get("from"))?.name || "From"
+                } (${searchParams.get("from") || ""}) → ${
+                  getAirport.get(searchParams.get("to"))?.name || "To"
+                } (${searchParams.get("to") || ""})`}</p>
+                <p className="text-sm text-gray-700">
+                  {`${toDayMonthYear(
+                    searchParams.get("departureTime") + "T00:00:00.000Z"
+                  )} | ${calcNoPassenger()} passenger(s) | ${searchParams.get(
+                    "seatType"
+                  )}`}
+                </p>
+              </div>
+              <div
+                onClick={() => {
+                  setShowSearchFlightForm(true);
+                }}
+                className="cursor-pointer flex hover:bg-blue-100 gap-2 bg-blue-50 transition-all py-2 mr-[15px] rounded-lg px-6 items-center"
+              >
+                <p className="text-[14px] font-bold text-primary-color">
+                  Change search
+                </p>
+                <div>
+                  <FontAwesomeIcon
+                    icon={faSearch}
+                    className="text-primary-color text-[17px] "
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="flex justify-center  mt-4">
+              <div className="bg-[#0264C8] px-4 py-2 rounded-xl">
+                <Carousel setApi={setApi} className="max-w-[650px] ">
+                  <CarouselContent>
+                    {getAllDatesOfMonth(
+                      searchParams.get("departureTime") + "T00:00:00.000Z"
+                    ).map((el, index) => (
+                      <CarouselItem
+                        key={index}
+                        onClick={() => handleChangeDate(el)}
+                        className="md:basis-1/2 pl-2 lg:basis-1/5"
+                      >
+                        <div
+                          className={`${
+                            el === searchParams.get("departureTime") &&
+                            "bg-white/30"
+                          } text-sm py-2  hover:bg-white/15 cursor-pointer transition-all text-center text-white font-semibold rounded-lg`}
+                        >
+                          {convertTime3(el)}
+                          <div className="text-xs text-white text-center">
+                            {`> 1.000.000 VND`}
+                          </div>
+                        </div>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  <CarouselPrevious />
+                  <CarouselNext />
+                </Carousel>
               </div>
             </div>
           </div>
-          <div className="flex justify-center  mt-4">
-            <div className="bg-[#0264C8] px-4 py-2 rounded-xl">
-              <Carousel setApi={setApi} className="max-w-[650px] ">
-                <CarouselContent>
-                  {getAllDatesOfMonth(
-                    searchParams.get("departureTime") + "T00:00:00.000Z"
-                  ).map((el, index) => (
-                    <CarouselItem
-                      key={index}
-                      onClick={() => handleChangeDate(el)}
-                      className="md:basis-1/2 pl-2 lg:basis-1/5"
-                    >
-                      <div
-                        className={`${
-                          el === searchParams.get("departureTime") &&
-                          "bg-white/30"
-                        } text-sm py-2  hover:bg-white/15 cursor-pointer transition-all text-center text-white font-semibold rounded-lg`}
-                      >
-                        {convertTime3(el)}
-                        <div className="text-xs text-white text-center">
-                          {`> 1.000.000 VND`}
-                        </div>
-                      </div>
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-                <CarouselPrevious />
-                <CarouselNext />
-              </Carousel>
-            </div>
-          </div>
+          {flightData &&
+            flightData.map((el, idx) => {
+              return (
+                <FlightItem
+                  flight={el}
+                  key={idx}
+                  handleSelectFlight={() => {
+                    setIdSlt(idx);
+                  }}
+                />
+              );
+            })}
         </div>
-        {flightData &&
-          flightData.map((el, idx) => {
-            return <FlightItem flight={el} key={idx} />;
-          })}
       </div>
-    </div>
+    </Sheet>
   );
 }

@@ -8,7 +8,7 @@ import {
   faUserGroup,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Combobox } from "./ComboBox";
+import { ComboBox } from "./ComboBox";
 import { useEffect, useState } from "react";
 import { destinations } from "@/lib/dataHotel";
 import {
@@ -134,7 +134,7 @@ export default function SearchHotels({
         <div className="flex px-16 py-2 gap-3">
           <div className="basis-[35%]">
             <div className={`${fromDetailHotelPage && "hidden"}`}>
-              <Combobox
+              <ComboBox
                 isDestination={true}
                 value={destination}
                 frameworks={destinations}
@@ -173,7 +173,7 @@ export default function SearchHotels({
             )}
           </div>
           <div className="basis-[15%]">
-            <Combobox
+            <ComboBox
               isCalendar={true}
               value={departureTime}
               departureDate={iniDeparture}
@@ -196,7 +196,7 @@ export default function SearchHotels({
             />
           </div>
           <div className="basis-[15%]">
-            <Combobox
+            <ComboBox
               value={duration}
               setValue={setDuration}
               isDurationList={true}
@@ -215,7 +215,7 @@ export default function SearchHotels({
             />
           </div>
           <div className="basis-[25%]">
-            <Combobox
+            <ComboBox
               isSetNumberPassenger={true}
               value={numberPassenger}
               setValue={setNumberPassenger}
@@ -259,7 +259,7 @@ export default function SearchHotels({
           >
             City, destination, or hotel name
           </p>
-          <Combobox
+          <ComboBox
             isDestination={true}
             value={destination}
             frameworks={destinations}
@@ -293,7 +293,7 @@ export default function SearchHotels({
               >
                 Check-in
               </p>
-              <Combobox
+              <ComboBox
                 isCalendar={true}
                 value={departureTime}
                 setValue={setDepatureTime}
@@ -326,7 +326,7 @@ export default function SearchHotels({
               >
                 Duration
               </p>
-              <Combobox
+              <ComboBox
                 value={duration}
                 setValue={setDuration}
                 isDurationList={true}
@@ -379,7 +379,7 @@ export default function SearchHotels({
           </p>
           <div className="flex gap-4 items-center">
             <div className="basis-[66%]">
-              <Combobox
+              <ComboBox
                 isSetNumberPassenger={true}
                 value={numberPassenger}
                 setValue={setNumberPassenger}

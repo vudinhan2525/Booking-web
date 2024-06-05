@@ -1,6 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import * as crypto from 'crypto';
 import { Hotel } from './hotel.entity';
+import { BillFlight } from './billFlight.entity';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -64,4 +65,7 @@ export class User {
 
   @OneToMany(() => Hotel, (hotel) => hotel.admin)
   hotels: Hotel[];
+
+  @OneToMany(() => BillFlight, (billFlight) => billFlight.user)
+  billFlights: BillFlight[];
 }

@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import { airports, getAirport } from "@/lib/dataAir";
 import { convertTime, toDayMonthYear } from "@/utils/convertTime";
 import objectToQueryString from "@/utils/convertToQueryString";
-import { Combobox } from "./Combobox";
+import { ComboBox } from "./ComboBox";
 const initialFrom = {
   name: "",
   nameAirport: "",
@@ -156,7 +156,7 @@ export default function SearchFlight({
             >
               From
             </p>
-            <Combobox
+            <ComboBox
               isAirportList={true}
               frameworks={airports}
               setValue={setAirportFrom}
@@ -204,7 +204,7 @@ export default function SearchFlight({
             >
               To
             </p>
-            <Combobox
+            <ComboBox
               isAirportList={true}
               frameworks={airports}
               setValue={setAirportTo}
@@ -238,7 +238,7 @@ export default function SearchFlight({
             >
               Depature Date
             </p>
-            <Combobox
+            <ComboBox
               isCalendar={true}
               value={departureTime}
               setValue={setDepatureTime}
@@ -288,7 +288,7 @@ export default function SearchFlight({
                 </p>
               </label>
             </div>
-            <Combobox
+            <ComboBox
               isCalendar={true}
               value={arrivalTime}
               setValue={setArrivalTime}
@@ -326,7 +326,7 @@ export default function SearchFlight({
         >
           No. of Passengers
         </p>
-        <Combobox
+        <ComboBox
           isSetNumberPassenger={true}
           setValue={setNumberPassenger}
           value={numberPassenger}
@@ -356,7 +356,7 @@ export default function SearchFlight({
             Seat class
           </p>
 
-          <Combobox
+          <ComboBox
             isSeatList={true}
             frameworks={[
               { name: "Economy" },
