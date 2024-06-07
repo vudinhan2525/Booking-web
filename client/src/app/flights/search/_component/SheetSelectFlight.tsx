@@ -9,6 +9,8 @@ import { useAppContext } from "@/app/AppProvider";
 import TicketType from "./TicketType";
 import Overview from "./Overview";
 import PassengerItem from "./PassengerItem";
+import flightApiRequest from "@/apiRequest/flight";
+import { useToast } from "@/components/ui/use-toast";
 
 export default function SheetSelectFlight({
   flight,
@@ -17,6 +19,7 @@ export default function SheetSelectFlight({
   flight: IFlight;
   iniNumberPassenger: string | null;
 }) {
+  const { toast } = useToast();
   const { user } = useAppContext();
   const [sltSeatType, setSltSeatType] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -61,14 +64,6 @@ export default function SheetSelectFlight({
     };
   });
   const closeRef = useRef<HTMLButtonElement>(null);
-  useEffect(() => {
-    if (flight && !Number.isNaN(sltSeatType)) {
-      setTotalPrice(
-        flight.flightSeats[sltSeatType].price *
-          (numberPassenger.adult + numberPassenger.child)
-      );
-    }
-  }, [flight, sltSeatType, numberPassenger]);
   const [infoContact, setInfoContact] = useState({
     firstName: "",
     lastName: "",
@@ -81,7 +76,6 @@ export default function SheetSelectFlight({
     ...new Array(numberPassenger.adult + numberPassenger.child),
   ]);
   const [showErrorSavedPass, setShowErrorSavedPass] = useState(false);
-
   const refContact = useRef<HTMLDivElement>(null);
   const refPass = useRef<HTMLDivElement>(null);
   const [saved, setSaved] = useState(() => {
@@ -93,6 +87,40 @@ export default function SheetSelectFlight({
     );
     return arr;
   });
+  useEffect(() => {
+    if (flight && !Number.isNaN(sltSeatType)) {
+      setTotalPrice(
+        flight.flightSeats[sltSeatType].price *
+          (numberPassenger.adult + numberPassenger.child)
+      );
+    }
+  }, [flight, sltSeatType, numberPassenger]);
+  const handleAddBillFlight = async () => {
+    if (!user) return;
+    try {
+      console.log(infoPassenger[0].birthDay);
+      const response = await flightApiRequest.addBillFlight({
+        userId: user.id,
+        username: infoContact.firstName + " " + infoContact.lastName,
+        email: infoContact.email,
+        phone: infoContact.phone,
+        airline: flight.airline,
+        flightCode: flight.flightCode,
+        departureTime: flight.departureTime,
+        arrivalTime: flight.arrivalTime,
+        from: `${flight.from}  (${flight.fromCode})`,
+        to: `${flight.to}  (${flight.toCode})`,
+        passenger: JSON.stringify(infoPassenger),
+      });
+      if (response.status === "success") {
+        toast({
+          title: "",
+          status: "success",
+          description: "Booking successfully !",
+        });
+      }
+    } catch (error) {}
+  };
   return (
     <div>
       {user ? (
@@ -186,10 +214,10 @@ export default function SheetSelectFlight({
                   let flag = 0;
                   saved.forEach((el, idx) => {
                     if (el === false) {
-                      flag = idx;
+                      flag = 1;
                     }
                   });
-                  if (flag !== 0) {
+                  if (flag === 1) {
                     setShowErrorSavedPass(true);
                     refPass.current?.scrollIntoView({
                       behavior: "smooth",
@@ -210,6 +238,7 @@ export default function SheetSelectFlight({
             {showPaymentDialog && (
               <Dialog
                 onYes={() => {
+                  handleAddBillFlight();
                   setShowPaymentDialog(false);
                   closeRef.current?.click();
                 }}

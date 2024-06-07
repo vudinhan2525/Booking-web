@@ -41,6 +41,9 @@ export class BillFlight {
   @Column()
   to: string;
 
-  @Column()
+  @Column({
+    type: 'nvarchar',
+    length: 5000,
+  })
   passenger: string;
 }

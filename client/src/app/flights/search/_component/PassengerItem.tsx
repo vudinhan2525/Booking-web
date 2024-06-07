@@ -51,11 +51,7 @@ export default function PassengerItem({
   });
 
   const disableDates = new Date("August 19, 2012 23:15:30");
-  useEffect(() => {
-    if (birthDay) {
-      console.log(birthDay);
-    }
-  }, [birthDay]);
+
   const handleSavePassenger = () => {
     if (firstName.trim() === "") {
       setError((prev) => [...prev, "firstName"]);
@@ -75,7 +71,7 @@ export default function PassengerItem({
         arr[numberOfAdult + id - 1] = {
           firstName,
           lastName,
-          birthDay: birthDay,
+          birthDay: birthDay.toString(),
           isChild: isChild,
         };
         return arr;
@@ -86,7 +82,7 @@ export default function PassengerItem({
         arr[id - 1] = {
           firstName,
           lastName,
-          birthDay: birthDay,
+          birthDay: birthDay.toString(),
           isChild: false,
         };
         return arr;

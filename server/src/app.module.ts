@@ -78,13 +78,15 @@ import { BillFlightModule } from './modules/billFlight.module';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthMiddleWare).forRoutes(
-      { path: 'users/getMe', method: RequestMethod.GET },
-      { path: 'users/updateUser', method: RequestMethod.POST },
-      { path: 'users/updatePassword', method: RequestMethod.POST },
-      { path: 'billHotel/addBillHotel', method: RequestMethod.POST },
-      { path: 'billHotel/getBillHotel', method: RequestMethod.POST },
-      //{ path: 'billFlight/addBillFlight', method: RequestMethod.POST },
-    );
+    consumer
+      .apply(AuthMiddleWare)
+      .forRoutes(
+        { path: 'users/getMe', method: RequestMethod.GET },
+        { path: 'users/updateUser', method: RequestMethod.POST },
+        { path: 'users/updatePassword', method: RequestMethod.POST },
+        { path: 'billHotel/addBillHotel', method: RequestMethod.POST },
+        { path: 'billHotel/getBillHotel', method: RequestMethod.POST },
+        { path: 'billFlight/addBillFlight', method: RequestMethod.POST },
+      );
   }
 }
