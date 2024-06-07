@@ -111,6 +111,7 @@ export default function SheetSelectFlight({
         from: `${flight.from}  (${flight.fromCode})`,
         to: `${flight.to}  (${flight.toCode})`,
         passenger: JSON.stringify(infoPassenger),
+        price: totalPrice,
       });
       if (response.status === "success") {
         toast({

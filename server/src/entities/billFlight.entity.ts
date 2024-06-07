@@ -10,6 +10,12 @@ export class BillFlight {
   user: User;
   @Column()
   userId: number;
+  @Column({
+    type: 'enum',
+    enum: ['pending', 'completed'],
+    default: 'pending',
+  })
+  status: string;
 
   @Column()
   createdAt: Date;
@@ -40,6 +46,9 @@ export class BillFlight {
 
   @Column()
   to: string;
+
+  @Column()
+  price: number;
 
   @Column({
     type: 'nvarchar',

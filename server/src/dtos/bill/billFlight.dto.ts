@@ -12,6 +12,10 @@ export class BillFlightBody {
   @IsNotEmpty()
   @Expose()
   email: string;
+
+  @Expose()
+  status: 'pending' | 'completed';
+
   @IsNotEmpty()
   @Expose()
   phone: string;
@@ -19,6 +23,10 @@ export class BillFlightBody {
   @IsNotEmpty()
   @Expose()
   airline: string;
+
+  @IsNotEmpty()
+  @Expose()
+  price: number;
 
   @IsNotEmpty()
   @Expose()

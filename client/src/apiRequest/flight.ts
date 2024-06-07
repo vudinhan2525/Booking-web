@@ -16,9 +16,15 @@ const flightApiRequest = {
     arrivalTime: string;
     from: string;
     to: string;
+    price: number;
     passenger: string;
   }) =>
     http.post<any>("/billFlight/addBillFlight", body, {
+      headers: { "Content-Type": "application/json" },
+      withCredentials: true,
+    }),
+  getBillFlight: (body: { userId: number }) =>
+    http.post<any>("/billFlight/getBillFlight", body, {
       headers: { "Content-Type": "application/json" },
       withCredentials: true,
     }),

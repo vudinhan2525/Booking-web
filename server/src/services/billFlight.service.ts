@@ -16,8 +16,10 @@ export class BillFlightService {
     const billFlight = await this.billFlightRepository.create({
       id: uniqueId,
       userId: body.userId,
+      status: body.status,
       username: body.username,
       createdAt: curDate,
+      price: body.price,
       email: body.email,
       phone: body.phone,
       airline: body.airline,
@@ -46,5 +48,12 @@ export class BillFlightService {
     }
 
     return this.generateUniqueBillHotelId(attempts + 1);
+  }
+  async getBillFlight(body: { userId: number }) {
+    const billFlights = await this.billFlightRepository
+      .createQueryBuilder('bill_flight')
+      .where('userId = :userId', { userId: body.userId })
+      .getMany();
+    return billFlights;
   }
 }
