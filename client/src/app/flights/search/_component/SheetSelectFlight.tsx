@@ -8,6 +8,7 @@ import ContactInfo from "./ContactInfo";
 import { useAppContext } from "@/app/AppProvider";
 import TicketType from "./TicketType";
 import Overview from "./Overview";
+import PassengerItem from "./PassengerItem";
 
 export default function SheetSelectFlight({
   flight,
@@ -76,6 +77,22 @@ export default function SheetSelectFlight({
   });
   const [isCheckedInfo, setIsCheckedInfo] = useState(false);
   const [showErrorSavedInfo, setShowErrorSavedInfo] = useState(false);
+  const [infoPassenger, setInfoPassenger] = useState([
+    ...new Array(numberPassenger.adult + numberPassenger.child),
+  ]);
+  const [showErrorSavedPass, setShowErrorSavedPass] = useState(false);
+
+  const refContact = useRef<HTMLDivElement>(null);
+  const refPass = useRef<HTMLDivElement>(null);
+  const [saved, setSaved] = useState(() => {
+    let arr: boolean[] = [];
+    [...new Array(numberPassenger.adult + numberPassenger.child)].forEach(
+      () => {
+        arr.push(false);
+      }
+    );
+    return arr;
+  });
   return (
     <div>
       {user ? (
@@ -87,6 +104,7 @@ export default function SheetSelectFlight({
               setSltSeatType={setSltSeatType}
               flight={flight}
             />
+            <div ref={refContact}></div>
             <ContactInfo
               iniData={{
                 firstName: user.firstName,
@@ -99,12 +117,54 @@ export default function SheetSelectFlight({
               showErrorSavedInfo={showErrorSavedInfo}
               setShowErrorSavedInfo={setShowErrorSavedInfo}
             />
+            <div ref={refPass}></div>
             <div className="px-6 mt-4">
-              <header className={` mt-4 text-lg font-bold`}>
+              <header
+                className={`${
+                  showErrorSavedPass ? "text-red-500" : ""
+                } mt-4 text-lg font-bold`}
+              >
                 Passenger information
               </header>
+              {showErrorSavedPass && (
+                <p className="italic text-xs font-light text-red-500">
+                  *Save your information before booking.
+                </p>
+              )}
+              <div className="flex flex-col gap-2 mt-2">
+                {[...new Array(numberPassenger.adult)].map((el, idx) => {
+                  return (
+                    <PassengerItem
+                      key={idx}
+                      id={idx + 1}
+                      iD={idx}
+                      setInfoPassenger={setInfoPassenger}
+                      saved={saved}
+                      setSaved={setSaved}
+                      setShowErrorSavedPass={setShowErrorSavedPass}
+                    />
+                  );
+                })}
+                {[...new Array(numberPassenger.child)].map((el, idx) => {
+                  return (
+                    <PassengerItem
+                      key={idx}
+                      id={idx + 1}
+                      iD={idx + numberPassenger.adult}
+                      setInfoPassenger={setInfoPassenger}
+                      saved={saved}
+                      setSaved={setSaved}
+                      isChild={true}
+                      numberOfAdult={
+                        numberPassenger.adult ? numberPassenger.adult : 0
+                      }
+                      setShowErrorSavedPass={setShowErrorSavedPass}
+                    />
+                  );
+                })}
+              </div>
             </div>
-            <div className="sticky items-center px-6 py-1 justify-between bottom-0 flex border-t-[1px]  w-full bg-white">
+            <div className="items-center px-6 py-1 justify-between bottom-0 flex border-t-[1px]  w-full bg-white">
               <div className="mt-2">
                 <p className="text-gray-600 text-sm">{`Total for ${
                   numberPassenger.adult + numberPassenger.child
@@ -117,6 +177,24 @@ export default function SheetSelectFlight({
                 onClick={() => {
                   if (!isCheckedInfo) {
                     setShowErrorSavedInfo(true);
+                    refContact.current?.scrollIntoView({
+                      behavior: "smooth",
+                      block: "center",
+                    });
+                    return;
+                  }
+                  let flag = 0;
+                  saved.forEach((el, idx) => {
+                    if (el === false) {
+                      flag = idx;
+                    }
+                  });
+                  if (flag !== 0) {
+                    setShowErrorSavedPass(true);
+                    refPass.current?.scrollIntoView({
+                      behavior: "smooth",
+                      block: "center",
+                    });
                     return;
                   }
                   setShowPaymentDialog(true);
