@@ -38,6 +38,7 @@ import { BillFlightModule } from './modules/billFlight.module';
       username: process.env.MYSQL_USERNAMELOCAL,
       password: process.env.MYSQL_PASSWORDLOCAL,
       database: process.env.MYSQL_DATABASENAMELOCAL,
+
       entities: [
         User,
         Flight,

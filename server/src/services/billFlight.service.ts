@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { BillFlight } from 'src/entities/billFlight.entity';
 import { BillFlightBody } from 'src/dtos/bill/billFlight.dto';
 import { generateUniqueId } from 'src/utils/generateId';
+
 @Injectable()
 export class BillFlightService {
   constructor(
@@ -18,7 +19,7 @@ export class BillFlightService {
       userId: body.userId,
       status: body.status,
       username: body.username,
-      createdAt: curDate,
+      createdAt: curDate.toString(),
       price: body.price,
       email: body.email,
       phone: body.phone,
@@ -54,6 +55,7 @@ export class BillFlightService {
       .createQueryBuilder('bill_flight')
       .where('userId = :userId', { userId: body.userId })
       .getMany();
+
     return billFlights;
   }
 }

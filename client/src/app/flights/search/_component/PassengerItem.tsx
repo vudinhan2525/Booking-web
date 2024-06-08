@@ -16,6 +16,7 @@ import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import { IFlightSeat } from "@/interfaces/IFlightSeat";
 const datas = [];
 type ValuePiece = Date | null;
 
@@ -29,6 +30,7 @@ export default function PassengerItem({
   numberOfAdult,
   iD,
   setShowErrorSavedPass,
+  seatSlt,
 }: {
   id: number;
   setInfoPassenger: React.Dispatch<React.SetStateAction<any[]>>;
@@ -38,6 +40,7 @@ export default function PassengerItem({
   numberOfAdult?: number;
   iD: number;
   setShowErrorSavedPass: React.Dispatch<React.SetStateAction<boolean>>;
+  seatSlt: IFlightSeat;
 }) {
   const [error, setError] = useState<string[]>([]);
   const [firstName, setFirstName] = useState("");
@@ -73,6 +76,8 @@ export default function PassengerItem({
           lastName,
           birthDay: birthDay.toString(),
           isChild: isChild,
+          baggage: seatSlt.baggage,
+          cabinBaggage: seatSlt.cabinBaggage,
         };
         return arr;
       });
@@ -84,6 +89,8 @@ export default function PassengerItem({
           lastName,
           birthDay: birthDay.toString(),
           isChild: false,
+          baggage: seatSlt.baggage,
+          cabinBaggage: seatSlt.cabinBaggage,
         };
         return arr;
       });

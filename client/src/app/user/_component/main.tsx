@@ -23,8 +23,11 @@ const settings = [
     icon: <FontAwesomeIcon icon={faBookmark} />,
   },
 ];
-export default function MainUserPage() {
-  const [optSlt, setOptSlt] = useState(0);
+export default function MainUserPage({ iniSlt }: { iniSlt?: number }) {
+  const [optSlt, setOptSlt] = useState(() => {
+    if (iniSlt) return iniSlt;
+    return 0;
+  });
   const { isAuthenticated, user } = useAppContext();
   return (
     <div>

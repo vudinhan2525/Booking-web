@@ -18,7 +18,7 @@ export class BillFlight {
   status: string;
 
   @Column()
-  createdAt: Date;
+  createdAt: string;
 
   @Column()
   username: string;

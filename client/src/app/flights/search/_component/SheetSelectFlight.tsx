@@ -98,7 +98,6 @@ export default function SheetSelectFlight({
   const handleAddBillFlight = async () => {
     if (!user) return;
     try {
-      console.log(infoPassenger[0].birthDay);
       const response = await flightApiRequest.addBillFlight({
         userId: user.id,
         username: infoContact.firstName + " " + infoContact.lastName,
@@ -167,6 +166,7 @@ export default function SheetSelectFlight({
                       key={idx}
                       id={idx + 1}
                       iD={idx}
+                      seatSlt={flight.flightSeats[sltSeatType]}
                       setInfoPassenger={setInfoPassenger}
                       saved={saved}
                       setSaved={setSaved}
@@ -180,6 +180,7 @@ export default function SheetSelectFlight({
                       key={idx}
                       id={idx + 1}
                       iD={idx + numberPassenger.adult}
+                      seatSlt={flight.flightSeats[sltSeatType]}
                       setInfoPassenger={setInfoPassenger}
                       saved={saved}
                       setSaved={setSaved}
