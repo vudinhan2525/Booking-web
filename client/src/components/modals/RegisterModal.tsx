@@ -1,5 +1,5 @@
 "use client";
-import { useAppContext } from "../../app/AppProvider";
+import { useAppContext } from "@/app/(userApp)/AppProvider";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";

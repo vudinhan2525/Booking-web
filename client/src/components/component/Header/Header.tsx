@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import CustomButton from "@/components/ui/CustomButton";
 import { useEffect, useState } from "react";
 import useDebounce from "@/hooks/useDebounce";
-import { useAppContext } from "@/app/AppProvider";
+import { useAppContext } from "@/app/(userApp)/AppProvider";
 import { useRouter, usePathname } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";

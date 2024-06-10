@@ -130,7 +130,7 @@ export default function DetailFlightBooking({
           {passenger &&
             passenger.map((el, idx) => {
               return (
-                <div key={idx} className="px-4 py-4 bg-gray-50 ">
+                <div key={idx} className="px-4 py-4 bg-gray-50 border-b-[1px]">
                   <p>{`${el.firstName} ${el.lastName} ${
                     el.isChild ? "(Child)" : "(Adult)"
                   }`}</p>

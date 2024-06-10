@@ -1,5 +1,5 @@
 "use client";
-import { useAppContext } from "@/app/AppProvider";
+import { useAppContext } from "@/app/(userApp)/AppProvider";
 import { Button } from "./button";
 import authApiRequest from "@/apiRequest/auth";
 

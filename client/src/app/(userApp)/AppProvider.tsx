@@ -1,7 +1,6 @@
 "use client";
 import userApiRequest from "@/apiRequest/user";
 import { IUser } from "@/interfaces/IUser";
-import http from "@/lib/http";
 import { createContext, useContext, useEffect, useState } from "react";
 const AppContext = createContext<{
   showLoginModal: boolean;

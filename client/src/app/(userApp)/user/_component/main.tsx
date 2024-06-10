@@ -7,7 +7,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Account from "./Settings/Account/Account";
-import { useAppContext } from "@/app/AppProvider";
+import { useAppContext } from "@/app/(userApp)/AppProvider";
 import Booking from "./Settings/Bookings/Booking";
 import { useSearchParams } from "next/navigation";
 import Saved from "./Settings/Saved/Saved";

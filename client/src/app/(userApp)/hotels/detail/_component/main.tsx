@@ -11,7 +11,7 @@ import { useSearchParams } from "next/navigation";
 import Location from "./Location";
 import { IFilterHotel } from "@/interfaces/IfliterObj";
 import RatingModal from "@/components/modals/RatingModal";
-import { useAppContext } from "@/app/AppProvider";
+import { useAppContext } from "@/app/(userApp)/AppProvider";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import SheetSelectRoom from "./SheetSelectRoom";
 import SearchHotels from "@/components/component/Search/SearchHotels";

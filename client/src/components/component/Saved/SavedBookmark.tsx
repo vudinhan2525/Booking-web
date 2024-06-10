@@ -7,7 +7,7 @@ import React from "react";
 import { faBookmark } from "@fortawesome/free-regular-svg-icons";
 import { faBookmark as faBookmarkSolid } from "@fortawesome/free-solid-svg-icons";
 import { useToast } from "@/components/ui/use-toast";
-import { useAppContext } from "@/app/AppProvider";
+import { useAppContext } from "@/app/(userApp)/AppProvider";
 export default function SavedBookmark({
   hotel,
   fromHotelCart,

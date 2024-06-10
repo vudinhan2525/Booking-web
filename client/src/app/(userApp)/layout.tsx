@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
-import "./globals.css";
 import { AppProvider } from "./AppProvider";
-import ShowModal from "../components/modals/ShowModal";
+import ShowModal from "@/components/modals/ShowModal";
 import Header from "@/components/component/Header/Header";
 import Footer from "@/components/component/Footer/Footer";
 import { Toaster } from "@/components/ui/toaster";
+import "../globals.css";
 const nunito = Nunito({ subsets: ["latin"] });
 
 export const metadata: Metadata = {

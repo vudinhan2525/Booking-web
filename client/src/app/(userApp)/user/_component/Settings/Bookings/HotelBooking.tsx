@@ -1,6 +1,6 @@
 "use client";
 import billHotelApiRequest from "@/apiRequest/billHotel";
-import { useAppContext } from "@/app/AppProvider";
+import { useAppContext } from "@/app/(userApp)/AppProvider";
 import { IBillHotel } from "@/interfaces/IBillHotel";
 import { RefundableIcon, RescheduleIcon } from "@/lib/icon";
 import {

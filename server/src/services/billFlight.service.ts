@@ -63,6 +63,12 @@ export class BillFlightService {
       }
       return false;
     });
+    result.sort((a, b) => {
+      if (new Date(a.createdAt) < new Date(b.createdAt)) {
+        return 1;
+      }
+      return -1;
+    });
     return result;
   }
 }

@@ -10,7 +10,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Button } from "../ui/button";
 import { IHotel } from "@/interfaces/IHotel";
 import { Textarea } from "../ui/textarea";
-import { useAppContext } from "@/app/AppProvider";
+import { useAppContext } from "@/app/(userApp)/AppProvider";
 import { useToast } from "../ui/use-toast";
 import reviewApiRequest from "@/apiRequest/review";
 import { IReview } from "@/interfaces/IReview";

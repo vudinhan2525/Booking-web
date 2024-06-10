@@ -1,5 +1,5 @@
 "use client";
-import { useAppContext } from "../../app/AppProvider";
+import { useAppContext } from "@/app/(userApp)/AppProvider";
 import LoginModal from "./LoginModal";
 import RegisterModal from "./RegisterModal";
 

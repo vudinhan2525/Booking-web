@@ -1,6 +1,6 @@
 "use client";
 import flightApiRequest from "@/apiRequest/flight";
-import { useAppContext } from "@/app/AppProvider";
+import { useAppContext } from "@/app/(userApp)/AppProvider";
 import { IBillFlight } from "@/interfaces/IBillFlight";
 import { formatNumber } from "@/utils/convertTime";
 import { faCircleNotch, faPlane } from "@fortawesome/free-solid-svg-icons";
@@ -118,7 +118,7 @@ export default function FlightBooking() {
                 </div>
               )}
               {billFlights.length > 0 && (
-                <div className="mt-2">
+                <div className="mt-2 flex gap-3 flex-col">
                   {billFlights.map((el, idx) => {
                     return (
                       <div

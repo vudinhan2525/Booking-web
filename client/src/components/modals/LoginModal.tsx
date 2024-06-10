@@ -1,5 +1,5 @@
 import { faChevronLeft, faXmark } from "@fortawesome/free-solid-svg-icons";
-import { useAppContext } from "../../app/AppProvider";
+import { useAppContext } from "@/app/(userApp)/AppProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useForm } from "react-hook-form";
 import {

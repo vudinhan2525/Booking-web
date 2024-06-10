@@ -5,7 +5,7 @@ import { formatNumber } from "@/utils/convertTime";
 import React, { useEffect, useRef, useState } from "react";
 import { SheetClose } from "@/components/ui/sheet";
 import ContactInfo from "./ContactInfo";
-import { useAppContext } from "@/app/AppProvider";
+import { useAppContext } from "@/app/(userApp)/AppProvider";
 import TicketType from "./TicketType";
 import Overview from "./Overview";
 import PassengerItem from "./PassengerItem";

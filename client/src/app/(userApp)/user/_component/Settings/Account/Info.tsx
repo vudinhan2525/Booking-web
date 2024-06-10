@@ -1,6 +1,6 @@
 "use client";
 import userApiRequest from "@/apiRequest/user";
-import { useAppContext } from "@/app/AppProvider";
+import { useAppContext } from "@/app/(userApp)/AppProvider";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { isValidEmail, isValidPhoneNumber } from "@/utils/validate";
