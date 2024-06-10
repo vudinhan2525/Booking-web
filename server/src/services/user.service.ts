@@ -9,6 +9,7 @@ import * as crypto from 'crypto';
 import { sendMail } from 'src/utils/email';
 import { Hotel } from 'src/entities/hotel.entity';
 import { Room } from 'src/entities/room.entity';
+import { Flight } from 'src/entities/flight.entity';
 @Injectable()
 export class UserService {
   constructor(
@@ -18,6 +19,8 @@ export class UserService {
     private hotelRepository: Repository<Hotel>,
     @InjectRepository(Room)
     private roomRepository: Repository<Room>,
+    @InjectRepository(Flight)
+    private flightRepository: Repository<Flight>,
   ) {}
   async createUser(body: UserBodyDto) {
     if (body.password !== body.passwordConfirm) {
@@ -227,5 +230,56 @@ export class UserService {
     const hotelsWithRooms = await Promise.all(hotelWithRoomsPromises);
 
     return hotelsWithRooms.filter((hotel) => hotel !== null);
+  }
+  async savedFlight(body: { flightId: number }, userId: number) {
+    const user = await this.usersRepository
+      .createQueryBuilder('user')
+      .where('user.id = :id', { id: userId })
+      .getOne();
+    let savedFlights = [];
+    if (user.savedFlight !== '') {
+      savedFlights = user.savedFlight.split(',');
+    }
+    if (!savedFlights.includes(body.flightId.toString())) {
+      savedFlights.push(body.flightId.toString());
+      user.savedFlight = savedFlights.join(',');
+    }
+    await this.usersRepository.save(user);
+    return user;
+  }
+  async unSavedFlight(body: { flightId: number }, userId: number) {
+    const user = await this.usersRepository
+      .createQueryBuilder('user')
+      .where('user.id = :id', { id: userId })
+      .getOne();
+    let savedFlights = [];
+    if (user.savedHotel !== '') {
+      savedFlights = user.savedFlight.split(',');
+    }
+    const newArr = savedFlights
+      .filter((el) => el !== body.flightId.toString())
+      .join(',');
+    user.savedFlight = newArr;
+    await this.usersRepository.save(user);
+    return user;
+  }
+  async getSavedFlight(savedFlight: string) {
+    let flightIds = [];
+    if (savedFlight !== '') {
+      flightIds = savedFlight.split(',');
+    }
+    if (flightIds.length === 0) {
+      return [];
+    }
+    const flightPromises = flightIds.map(async (flightId) => {
+      return await this.flightRepository
+        .createQueryBuilder('flight')
+        .where('flight.id = :flightId', { flightId: flightId })
+        .leftJoinAndSelect('flight.flightSeats', 'flightSeat')
+        .getOne();
+    });
+
+    const flights = await Promise.all(flightPromises);
+    return flights;
   }
 }

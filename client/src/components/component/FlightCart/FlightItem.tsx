@@ -1,4 +1,5 @@
 "use client";
+import SavedBookmarkFlight from "@/components/component/Saved/SavedBookmarkFlight";
 import { Button } from "@/components/ui/button";
 import { SheetTrigger } from "@/components/ui/sheet";
 import { IFlight } from "@/interfaces/IFlight";
@@ -24,9 +25,11 @@ import React, { useEffect, useState } from "react";
 export default function FlightItem({
   flight,
   handleSelectFlight,
+  fromSavedPage,
 }: {
   flight: IFlight;
-  handleSelectFlight: () => void;
+  handleSelectFlight?: () => void;
+  fromSavedPage?: boolean;
 }) {
   const [opt, setOpt] = useState("");
   const searchParams = useSearchParams();
@@ -80,7 +83,11 @@ export default function FlightItem({
     }
   }, [flight, numberOfPassenger]);
   return (
-    <div className="bg-white  transition-all hover:border-primary-color border-[1px] border-transparent cursor-pointer pb-4 w-full mt-4 shadow-md rounded-xl">
+    <div
+      className={`bg-white  transition-all hover:border-primary-color border-[1px] ${
+        fromSavedPage ? "border-gray-300" : "border-transparent"
+      } cursor-pointer pb-4 w-full mt-4 shadow-md rounded-xl`}
+    >
       <div
         onClick={() => {
           if (opt !== "") {
@@ -103,6 +110,7 @@ export default function FlightItem({
               />
             </div>
             <p>{flight.airline}</p>
+            <SavedBookmarkFlight flight={flight} fromSearchPage={true} />
           </div>
           <div className="basis-[25%] flex gap-3 items-center">
             <div>
@@ -209,11 +217,13 @@ export default function FlightItem({
           </div>
         </div>
         <div className="basis-[20%]">
-          <SheetTrigger onClick={handleSelectFlight}>
-            <div className="bg-primary-color py-2 rounded-md  text-white font-semibold px-8 hover:bg-primary-color hover:opacity-80 transition-all text-[15px]">
-              Choose
-            </div>
-          </SheetTrigger>
+          {!fromSavedPage && (
+            <SheetTrigger onClick={handleSelectFlight}>
+              <div className="bg-primary-color py-2 rounded-md  text-white font-semibold px-8 hover:bg-primary-color hover:opacity-80 transition-all text-[15px]">
+                Choose
+              </div>
+            </SheetTrigger>
+          )}
         </div>
       </div>
       {opt === "flightdetail" && (

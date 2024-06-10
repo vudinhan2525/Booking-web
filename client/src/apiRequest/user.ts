@@ -55,5 +55,20 @@ const userApiRequest = {
       headers: { "Content-Type": "application/json" },
       withCredentials: true,
     }),
+  savedFlight: (body: { flightId: number }) =>
+    http.post<any>("users/savedFlight", body, {
+      headers: { "Content-Type": "application/json" },
+      withCredentials: true,
+    }),
+  unSavedFlight: (body: { flightId: number }) =>
+    http.post<any>("users/unSavedFlight", body, {
+      headers: { "Content-Type": "application/json" },
+      withCredentials: true,
+    }),
+  getSavedFlight: () =>
+    http.get<any>("users/getSavedFlight", {
+      headers: { "Content-Type": "application/json" },
+      withCredentials: true,
+    }),
 };
 export default userApiRequest;

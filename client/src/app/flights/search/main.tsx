@@ -18,7 +18,6 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import FlightItem from "./_component/flightItem";
 import { useEffect, useState } from "react";
 import flightApiRequest from "@/apiRequest/flight";
 import { IFlight } from "@/interfaces/IFlight";
@@ -28,6 +27,7 @@ import { IfilterObj } from "@/interfaces/IfliterObj";
 import SearchFlight from "@/components/component/Search/SearchFlight";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import SheetSelectFlight from "./_component/SheetSelectFlight";
+import FlightItem from "@/components/component/FlightCart/FlightItem";
 const initialObj: IfilterObj = {
   airline: [],
   depatureTime: 0,

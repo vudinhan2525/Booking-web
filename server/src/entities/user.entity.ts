@@ -28,6 +28,9 @@ export class User {
   @Column({ default: '' })
   savedHotel: string;
 
+  @Column({ default: '' })
+  savedFlight: string;
+
   @Column({
     type: 'enum',
     enum: ['user', 'admin'],

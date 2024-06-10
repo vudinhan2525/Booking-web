@@ -1,3 +1,4 @@
+import SavedBookmarkFlight from "@/components/component/Saved/SavedBookmarkFlight";
 import { IFlight } from "@/interfaces/IFlight";
 import { getAirline } from "@/lib/dataAir";
 import {
@@ -13,14 +14,9 @@ import React from "react";
 export default function Overview({ flight }: { flight: IFlight }) {
   return (
     <div>
-      <div className="flex items-center mt-4 gap-8 px-6">
+      <div className="flex items-center mt-4 gap-4 px-6">
         <header className="text-2xl font-bold ">Your flight ticket</header>
-        <div>
-          <FontAwesomeIcon
-            icon={faBookmark}
-            className="text-gray-600 text-xl mt-1 cursor-pointer"
-          />
-        </div>
+        <SavedBookmarkFlight flight={flight} />
       </div>
       <div className="w-full px-4 py-4 bg-blue-100 mt-4">
         <div className="bg-white border-[1px] rounded-md px-4 py-4">

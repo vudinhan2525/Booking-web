@@ -27,9 +27,7 @@ export default function FlightCart({ flight }: { flight: IFlight }) {
         <div className="text-sm text-gray-500">
           {toDayMonthYear(flight.departureTime)}
         </div>
-        <p className="text-orange-500 font-bold">
-          {formatNumber(flight.price)}VND
-        </p>
+        <p className="text-orange-500 font-bold">{formatNumber(1250000)}VND</p>
       </div>
     </div>
   );
