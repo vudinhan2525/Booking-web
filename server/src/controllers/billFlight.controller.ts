@@ -12,7 +12,10 @@ export class BillFlightController {
     res.status(200).json({ status: 'success', data: result });
   }
   @Post('getBillFlight')
-  async getBillFlight(@Body() body: { userId: number }, @Res() res: Response) {
+  async getBillFlight(
+    @Body() body: { userId: number; from: string },
+    @Res() res: Response,
+  ) {
     const result = await this.billFlightService.getBillFlight(body);
     res.status(200).json({ status: 'success', data: result });
   }

@@ -7,6 +7,7 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import {
   convertTime3,
   getAllDatesOfMonth,
+  getCurISOString,
   toDayMonthYear,
 } from "@/utils/convertTime";
 import { type CarouselApi } from "@/components/ui/carousel";
@@ -49,6 +50,12 @@ export default function MainSearchFlightPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
+  function pad(number: number): string {
+    if (number < 10) {
+      return "0" + number;
+    }
+    return number.toString();
+  }
   const getFlightList = async () => {
     let obj: any = {};
     const numberPassenger = searchParams.get("numberPassenger")?.split("-");
@@ -59,10 +66,14 @@ export default function MainSearchFlightPage() {
       obj.to = searchParams.get("to");
     }
     if (searchParams.get("departureTime")) {
-      obj.departureTime = searchParams.get("departureTime") + "T00:00:00.000Z";
+      obj.departureTime = new Date(
+        searchParams.get("departureTime") + "T00:00:00.000"
+      ).toString();
     }
     if (searchParams.get("arrivalTime")) {
-      obj.arrivalTime = searchParams.get("arrivalTime") + "T00:00:00.000Z";
+      obj.arrivalTime = new Date(
+        searchParams.get("arrivalTime") + "T00:00:00.000"
+      ).toString();
     }
     if (searchParams.get("seatType")) {
       obj.seatType = searchParams.get("seatType");
@@ -97,6 +108,7 @@ export default function MainSearchFlightPage() {
         console.log(error);
       }
   };
+
   const calcNoPassenger = () => {
     const numberPassenger = searchParams.get("numberPassenger")?.split("-");
     if (numberPassenger) {

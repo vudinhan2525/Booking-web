@@ -36,10 +36,10 @@ export class BillFlight {
   flightCode: string;
 
   @Column()
-  departureTime: Date;
+  departureTime: string;
 
   @Column()
-  arrivalTime: Date;
+  arrivalTime: string;
 
   @Column()
   from: string;

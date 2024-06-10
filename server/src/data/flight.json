@@ -10,8 +10,8 @@
     "airline": "Vietnam Airlines",
     "airplane": "Airbus A330",
     "flightCode": "VN-124",
-    "departureTime": "2024-12-10T10:45:00.000Z",
-    "arrivalTime": "2024-12-10T12:30:00.000Z"
+    "departureTime": "Tue Dec 10 2024 10:45:00 GMT+0700 (Indochina Time)",
+    "arrivalTime": "Tue Dec 10 2024 12:30:00 GMT+0700 (Indochina Time)"
   },
   {
     "id": 2,
@@ -24,8 +24,8 @@
     "airline": "VietJet Air",
     "airplane": "Airbus A332",
     "flightCode": "VJ-256",
-    "departureTime": "2024-12-10T11:45:00.000Z",
-    "arrivalTime": "2024-12-10T12:45:00.000Z"
+    "departureTime": "Tue Dec 10 2024 11:45:00 GMT+0700 (Indochina Time)",
+    "arrivalTime": "Tue Dec 10 2024 12:45:00 GMT+0700 (Indochina Time)"
   },
   {
     "id": 3,
@@ -38,8 +38,8 @@
     "airline": "VietJet Air",
     "airplane": "Airbus A220",
     "flightCode": "VJ-190",
-    "departureTime": "2024-12-10T13:45:00.000Z",
-    "arrivalTime": "2024-12-10T15:30:00.000Z"
+    "departureTime": "Tue Dec 10 2024 13:45:00 GMT+0700 (Indochina Time)",
+    "arrivalTime": "Tue Dec 10 2024 15:30:00 GMT+0700 (Indochina Time)"
   },
   {
     "id": 4,
@@ -52,8 +52,8 @@
     "airline": "Vietnam Airlines",
     "airplane": "Airbus A370",
     "flightCode": "VN-240",
-    "departureTime": "2024-12-10T15:45:00.000Z",
-    "arrivalTime": "2024-12-10T16:45:00.000Z"
+    "departureTime": "Tue Dec 10 2024 15:45:00 GMT+0700 (Indochina Time)",
+    "arrivalTime": "Tue Dec 10 2024 16:45:00 GMT+0700 (Indochina Time)"
   },
   {
     "id": 5,
@@ -66,8 +66,8 @@
     "airline": "Vietnam Airlines",
     "airplane": "Airbus A320",
     "flightCode": "VN-281",
-    "departureTime": "2024-12-10T17:45:00.000Z",
-    "arrivalTime": "2024-12-10T19:30:00.000Z"
+    "departureTime": "Tue Dec 10 2024 17:45:00 GMT+0700 (Indochina Time)",
+    "arrivalTime": "Tue Dec 10 2024 19:30:00 GMT+0700 (Indochina Time)"
   },
   {
     "id": 6,
@@ -80,8 +80,8 @@
     "airline": "Vietnam Airlines",
     "airplane": "Airbus A370",
     "flightCode": "VN-270",
-    "departureTime": "2024-12-10T19:45:00.000Z",
-    "arrivalTime": "2024-12-10T21:30:00.000Z"
+    "departureTime": "Tue Dec 10 2024 19:45:00 GMT+0700 (Indochina Time)",
+    "arrivalTime": "Tue Dec 10 2024 21:30:00 GMT+0700 (Indochina Time)"
   },
   {
     "id": 7,
@@ -94,8 +94,8 @@
     "airline": "Vietnam Airlines",
     "airplane": "Airbus A370",
     "flightCode": "VN-270",
-    "departureTime": "2024-12-10T07:45:00.000Z",
-    "arrivalTime": "2024-12-10T09:30:00.000Z"
+    "departureTime": "Tue Dec 10 2024 07:45:00 GMT+0700 (Indochina Time)",
+    "arrivalTime": "Tue Dec 10 2024 09:30:00 GMT+0700 (Indochina Time)"
   },
   {
     "id": 8,
@@ -108,7 +108,7 @@
     "airline": "Vietnam Airlines",
     "airplane": "Airbus A330",
     "flightCode": "VN-252",
-    "departureTime": "2024-12-10T05:45:00.000Z",
-    "arrivalTime": "2024-12-10T07:30:00.000Z"
+    "departureTime": "Tue Dec 10 2024 05:45:00 GMT+0700 (Indochina Time)",
+    "arrivalTime": "Tue Dec 10 2024 07:30:00 GMT+0700 (Indochina Time)"
   }
 ]

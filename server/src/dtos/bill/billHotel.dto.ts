@@ -26,7 +26,7 @@ export class BillHotelBody {
 
   @IsNotEmpty()
   @Expose()
-  dateCheckIn: Date;
+  dateCheckIn: string;
 
   @IsNotEmpty()
   @Expose()
@@ -34,7 +34,7 @@ export class BillHotelBody {
 
   @IsNotEmpty()
   @Expose()
-  dateCheckOut: Date;
+  dateCheckOut: string;
 
   @IsNotEmpty()
   @Expose()

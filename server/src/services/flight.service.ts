@@ -58,28 +58,50 @@ export class FlightService {
     if (body.to) {
       query = query.andWhere('toCode = :toCode', { toCode: body.to });
     }
-    if (body.departureTime) {
-      if (body.arrivalTime) {
-        query = query.andWhere(`departureTime BETWEEN :from AND :to`, {
-          from: new Date(body.departureTime),
-          to: new Date(body.arrivalTime),
-        });
-      } else {
-        const departureTime = new Date(body.departureTime);
-        const nextDay = new Date(departureTime);
-        nextDay.setDate(departureTime.getDate() + 1);
-        query = query.andWhere(`departureTime BETWEEN :from AND :to`, {
-          from: new Date(body.departureTime),
-          to: nextDay,
-        });
-      }
-    }
+    // if (body.departureTime) {
+    //   if (body.arrivalTime) {
+    //     query = query.andWhere(`departureTime BETWEEN :from AND :to`, {
+    //       from: new Date(body.departureTime),
+    //       to: new Date(body.arrivalTime),
+    //     });
+    //   } else {
+    //     const departureTime = new Date(body.departureTime);
+    //     const nextDay = new Date(departureTime);
+    //     nextDay.setDate(departureTime.getDate() + 1);
+    //     query = query.andWhere(`departureTime BETWEEN :from AND :to`, {
+    //       from: new Date(body.departureTime),
+    //       to: nextDay,
+    //     });
+    //   }
+    // }
     if (body.airline && body.airline.length > 0) {
       query = query.andWhere(`airline IN (:...airlines)`, {
         airlines: body.airline,
       });
     }
     let flights = await query.getMany();
+    if (body.departureTime) {
+      const departureTime: Date = new Date(body.departureTime);
+      const nextDay: Date = new Date(departureTime);
+      nextDay.setDate(departureTime.getDate() + 1);
+
+      if (body.arrivalTime) {
+        const arrivalTime: Date = new Date(body.arrivalTime);
+        flights = flights.filter((flight) => {
+          return (
+            new Date(flight.departureTime) > departureTime &&
+            new Date(flight.arrivalTime) < arrivalTime
+          );
+        });
+      } else {
+        flights = flights.filter((flight) => {
+          return (
+            new Date(flight.arrivalTime) >= departureTime &&
+            new Date(flight.arrivalTime) < nextDay
+          );
+        });
+      }
+    }
     flights.forEach((flight) => {
       flight.flightSeats.sort((a, b) => a.price - b.price);
     });

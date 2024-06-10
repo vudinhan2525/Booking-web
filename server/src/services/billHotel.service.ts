@@ -27,7 +27,7 @@ export class BillHotelService {
       dateCheckIn: body.dateCheckIn,
       dateCheckOut: body.dateCheckOut,
       bed: body.bed,
-      createdAt: now,
+      createdAt: now.toString(),
       duration: body.duration,
       nameRoom: body.nameRoom,
       nameHotel: body.nameHotel,

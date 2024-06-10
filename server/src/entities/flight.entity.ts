@@ -23,9 +23,9 @@ export class Flight {
   @Column()
   airplane: string;
   @Column()
-  departureTime: Date;
+  departureTime: string;
   @Column()
-  arrivalTime: Date;
+  arrivalTime: string;
 
   @OneToMany(() => FlightSeat, (flightSeat) => flightSeat.flight)
   flightSeats: FlightSeat[];

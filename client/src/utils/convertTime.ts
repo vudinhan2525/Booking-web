@@ -36,13 +36,14 @@ export function convertTime(date: string) {
     ("0" + newDate.getDate()).slice(-2);
   return formattedDate;
 }
+//return like 10:45
 export function convertTime2(isoString: string) {
   // Parse ISO string
   const date = new Date(isoString);
 
   // Get hours and minutes
-  const hours = date.getUTCHours();
-  const minutes = date.getUTCMinutes();
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
 
   // Format hours and minutes
   const formattedTime = `${hours < 10 ? "0" : ""}${hours}:${
@@ -206,4 +207,9 @@ export function formatISODate(isoString: string): string {
   const seconds = String(date.getSeconds()).padStart(2, "0");
 
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
+export function getCurISOString() {
+  var tzoffset = new Date().getTimezoneOffset() * 60000; //offset in milliseconds
+  var localISOTime = new Date(Date.now() - tzoffset).toISOString().slice(0, -1);
+  return localISOTime;
 }

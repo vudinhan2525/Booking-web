@@ -34,10 +34,10 @@ export class FlightBody {
   airplane: string;
   @IsNotEmpty()
   @Expose()
-  departureTime: Date;
+  departureTime: string;
   @IsNotEmpty()
   @Expose()
-  arrivalTime: Date;
+  arrivalTime: string;
 }
 export class FlightQuery {
   @Expose()

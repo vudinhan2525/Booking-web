@@ -50,12 +50,19 @@ export class BillFlightService {
 
     return this.generateUniqueBillHotelId(attempts + 1);
   }
-  async getBillFlight(body: { userId: number }) {
+  async getBillFlight(body: { userId: number; from: string }) {
     const billFlights = await this.billFlightRepository
       .createQueryBuilder('bill_flight')
       .where('userId = :userId', { userId: body.userId })
       .getMany();
-
-    return billFlights;
+    const result = billFlights.filter((bill) => {
+      if (new Date(bill.createdAt) >= new Date(body.from)) {
+        {
+          return true;
+        }
+      }
+      return false;
+    });
+    return result;
   }
 }

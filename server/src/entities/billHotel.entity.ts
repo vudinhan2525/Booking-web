@@ -22,10 +22,10 @@ export class BillHotel {
   isReschedule: boolean;
 
   @Column()
-  dateCheckIn: Date;
+  dateCheckIn: string;
 
   @Column()
-  dateCheckOut: Date;
+  dateCheckOut: string;
 
   @Column({
     default: false,
@@ -50,7 +50,7 @@ export class BillHotel {
   nameRoom: string;
 
   @Column()
-  createdAt: Date;
+  createdAt: string;
 
   @Column()
   duration: number;
