@@ -66,6 +66,9 @@ export default function Header() {
         </div>
         <div className="flex gap-2">
           <Button
+            onClick={() => {
+              router.push("/user?slt=2");
+            }}
             variant={onTop ? "transparent" : "outline"}
             className={`${
               onTop
@@ -76,6 +79,9 @@ export default function Header() {
             Saved
           </Button>
           <Button
+            onClick={() => {
+              router.push("/user?slt=1");
+            }}
             variant={onTop ? "transparent" : "outline"}
             className={`${
               onTop

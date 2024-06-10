@@ -12,17 +12,8 @@ import Location from "./Location";
 import { IFilterHotel } from "@/interfaces/IfliterObj";
 import RatingModal from "@/components/modals/RatingModal";
 import { useAppContext } from "@/app/AppProvider";
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 import SheetSelectRoom from "./SheetSelectRoom";
-import { IRoomOpt } from "@/interfaces/IRoomOpt";
 import SearchHotels from "@/components/component/Search/SearchHotels";
 import { destinationsMap } from "@/lib/dataHotel";
 
@@ -37,7 +28,7 @@ export default function MainHotelDetail() {
   const roomRef = useRef<HTMLInputElement>(null);
   const reviewRef = useRef<HTMLInputElement>(null);
   const locationRef = useRef<HTMLInputElement>(null);
-  const { user } = useAppContext();
+  const { user, setUser } = useAppContext();
   const [showRatingModal, setShowRatingModal] = useState(() => {
     if (searchParams.get("rating") === "1") return true;
     return false;

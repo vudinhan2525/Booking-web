@@ -9,6 +9,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Account from "./Settings/Account/Account";
 import { useAppContext } from "@/app/AppProvider";
 import Booking from "./Settings/Bookings/Booking";
+import { useSearchParams } from "next/navigation";
+import Saved from "./Settings/Saved/Saved";
 const settings = [
   {
     title: "Account",
@@ -23,9 +25,12 @@ const settings = [
     icon: <FontAwesomeIcon icon={faBookmark} />,
   },
 ];
-export default function MainUserPage({ iniSlt }: { iniSlt?: number }) {
+export default function MainUserPage() {
+  const searchParams = useSearchParams();
   const [optSlt, setOptSlt] = useState(() => {
-    if (iniSlt) return iniSlt;
+    if (searchParams.get("slt")) {
+      return Number(searchParams.get("slt"));
+    }
     return 0;
   });
   const { isAuthenticated, user } = useAppContext();
@@ -59,6 +64,7 @@ export default function MainUserPage({ iniSlt }: { iniSlt?: number }) {
           <div className="basis-[70%]">
             {optSlt === 0 && <Account />}
             {optSlt === 1 && <Booking />}
+            {optSlt === 2 && <Saved />}
           </div>
         </div>
       )}

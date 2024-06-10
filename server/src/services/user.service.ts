@@ -7,11 +7,17 @@ import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 import * as crypto from 'crypto';
 import { sendMail } from 'src/utils/email';
+import { Hotel } from 'src/entities/hotel.entity';
+import { Room } from 'src/entities/room.entity';
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
+    @InjectRepository(Hotel)
+    private hotelRepository: Repository<Hotel>,
+    @InjectRepository(Room)
+    private roomRepository: Repository<Room>,
   ) {}
   async createUser(body: UserBodyDto) {
     if (body.password !== body.passwordConfirm) {
@@ -151,5 +157,75 @@ export class UserService {
     user.password = hashedPassword;
     await this.usersRepository.save(user);
     return { status: 'success' };
+  }
+  async savedHotel(body: { hotelId: number }, userId: number) {
+    const user = await this.usersRepository
+      .createQueryBuilder('user')
+      .where('user.id = :id', { id: userId })
+      .getOne();
+    let savedHotels = [];
+    if (user.savedHotel !== '') {
+      savedHotels = user.savedHotel.split(',');
+    }
+    if (!savedHotels.includes(body.hotelId.toString())) {
+      savedHotels.push(body.hotelId.toString());
+      user.savedHotel = savedHotels.join(',');
+    }
+    await this.usersRepository.save(user);
+    return user;
+  }
+  async unSavedHotel(body: { hotelId: number }, userId: number) {
+    const user = await this.usersRepository
+      .createQueryBuilder('user')
+      .where('user.id = :id', { id: userId })
+      .getOne();
+    let savedHotels = [];
+    if (user.savedHotel !== '') {
+      savedHotels = user.savedHotel.split(',');
+    }
+    const newArr = savedHotels
+      .filter((el) => el !== body.hotelId.toString())
+      .join(',');
+    user.savedHotel = newArr;
+    await this.usersRepository.save(user);
+    return user;
+  }
+  async getSavedHotel(savedHotel: string) {
+    let hotelsId = [];
+    if (savedHotel !== '') {
+      hotelsId = savedHotel.split(',');
+    }
+    if (hotelsId.length === 0) {
+      return [];
+    }
+    // Assume that `this.hotelsRepository` is your ORM repository for the hotels table/entity
+    const hotelPromises = hotelsId.map((id) =>
+      this.hotelRepository.findOne({ where: { id } }),
+    );
+
+    const hotels = await Promise.all(hotelPromises);
+
+    // Fetch and join rooms for each hotel
+    const hotelWithRoomsPromises = hotels.map(async (hotel) => {
+      if (!hotel) {
+        return null;
+      }
+      const rooms = await this.roomRepository
+        .createQueryBuilder('room')
+        .leftJoinAndSelect('room.roomOpts', 'roomOpt')
+        .where('room.hotelId = :hotelId', { hotelId: hotel.id })
+        .orderBy('roomOpt.price')
+        .getMany();
+
+      const sortedRooms = rooms.map((room) => ({
+        ...room,
+        roomOpts: room.roomOpts.sort((a, b) => a.price - b.price),
+      }));
+      return { ...hotel, rooms: sortedRooms };
+    });
+
+    const hotelsWithRooms = await Promise.all(hotelWithRoomsPromises);
+
+    return hotelsWithRooms.filter((hotel) => hotel !== null);
   }
 }

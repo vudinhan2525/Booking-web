@@ -80,8 +80,8 @@ export default function HotelBooking() {
                   No result found
                 </header>
                 <p className="">
-                  Could not find a result for the filter you selected. Reset
-                  filters to see all transactions.
+                  Could not find a result for the hotels you booking. Booking
+                  any hotel to see all your transactions.
                 </p>
               </div>
             </div>

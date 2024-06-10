@@ -1,4 +1,5 @@
 "use client";
+import SavedBookmark from "@/components/component/Saved/SavedBookmark";
 import { IHotel } from "@/interfaces/IHotel";
 import { formatNumber } from "@/utils/convertTime";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
@@ -10,7 +11,7 @@ export default function HotelCart({ hotel }: { hotel: IHotel }) {
   return (
     <Link
       href={`/hotels/detail?hotelId=${hotel.id}`}
-      className="w-full rounded-lg overflow-hidden border-[1px] hover:border-primary-color border-transparent transition-all cursor-pointer"
+      className="w-full rounded-lg overflow-hidden border-[1px] hover:border-primary-color border-gray-300 transition-all cursor-pointer"
     >
       <div className="relative w-full h-[200px]">
         <Image
@@ -22,6 +23,9 @@ export default function HotelCart({ hotel }: { hotel: IHotel }) {
           style={{ objectFit: "cover", objectPosition: "center" }}
           src="https://shopcartimg2.blob.core.windows.net/shopcartctn/hotel2.jpg"
         />
+        <div className="absolute right-[10px] top-[10px]">
+          <SavedBookmark hotel={hotel} fromHotelCart={true} />
+        </div>
       </div>
       <div className="px-4 py-3 bg-white">
         <header className="font-bold line-clamp-1">{hotel.name}</header>

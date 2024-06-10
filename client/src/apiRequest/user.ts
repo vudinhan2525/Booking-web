@@ -40,5 +40,20 @@ const userApiRequest = {
       headers: { "Content-Type": "application/json" },
       withCredentials: true,
     }),
+  savedHotel: (body: { hotelId: number }) =>
+    http.post<any>("users/savedHotel", body, {
+      headers: { "Content-Type": "application/json" },
+      withCredentials: true,
+    }),
+  unSavedHotel: (body: { hotelId: number }) =>
+    http.post<any>("users/unSavedHotel", body, {
+      headers: { "Content-Type": "application/json" },
+      withCredentials: true,
+    }),
+  getSavedHotel: () =>
+    http.get<any>("users/getSavedHotel", {
+      headers: { "Content-Type": "application/json" },
+      withCredentials: true,
+    }),
 };
 export default userApiRequest;

@@ -1,8 +1,10 @@
 "use client";
+import SavedBookmark from "@/components/component/Saved/SavedBookmark";
 import { Button } from "@/components/ui/button";
 import { IHotel } from "@/interfaces/IHotel";
 import { formatNumber } from "@/utils/convertTime";
-import facilitiesMap, { facilities } from "@/utils/facilities";
+import facilitiesMap from "@/utils/facilities";
+
 import {
   faChevronRight,
   faClock,
@@ -24,7 +26,10 @@ export default function Overview({
     <div>
       <div className="flex mt-8 justify-between items-center">
         <div>
-          <header className="text-4xl font-bold">{hotel.name}</header>
+          <div className="flex items-center gap-4">
+            <header className="text-4xl font-bold">{hotel.name}</header>
+            <SavedBookmark hotel={hotel} />
+          </div>
           <div className="flex gap-[8px] mt-2 items-center">
             <div className="text-sm px-3 py-1 bg-blue-100/60 rounded-full text-blue-600">
               {hotel.accomodation}

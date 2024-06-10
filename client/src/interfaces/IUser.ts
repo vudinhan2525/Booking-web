@@ -8,5 +8,6 @@ export interface IUser {
   createdAt: Date;
   updatedAt: Date;
   isActive: boolean;
+  savedHotel: string;
   phone: string;
 }

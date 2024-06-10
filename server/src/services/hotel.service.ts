@@ -78,7 +78,7 @@ export class HotelService {
 
       query = query.andWhere(`(${ratingConditions})`, ratingParams);
     }
-    const datas = await query.getMany();
+    let hotels = await query.getMany();
 
     //Filter by range
     const distanceFromPoint = (hotel) => {
@@ -90,7 +90,10 @@ export class HotelService {
       );
       return distance <= 30000;
     };
-    const hotels = datas.filter(distanceFromPoint);
+    if (body.long && body.lat) {
+      const datas = hotels.filter(distanceFromPoint);
+      hotels = datas;
+    }
     let hotelWithRooms = await Promise.all(
       hotels.map(async (hotel) => {
         const rooms = await this.roomRepository

@@ -65,4 +65,39 @@ export class UserController {
     );
     response.status(200).json(result);
   }
+  @Post('savedHotel')
+  async savedHotel(
+    @Body()
+    body: { hotelId: number },
+    @Res() response: Response,
+  ) {
+    const result = await this.userService.savedHotel(
+      body,
+      response.locals.user.id,
+    );
+    response.status(200).json({ status: 'success', data: result });
+  }
+  @Post('unSavedHotel')
+  async unSavedHotel(
+    @Body()
+    body: { hotelId: number },
+    @Res() response: Response,
+  ) {
+    const result = await this.userService.unSavedHotel(
+      body,
+      response.locals.user.id,
+    );
+    response.status(200).json({ status: 'success', data: result });
+  }
+  @Get('getSavedHotel')
+  async getSavedHotel(
+    @Body()
+    body: { hotelId: number },
+    @Res() response: Response,
+  ) {
+    const result = await this.userService.getSavedHotel(
+      response.locals.user.savedHotel,
+    );
+    response.status(200).json({ status: 'success', data: result });
+  }
 }

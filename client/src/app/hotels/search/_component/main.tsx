@@ -23,6 +23,7 @@ import {
 import SkeletonItem from "./skeletonItem";
 import useDebounce from "@/hooks/useDebounce";
 import objectToQueryString from "@/utils/convertToQueryString";
+import SavedBookmark from "@/components/component/Saved/SavedBookmark";
 const sortArr = ["Lowest Price", "Highest Price", "Top Rating", "Most Viewed"];
 const initialFilObj: IFilterHotel = {
   rating: "",
@@ -122,7 +123,7 @@ export default function MainSearchHotelPages() {
             return (
               <div
                 key={idx}
-                onClick={() => {
+                onClick={(e) => {
                   handleNavigate(el.id);
                 }}
                 className="mt-4 flex gap-4 p-3 cursor-pointer hover:border-[1px] hover:border-primary-color border-[1px] border-transparent bg-white rounded-lg shadow-md"
@@ -137,6 +138,9 @@ export default function MainSearchHotelPages() {
                       style={{ objectFit: "cover", objectPosition: "center" }}
                       src={el.images}
                     />
+                    <div className="absolute right-[10px] top-[10px]">
+                      <SavedBookmark hotel={el} fromHotelCart={true} />
+                    </div>
                   </div>
                   <div className="flex gap-[2px] mt-[2px]">
                     <div className="basis-1/3 relative h-[70px]">

@@ -25,6 +25,9 @@ export class User {
   @Column()
   phone: string;
 
+  @Column({ default: '' })
+  savedHotel: string;
+
   @Column({
     type: 'enum',
     enum: ['user', 'admin'],
