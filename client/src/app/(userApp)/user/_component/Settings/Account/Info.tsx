@@ -1,38 +1,48 @@
 "use client";
 import userApiRequest from "@/apiRequest/user";
+import { useAdminContext } from "@/app/(adminApp)/admin/AdminProvider";
 import { useAppContext } from "@/app/(userApp)/AppProvider";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { isValidEmail, isValidPhoneNumber } from "@/utils/validate";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export default function Info() {
   const { toast } = useToast();
   const { user, setUser } = useAppContext();
+  const { admin, setAdmin } = useAdminContext();
   const [error, setError] = useState<string[]>([]);
-  const [email, setEmail] = useState(() => {
-    if (user?.email) return user.email;
-    return "";
-  });
-  const [phone, setPhone] = useState(() => {
-    if (user?.phone) {
-      return user.phone;
-    }
-    return "";
-  });
-  const [firstName, setFirstName] = useState(() => {
-    if (user?.firstName) {
-      return user.firstName;
-    }
-    return "";
-  });
-  const [lastName, setLastName] = useState(() => {
-    if (user?.lastName) {
-      return user.lastName;
-    }
-    return "";
-  });
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [emailMsg, setEmailMsg] = useState("Email is not valid.");
+  useEffect(() => {
+    if (admin?.phone) {
+      setPhone(admin.phone);
+    }
+    if (admin?.firstName) {
+      setFirstName(admin.firstName);
+    }
+    if (admin?.lastName) {
+      setLastName(admin.lastName);
+    }
+    if (admin?.email) {
+      setEmail(admin.email);
+    }
+    if (user?.email) {
+      setEmail(user.email);
+    }
+    if (user?.phone) {
+      setPhone(user.phone);
+    }
+    if (user?.firstName) {
+      setFirstName(user.firstName);
+    }
+    if (user?.lastName) {
+      setLastName(user.lastName);
+    }
+  }, [admin, user]);
   const handleUpdateUser = async () => {
     if (!isValidEmail(email)) {
       setError((prev) => {
@@ -61,7 +71,8 @@ export default function Info() {
         lastName: lastName.trim(),
       });
       if (response.status === "success") {
-        setUser(response.data);
+        if (setUser) setUser(response.data);
+        if (setAdmin) setAdmin(response.data);
         toast({
           title: "",
           status: "success",
@@ -71,7 +82,7 @@ export default function Info() {
     } catch (error) {}
   };
   return (
-    <div className="py-4 border-[1px] rounded-md border-gray-300 mt-4">
+    <div className="py-4 bg-white border-[1px] rounded-md border-gray-300 mt-4">
       <header className="px-6 font-bold pb-4 border-gray-300 border-b-[1px]">
         Personal details
       </header>

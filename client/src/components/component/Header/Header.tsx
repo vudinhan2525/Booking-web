@@ -43,7 +43,9 @@ export default function Header({ fromAdminPage }: { fromAdminPage?: boolean }) {
         pathname !== "/hotels/detail" &&
         pathname !== "/hotels/search" &&
         "fixed"
-      } top-0 left-0 pt-2 right-0 ${pathname === "/user" && "border-b-[1px]"}`}
+      } top-0 left-0 pt-2 right-0 ${pathname === "/user" && "border-b-[1px]"} ${
+        isAdminAuthenticated && "border-b-[1px]"
+      }`}
     >
       <div className="absolute z-[100] right-0"></div>
       <div className="flex items-center justify-between ">
@@ -205,44 +207,46 @@ export default function Header({ fromAdminPage }: { fromAdminPage?: boolean }) {
           </div>
         )}
       </div>
-      <div className="mt-2 flex gap-2">
-        <Button
-          onClick={() => {
-            router.push("/hotels");
-          }}
-          variant={onTop ? "transparent" : "outline"}
-          className={`${
-            onTop
-              ? "text-white hover:bg-black/30"
-              : "text-gray-600 hover:text-gray-600 border-[0px]"
-          } text-[15px] font-bold `}
-        >
-          Hotels
-        </Button>
-        <Button
-          onClick={() => {
-            router.push("/flights");
-          }}
-          variant={onTop ? "transparent" : "outline"}
-          className={`${
-            onTop
-              ? "text-white hover:bg-black/30"
-              : "text-gray-600 hover:text-gray-600 border-[0px]"
-          } text-[15px] font-bold `}
-        >
-          Flights
-        </Button>
-        <Button
-          variant={onTop ? "transparent" : "outline"}
-          className={`${
-            onTop
-              ? "text-white hover:bg-black/30"
-              : "text-gray-600 hover:text-gray-600 border-[0px]"
-          } text-[15px] font-bold `}
-        >
-          Car Rentals
-        </Button>
-      </div>
+      {!isAdminAuthenticated && (
+        <div className="mt-2 flex gap-2">
+          <Button
+            onClick={() => {
+              router.push("/hotels");
+            }}
+            variant={onTop ? "transparent" : "outline"}
+            className={`${
+              onTop
+                ? "text-white hover:bg-black/30"
+                : "text-gray-600 hover:text-gray-600 border-[0px]"
+            } text-[15px] font-bold `}
+          >
+            Hotels
+          </Button>
+          <Button
+            onClick={() => {
+              router.push("/flights");
+            }}
+            variant={onTop ? "transparent" : "outline"}
+            className={`${
+              onTop
+                ? "text-white hover:bg-black/30"
+                : "text-gray-600 hover:text-gray-600 border-[0px]"
+            } text-[15px] font-bold `}
+          >
+            Flights
+          </Button>
+          <Button
+            variant={onTop ? "transparent" : "outline"}
+            className={`${
+              onTop
+                ? "text-white hover:bg-black/30"
+                : "text-gray-600 hover:text-gray-600 border-[0px]"
+            } text-[15px] font-bold `}
+          >
+            Car Rentals
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

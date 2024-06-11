@@ -18,7 +18,7 @@ export default async function AdminLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="bg-[#F7F9FA] ">
       <body className={nunito.className}>
         <AdminProvider>
           <Header fromAdminPage={true} />
