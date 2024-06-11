@@ -20,11 +20,22 @@ import {
   RegisterBodyType,
 } from "@/utils/schemaValidations/auth.schema";
 import authApiRequest from "@/apiRequest/auth";
-export default function RegisterModal() {
+import { useAdminContext } from "@/app/(adminApp)/admin/AdminProvider";
+export default function RegisterModal({
+  fromAdminPage,
+}: {
+  fromAdminPage?: boolean;
+}) {
   const { setShowRegisterModal } = useAppContext();
+  const { setShowRegisterAdminModal } = useAdminContext();
   const handleTurnOffModal = (e: any) => {
     if (e.target.classList.contains("modal-register")) {
-      setShowRegisterModal(false);
+      if (setShowRegisterModal) {
+        setShowRegisterModal(false);
+      }
+      if (setShowRegisterAdminModal) {
+        setShowRegisterAdminModal(false);
+      }
     }
   };
   // 1. Define your form.
@@ -36,10 +47,14 @@ export default function RegisterModal() {
       lastName: "",
       password: "",
       passwordConfirm: "",
+      role: "user",
     },
   });
   // 2. Define a submit handler.
   async function onSubmit(values: RegisterBodyType) {
+    if (fromAdminPage) {
+      values.role = "admin";
+    }
     try {
       const response = await authApiRequest.register(values);
       if (
@@ -63,7 +78,14 @@ export default function RegisterModal() {
           <p className="text-3xl font-bold">Register</p>
           <FontAwesomeIcon
             icon={faXmark}
-            onClick={() => setShowRegisterModal(false)}
+            onClick={() => {
+              if (setShowRegisterModal) {
+                setShowRegisterModal(false);
+              }
+              if (setShowRegisterAdminModal) {
+                setShowRegisterAdminModal(false);
+              }
+            }}
             className="text-3xl cursor-pointer text-gray-500 hover:text-gray-700 transition-all"
           ></FontAwesomeIcon>
         </div>

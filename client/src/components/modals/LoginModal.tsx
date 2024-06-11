@@ -21,13 +21,24 @@ import { GoogleIcons } from "@/lib/icon";
 import authApiRequest from "@/apiRequest/auth";
 import { useState } from "react";
 import ForgotModal from "./ForgotModal";
+import { useAdminContext } from "@/app/(adminApp)/admin/AdminProvider";
 
-export default function LoginModal() {
+export default function LoginModal({
+  fromAdminPage,
+}: {
+  fromAdminPage?: boolean;
+}) {
   const { setShowLoginModal } = useAppContext();
+  const { setShowLoginAdminModal } = useAdminContext();
   const [forgotPasswordModal, setForgotPasswordModal] = useState(false);
   const handleTurnOffModal = (e: any) => {
     if (e.target.classList.contains("modal")) {
-      setShowLoginModal(false);
+      if (setShowLoginModal) {
+        setShowLoginModal(false);
+      }
+      if (setShowLoginAdminModal) {
+        setShowLoginAdminModal(false);
+      }
     }
   };
   // 1. Define your form.
@@ -36,10 +47,14 @@ export default function LoginModal() {
     defaultValues: {
       email: "",
       password: "",
+      isAdmin: false,
     },
   });
   // 2. Define a submit handler.
   async function onSubmit(values: LoginBodyType) {
+    if (fromAdminPage) {
+      values.isAdmin = true;
+    }
     try {
       const response = await authApiRequest.login(values);
       if (
@@ -50,7 +65,7 @@ export default function LoginModal() {
         form.setError("password", { message: response.message });
       }
       if (response.status === "success") {
-        window.location.href = "/";
+        window.location.reload();
       }
     } catch (error) {}
   }
@@ -73,12 +88,21 @@ export default function LoginModal() {
               </div>
             )}
             <p className="text-3xl font-bold">
-              {forgotPasswordModal ? "Forgot Password" : "Login"}
+              {forgotPasswordModal
+                ? "Forgot Password"
+                : `${fromAdminPage ? "Login admin account" : "Login"}`}
             </p>
           </div>
           <FontAwesomeIcon
             icon={faXmark}
-            onClick={() => setShowLoginModal(false)}
+            onClick={() => {
+              if (setShowLoginModal) {
+                setShowLoginModal(false);
+              }
+              if (setShowLoginAdminModal) {
+                setShowLoginAdminModal(false);
+              }
+            }}
             className="text-3xl cursor-pointer text-gray-500 hover:text-gray-700 transition-all"
           ></FontAwesomeIcon>
         </div>

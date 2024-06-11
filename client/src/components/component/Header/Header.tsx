@@ -9,12 +9,14 @@ import { useAppContext } from "@/app/(userApp)/AppProvider";
 import { useRouter, usePathname } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
-export default function Header() {
+import { useAdminContext } from "@/app/(adminApp)/admin/AdminProvider";
+export default function Header({ fromAdminPage }: { fromAdminPage?: boolean }) {
   const pathname = usePathname();
   const router = useRouter();
   const [onTop, setOnTop] = useState(false);
   const debounce = useDebounce(onTop, 500);
   const { isAuthenticated, user } = useAppContext();
+  const { isAdminAuthenticated, admin } = useAdminContext();
   useEffect(() => {
     function handleScroll() {
       if (pathname === "/") {
@@ -44,7 +46,7 @@ export default function Header() {
       } top-0 left-0 pt-2 right-0 ${pathname === "/user" && "border-b-[1px]"}`}
     >
       <div className="absolute z-[100] right-0"></div>
-      <div className="flex  items-center justify-between ">
+      <div className="flex items-center justify-between ">
         <div
           onClick={() => {
             router.push("/");
@@ -64,84 +66,144 @@ export default function Header() {
             <p className="text-[#14B0C4] text-2xl font-bold">Travel</p>
           </div>
         </div>
-        <div className="flex gap-2">
-          <Button
-            onClick={() => {
-              router.push("/user?slt=2");
-            }}
-            variant={onTop ? "transparent" : "outline"}
-            className={`${
-              onTop
-                ? "text-white hover:bg-black/30"
-                : "text-gray-600 hover:text-gray-600 border-[0px]"
-            } text-[15px] font-bold `}
-          >
-            Saved
-          </Button>
-          <Button
-            onClick={() => {
-              router.push("/user?slt=1");
-            }}
-            variant={onTop ? "transparent" : "outline"}
-            className={`${
-              onTop
-                ? "text-white hover:bg-black/30"
-                : "text-gray-600 hover:text-gray-600 border-[0px]"
-            } text-[15px] font-bold `}
-          >
-            My Bookings
-          </Button>
-          {!isAuthenticated && (
+        {!fromAdminPage && (
+          <div className={`flex gap-2`}>
             <div className="flex gap-2">
-              <CustomButton
-                showLoginModal={true}
+              <Button
+                onClick={() => {
+                  router.push("/user?slt=2");
+                }}
                 variant={onTop ? "transparent" : "outline"}
                 className={`${
                   onTop
-                    ? "text-white border-[1px] border-white"
-                    : "hover:text-primary-color text-primary-color border-primary-color "
-                } flex justify-center items-center gap-1 text-[15px] `}
+                    ? "text-white hover:bg-black/30"
+                    : "text-gray-600 hover:text-gray-600 border-[0px]"
+                } text-[15px] font-bold `}
               >
-                <UserIcon width="18px" height="18px"></UserIcon>
-                <p className="">Log In</p>
-              </CustomButton>
-              <CustomButton
-                showRegisterModal={true}
-                variant={"outline"}
-                className="text-[15px] border-primary-color text-white bg-primary-color hover:bg-primary-color hover:text-white hover:bg-opacity-80"
+                Saved
+              </Button>
+              <Button
+                onClick={() => {
+                  router.push("/user?slt=1");
+                }}
+                variant={onTop ? "transparent" : "outline"}
+                className={`${
+                  onTop
+                    ? "text-white hover:bg-black/30"
+                    : "text-gray-600 hover:text-gray-600 border-[0px]"
+                } text-[15px] font-bold `}
               >
-                Register
-              </CustomButton>
+                My Bookings
+              </Button>
             </div>
-          )}
-          {isAuthenticated && user && (
-            <Button
-              onClick={() => {
-                router.push("/user");
-              }}
-              variant={onTop ? "transparent" : "outline"}
-              className={`${
-                onTop
-                  ? "text-white hover:bg-black/30"
-                  : "text-gray-600 hover:text-gray-600 border-[0px]"
-              } text-[15px] font-bold flex items-center gap-2`}
-            >
-              <div className="mb-[2px] border-r-[1px] pr-2 border-gray-400">
-                <FontAwesomeIcon icon={faUser}></FontAwesomeIcon>
+            <div className={`flex gap-2`}>
+              {!isAuthenticated && (
+                <div className="flex gap-2">
+                  <CustomButton
+                    showLoginModal={true}
+                    variant={onTop ? "transparent" : "outline"}
+                    className={`${
+                      onTop
+                        ? "text-white border-[1px] border-white"
+                        : "hover:text-primary-color text-primary-color border-primary-color "
+                    } flex justify-center items-center gap-1 text-[15px] `}
+                  >
+                    <UserIcon width="18px" height="18px"></UserIcon>
+                    <p className="">Log In</p>
+                  </CustomButton>
+                  <CustomButton
+                    showRegisterModal={true}
+                    variant={"outline"}
+                    className="text-[15px] border-primary-color text-white bg-primary-color hover:bg-primary-color hover:text-white hover:bg-opacity-80"
+                  >
+                    Register
+                  </CustomButton>
+                </div>
+              )}
+              {isAuthenticated && user && (
+                <Button
+                  onClick={() => {
+                    router.push("/user");
+                  }}
+                  variant={onTop ? "transparent" : "outline"}
+                  className={`${
+                    onTop
+                      ? "text-white hover:bg-black/30"
+                      : "text-gray-600 hover:text-gray-600 border-[0px]"
+                  } text-[15px] font-bold flex items-center gap-2`}
+                >
+                  <div className="mb-[2px] border-r-[1px] pr-2 border-gray-400">
+                    <FontAwesomeIcon icon={faUser}></FontAwesomeIcon>
+                  </div>
+                  <p>{user.firstName + " " + user.lastName}</p>
+                </Button>
+              )}
+              {isAuthenticated && (
+                <CustomButton
+                  variant={"outline"}
+                  buttonLogout={true}
+                  className="text-[15px] font-bold text-gray-600 hover:text-gray-600 border-[0px]"
+                >
+                  Log out
+                </CustomButton>
+              )}
+            </div>
+          </div>
+        )}
+        {fromAdminPage && (
+          <div className="flex gap-2">
+            {!isAdminAuthenticated && (
+              <div className="flex gap-2">
+                <CustomButton
+                  showLoginModal={true}
+                  variant={onTop ? "transparent" : "outline"}
+                  className={`${
+                    onTop
+                      ? "text-white border-[1px] border-white"
+                      : "hover:text-primary-color text-primary-color border-primary-color "
+                  } flex justify-center items-center gap-1 text-[15px] `}
+                >
+                  <UserIcon width="18px" height="18px"></UserIcon>
+                  <p className="">Log In</p>
+                </CustomButton>
+                <CustomButton
+                  showRegisterModal={true}
+                  variant={"outline"}
+                  className="text-[15px] border-primary-color text-white bg-primary-color hover:bg-primary-color hover:text-white hover:bg-opacity-80"
+                >
+                  Register
+                </CustomButton>
               </div>
-              <p>{user.firstName + " " + user.lastName}</p>
-            </Button>
-          )}
-          {isAuthenticated && (
-            <CustomButton
-              variant={"outline"}
-              buttonLogout={true}
-              className="text-[15px] font-bold text-gray-600 hover:text-gray-600 border-[0px]"
-            >
-              Log out
-            </CustomButton>
-          )}
-        </div>
+            )}
+            {isAdminAuthenticated && admin && (
+              <Button
+                onClick={() => {
+                  router.push("/user");
+                }}
+                variant={onTop ? "transparent" : "outline"}
+                className={`${
+                  onTop
+                    ? "text-white hover:bg-black/30"
+                    : "text-gray-600 hover:text-gray-600 border-[0px]"
+                } text-[15px] font-bold flex items-center gap-2`}
+              >
+                <div className="mb-[2px] border-r-[1px] pr-2 border-gray-400">
+                  <FontAwesomeIcon icon={faUser}></FontAwesomeIcon>
+                </div>
+                <p>{admin.firstName + " " + admin.lastName}</p>
+              </Button>
+            )}
+            {isAdminAuthenticated && (
+              <CustomButton
+                variant={"outline"}
+                buttonLogout={true}
+                className="text-[15px] font-bold text-gray-600 hover:text-gray-600 border-[0px]"
+              >
+                Log out
+              </CustomButton>
+            )}
+          </div>
+        )}
       </div>
       <div className="mt-2 flex gap-2">
         <Button

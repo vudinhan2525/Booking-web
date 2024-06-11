@@ -23,6 +23,7 @@ export class UserController {
     res.cookie('jwt', result.token);
     res.status(200).json(result);
   }
+
   @Post('forgotPassword')
   async forgotPassword(
     @Body() data: { email: string },

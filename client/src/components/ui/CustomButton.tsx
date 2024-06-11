@@ -2,6 +2,7 @@
 import { useAppContext } from "@/app/(userApp)/AppProvider";
 import { Button } from "./button";
 import authApiRequest from "@/apiRequest/auth";
+import { useAdminContext } from "@/app/(adminApp)/admin/AdminProvider";
 
 export default function CustomButton({
   variant,
@@ -26,19 +27,32 @@ export default function CustomButton({
   buttonLogout?: boolean;
 }) {
   const { setShowLoginModal, setShowRegisterModal } = useAppContext();
+  const { setShowRegisterAdminModal, setShowLoginAdminModal } =
+    useAdminContext();
   return (
     <Button
       onClick={async () => {
         if (showLoginModal) {
-          setShowLoginModal(true);
+          if (setShowLoginModal) {
+            setShowLoginModal(true);
+          }
+          if (setShowLoginAdminModal) {
+            setShowLoginAdminModal(true);
+          }
         }
         if (showRegisterModal) {
-          setShowRegisterModal(true);
+          if (setShowRegisterModal) {
+            setShowRegisterModal(true);
+          }
+          if (setShowRegisterAdminModal) {
+            setShowRegisterAdminModal(true);
+          }
         }
+
         if (buttonLogout) {
           const response = await authApiRequest.logoutFromNextClient();
           if (response.status === "success") {
-            window.location.href = "/";
+            window.location.reload();
           }
         }
       }}

@@ -37,7 +37,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const getUserAuth = async () => {
     try {
       const response = await userApiRequest.getMeFromClient();
-      if (response.status === "success") {
+      if (response.status === "success" && response.data.role === "user") {
         setUser(response.data);
       }
     } catch (error: any) {

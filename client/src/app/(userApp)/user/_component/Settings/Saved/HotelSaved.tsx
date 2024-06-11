@@ -1,6 +1,6 @@
 "use client";
 import userApiRequest from "@/apiRequest/user";
-import HotelCart from "@/app/hotels/detail/_component/HotelCart";
+import HotelCart from "@/app/(userApp)/hotels/detail/_component/HotelCart";
 import { IHotel } from "@/interfaces/IHotel";
 import { delay } from "@/utils/delay";
 import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";

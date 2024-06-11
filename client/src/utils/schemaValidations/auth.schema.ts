@@ -5,6 +5,7 @@ export const LoginBody = z.object({
     .string()
     .min(8, { message: "Password must contain at least 8 character(s)" })
     .max(40),
+  isAdmin: z.boolean(),
 });
 export type LoginBodyType = z.TypeOf<typeof LoginBody>;
 export const RegisterBody = z
@@ -22,6 +23,8 @@ export const RegisterBody = z
         message: "Password confirm must contain at least 8 character(s)",
       })
       .max(40),
+
+    role: z.enum(["admin", "user"]),
   })
   .strict()
   .superRefine(({ passwordConfirm, password }, ctx) => {

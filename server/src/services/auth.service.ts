@@ -23,7 +23,22 @@ export class AuthService {
         HttpStatus.BAD_REQUEST,
       );
     }
-    // Generate JWT token
+    if (body.isAdmin) {
+      if (user.role !== 'admin') {
+        throw new HttpException(
+          'Email or password is not correct',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+    }
+    if (body.isAdmin === false) {
+      if (user.role !== 'user') {
+        throw new HttpException(
+          'Email or password is not correct',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+    }
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRE_IN,
     });

@@ -1,3 +1,4 @@
+"use client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -12,10 +13,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import userApiRequest from "@/apiRequest/user";
+import { useState } from "react";
 export const forgotBody = z.object({
   email: z.string().email(),
 });
 export default function ForgotModal() {
+  const [showSuccessMsg, setShowSuccessMsg] = useState(false);
   // 1. Define your form.
   const form = useForm<z.TypeOf<typeof forgotBody>>({
     resolver: zodResolver(forgotBody),
@@ -26,14 +29,16 @@ export default function ForgotModal() {
   async function onSubmit(values: z.TypeOf<typeof forgotBody>) {
     try {
       const response = await userApiRequest.forgotPassword(values);
-      console.log(response);
+      if (response.status === "success") {
+        setShowSuccessMsg(true);
+      }
     } catch (error) {}
   }
   return (
     <div>
       {" "}
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
           <FormField
             control={form.control}
             name="email"
@@ -63,6 +68,11 @@ export default function ForgotModal() {
               </FormItem>
             )}
           />
+          {showSuccessMsg && (
+            <p className="text-sm italic text-primary-color font-semibold">
+              *An email to reset your password has been sent to your email.
+            </p>
+          )}
           <Button
             type="submit"
             className=" w-full text-[16px] bg-primary-color font-bold hover:bg-primary-color"
