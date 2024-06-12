@@ -8,11 +8,9 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSearchParams } from "next/navigation";
 import React, { useState } from "react";
+import HotelDashboard from "./Settings/Hotels/HotelDashboard";
+import { useAdminContext } from "../AdminProvider";
 const settings = [
-  {
-    title: "Account",
-    icon: <FontAwesomeIcon icon={faUser} />,
-  },
   {
     title: "Hotels",
     icon: <FontAwesomeIcon icon={faHotel} />,
@@ -21,9 +19,14 @@ const settings = [
     title: "Bills",
     icon: <FontAwesomeIcon icon={faFileInvoice} />,
   },
+  {
+    title: "Account",
+    icon: <FontAwesomeIcon icon={faUser} />,
+  },
 ];
 export default function MainPage() {
   const searchParams = useSearchParams();
+  const { isAdminAuthenticated } = useAdminContext();
   const [optSlt, setOptSlt] = useState(() => {
     if (searchParams.get("slt")) {
       return Number(searchParams.get("slt"));
@@ -31,7 +34,7 @@ export default function MainPage() {
     return 0;
   });
   return (
-    <div className="flex gap-6">
+    <div className="flex gap-12">
       <div className="basis-[20%] px-6 py-6 bg-white min-h-[80vh] border-[1px] rounded-md border-gray-300">
         <div className="flex flex-col gap-2">
           {settings.map((el, idx) => {
@@ -54,7 +57,12 @@ export default function MainPage() {
           })}
         </div>
       </div>
-      <div className="basis-[75%]">{optSlt === 0 && <Account />}</div>
+      {isAdminAuthenticated && (
+        <div className="basis-[75%]">
+          {optSlt === 0 && <HotelDashboard />}
+          {optSlt === 2 && <Account />}
+        </div>
+      )}
     </div>
   );
 }

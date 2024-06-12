@@ -79,22 +79,25 @@ import { BillFlightModule } from './modules/billFlight.module';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(AuthMiddleWare)
-      .forRoutes(
-        { path: 'users/getMe', method: RequestMethod.GET },
-        { path: 'users/updateUser', method: RequestMethod.POST },
-        { path: 'users/updatePassword', method: RequestMethod.POST },
-        { path: 'users/savedHotel', method: RequestMethod.POST },
-        { path: 'users/unSavedHotel', method: RequestMethod.POST },
-        { path: 'users/getSavedHotel', method: RequestMethod.GET },
-        { path: 'users/savedFlight', method: RequestMethod.POST },
-        { path: 'users/unSavedFlight', method: RequestMethod.POST },
-        { path: 'users/getSavedFlight', method: RequestMethod.GET },
-        { path: 'billHotel/addBillHotel', method: RequestMethod.POST },
-        { path: 'billHotel/getBillHotel', method: RequestMethod.POST },
-        { path: 'billFlight/addBillFlight', method: RequestMethod.POST },
-        { path: 'billFlight/getBillFlight', method: RequestMethod.POST },
-      );
+    consumer.apply(AuthMiddleWare).forRoutes(
+      // user
+      { path: 'users/getMe', method: RequestMethod.GET },
+      { path: 'users/updateUser', method: RequestMethod.POST },
+      { path: 'users/updatePassword', method: RequestMethod.POST },
+      { path: 'users/savedHotel', method: RequestMethod.POST },
+      { path: 'users/unSavedHotel', method: RequestMethod.POST },
+      { path: 'users/getSavedHotel', method: RequestMethod.GET },
+      { path: 'users/savedFlight', method: RequestMethod.POST },
+      { path: 'users/unSavedFlight', method: RequestMethod.POST },
+      { path: 'users/getSavedFlight', method: RequestMethod.GET },
+      // hotel
+      { path: 'hotel/getHotelFromAdmin', method: RequestMethod.POST },
+      // bill hotel
+      { path: 'billHotel/addBillHotel', method: RequestMethod.POST },
+      { path: 'billHotel/getBillHotel', method: RequestMethod.POST },
+      // bill flight
+      { path: 'billFlight/addBillFlight', method: RequestMethod.POST },
+      { path: 'billFlight/getBillFlight', method: RequestMethod.POST },
+    );
   }
 }

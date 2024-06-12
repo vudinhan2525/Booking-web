@@ -29,4 +29,12 @@ export class HotelController {
     this.hotelService.importHotel(body);
     res.status(200).json({ status: 'success' });
   }
+  @Post('getHotelFromAdmin')
+  async getHotelFromAdmin(
+    @Body() body: { adminId: number; accomodation: string },
+    @Res() res: Response,
+  ) {
+    const result = await this.hotelService.getHotelFromAdmin(body);
+    res.status(200).json({ status: 'success', data: result });
+  }
 }

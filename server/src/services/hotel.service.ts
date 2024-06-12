@@ -180,4 +180,29 @@ export class HotelService {
     const result = { ...hotel, rooms: sortedRooms };
     return { status: 'success', data: result };
   }
+  async getHotelFromAdmin(body: { adminId: number; accomodation: string }) {
+    const hotels = await this.hotelRepository
+      .createQueryBuilder('hotel')
+      .where('adminId = :aId', { aId: body.adminId })
+      .andWhere('accomodation = :acc', { acc: body.accomodation })
+      .getMany();
+
+    const hotelWithRooms = await Promise.all(
+      hotels.map(async (hotel) => {
+        const rooms = await this.roomRepository
+          .createQueryBuilder('room')
+          .leftJoinAndSelect('room.roomOpts', 'roomOpt')
+          .where('room.hotelId = :hotelId', { hotelId: hotel.id })
+          .orderBy('roomOpt.price')
+          .getMany();
+        const sortedRooms = rooms.sort((a, b) => {
+          const minPriceA = Math.min(...a.roomOpts.map((opt) => opt.price));
+          const minPriceB = Math.min(...b.roomOpts.map((opt) => opt.price));
+          return minPriceA - minPriceB;
+        });
+        return { ...hotel, rooms: sortedRooms };
+      }),
+    );
+    return hotelWithRooms;
+  }
 }

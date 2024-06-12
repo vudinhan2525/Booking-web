@@ -59,7 +59,7 @@ export default function Security() {
     } catch (error) {}
   };
   return (
-    <div className="py-4 border-[1px] rounded-md border-gray-300 mt-4">
+    <div className="py-4 border-[1px] bg-white rounded-md border-gray-300 mt-4">
       <header className="px-6 font-bold pb-4 border-gray-300 border-b-[1px]">
         Change password
       </header>
