@@ -31,7 +31,7 @@ export class HotelController {
   }
   @Post('getHotelFromAdmin')
   async getHotelFromAdmin(
-    @Body() body: { adminId: number; accomodation: string },
+    @Body() body: { adminId: number; accomodation: string; searchText: string },
     @Res() res: Response,
   ) {
     const result = await this.hotelService.getHotelFromAdmin(body);

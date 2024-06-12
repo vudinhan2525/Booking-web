@@ -2,10 +2,10 @@ import { IRoom } from "./IRoom";
 
 export interface IHotel {
   id: number;
-  name: string;
-  accomodation: string;
-  location: string;
-  address: string;
+  name: string; //
+  accomodation: string; //
+  location: string; //
+  address: string; //
   long: string;
   oneStar: number;
   twoStar: number;
@@ -15,10 +15,9 @@ export interface IHotel {
   lat: string;
   rating: string;
   numberOfRating: number;
-  summary: string;
-  facilities: string;
-  images: string;
-  roomLeft: number;
+  summary: string; //
+  facilities: string; //
+  images: string; //
   adminId: number;
   rooms: IRoom[];
 }

@@ -180,13 +180,21 @@ export class HotelService {
     const result = { ...hotel, rooms: sortedRooms };
     return { status: 'success', data: result };
   }
-  async getHotelFromAdmin(body: { adminId: number; accomodation: string }) {
-    const hotels = await this.hotelRepository
+  async getHotelFromAdmin(body: {
+    adminId: number;
+    accomodation: string;
+    searchText: string;
+  }) {
+    let query = await this.hotelRepository
       .createQueryBuilder('hotel')
       .where('adminId = :aId', { aId: body.adminId })
-      .andWhere('accomodation = :acc', { acc: body.accomodation })
-      .getMany();
-
+      .andWhere('accomodation = :acc', { acc: body.accomodation });
+    if (body.searchText) {
+      query = query.andWhere('hotel.name LIKE :searchText', {
+        searchText: `%${body.searchText}%`,
+      });
+    }
+    const hotels = await query.getMany();
     const hotelWithRooms = await Promise.all(
       hotels.map(async (hotel) => {
         const rooms = await this.roomRepository

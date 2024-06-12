@@ -10,7 +10,11 @@ const hotelApiRequest = {
     http.post<any>("/hotel/getOneHotel", body, {
       headers: { "Content-Type": "application/json" },
     }),
-  getHotelFromAdmin: (body: { adminId: number; accomodation: string }) =>
+  getHotelFromAdmin: (body: {
+    adminId: number;
+    accomodation: string;
+    searchText: string;
+  }) =>
     http.post<any>("/hotel/getHotelFromAdmin", body, {
       headers: { "Content-Type": "application/json" },
       withCredentials: true,
