@@ -79,7 +79,7 @@ export function ComboBox({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [departureDate]);
   return (
-    <div className="relative" ref={dropdownRef}>
+    <div className="relative " ref={dropdownRef}>
       <div onClick={() => setOpen((prev) => !prev)}>{child}</div>
       {open && (
         <div

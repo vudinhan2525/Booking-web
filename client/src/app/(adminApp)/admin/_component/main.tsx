@@ -58,7 +58,7 @@ export default function MainPage() {
         </div>
       </div>
       {isAdminAuthenticated && (
-        <div className="basis-[75%]">
+        <div className="basis-[75%] min-w-[75%]">
           {optSlt === 0 && <HotelDashboard />}
           {optSlt === 2 && <Account />}
         </div>
