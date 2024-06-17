@@ -21,7 +21,7 @@ export class ReviewController {
   @UseInterceptors(
     FilesInterceptor('files', 5, {
       fileFilter(req, file, callback) {
-        if (file.mimetype.match(/\/(jpg|jpeg|png|gif)$/)) {
+        if (file.mimetype.match(/\/(jpg|webp|jpeg|png|gif)$/)) {
           const fileSize = parseInt(req.headers['content-length']);
           if (fileSize > 1024 * 1024 * 5) {
             callback(

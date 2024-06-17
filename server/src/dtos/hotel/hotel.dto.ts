@@ -1,14 +1,13 @@
 import { IsNotEmpty } from 'class-validator';
 import { Expose } from 'class-transformer';
 export class HotelBody {
-  @IsNotEmpty()
   @Expose()
   id: number;
+
   @IsNotEmpty()
   @Expose()
   name: string;
-  @Expose()
-  rating: number;
+
   @IsNotEmpty()
   @Expose()
   accomodation: string;
@@ -37,7 +36,6 @@ export class HotelBody {
   @Expose()
   facilities: string;
 
-  @IsNotEmpty()
   @Expose()
   adminId: number;
 }

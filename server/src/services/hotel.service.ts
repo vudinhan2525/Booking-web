@@ -27,7 +27,6 @@ export class HotelService {
         location: item.location,
         long: item.long,
         lat: item.lat,
-        rating: item.rating,
         adminId: item.adminId,
         summary: item.summary,
         facilities: item.facilities,

@@ -23,6 +23,8 @@ import {
 } from "@/components/ui/popover";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import hotelApiRequest from "@/apiRequest/hotel";
+import RoomEditForm from "./RoomEditForm";
 // const MapPicker = dynamic(
 //   () => import("@/components/component/Map/MapPicker"),
 //   {
@@ -41,6 +43,8 @@ const accomodationType = [
   { name: "Hostels" },
   { name: "Villas" },
 ];
+const DEFAULT_LAT = 10.797752036781176;
+const DEFAULT_LONG = 106.6675132954067;
 export default function EditForm({
   isEditForm,
   setTurnOffForm,
@@ -66,6 +70,8 @@ export default function EditForm({
   const [accomodations, setAccomodations] = useState({ name: "Hotels" });
   const [location, setLocation] = useState<LatLng | null>(null);
   const [fac, setFac] = useState<string[]>(["AC", "Parking"]);
+  const [isAdded, setIsAdded] = useState(false);
+  const roomRef = useRef<HTMLDivElement>(null);
   const handleLocationSelect = (latlng: LatLng) => {
     setLocation(latlng);
   };
@@ -88,24 +94,60 @@ export default function EditForm({
     setFiles(updatedFiles);
   };
   const handleAddHotel = async () => {
+    let flg = 0;
     if (name.trim() === "") {
       setError((prev) => [...prev, "name"]);
+      flg = 1;
     }
     if (address.trim() === "") {
       setError((prev) => [...prev, "address"]);
+      flg = 1;
     }
     if (destination.code === "") {
       setError((prev) => [...prev, "destination"]);
+      flg = 1;
     }
     if (summary.trim() === "") {
       setError((prev) => [...prev, "summary"]);
+      flg = 1;
     }
     if (!files || files.length !== 5) {
       setError((prev) => [...prev, "files"]);
+      flg = 1;
     }
     if (!fac || fac.length === 0) {
       setError((prev) => [...prev, "facilities"]);
+      flg = 1;
     }
+    if (location === null) {
+      setError((prev) => [...prev, "location"]);
+      flg = 1;
+    }
+    if (flg === 1) {
+      return;
+    }
+    try {
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("accomodation", accomodations.name);
+      formData.append("address", address);
+      formData.append("summary", summary);
+      formData.append("location", destination.title);
+      formData.append("facilities", fac.join(","));
+      formData.append("long", (location?.lng as number).toString());
+      formData.append("lat", (location?.lat as number).toString());
+      files.forEach((file, index) => {
+        formData.append("files", file);
+      });
+      const response = await hotelApiRequest.addHotel(formData);
+      if (response.status === "success") {
+        setIsAdded(true);
+        roomRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
+    } catch (error) {}
   };
   return (
     <div>
@@ -118,8 +160,15 @@ export default function EditForm({
           className="text-xl"
         ></FontAwesomeIcon>
       </div>
-      <div className="px-6 mt-2 py-6 bg-white rounded-md shadow-md">
-        <header className="text-xl mb-2 font-bold">Hotel Information</header>
+      <div className="px-6 mt-2 py-6 bg-white rounded-md relative shadow-md">
+        {isAdded && (
+          <div className="absolute z-[10] bg-blue-100/70 rounded-md  top-0 right-0 left-0 bottom-0 flex items-center justify-center">
+            <p className="text-xl font-bold text-primary-color">
+              Hotel added successfully.
+            </p>
+          </div>
+        )}
+        <header className="text-2xl mb-2 font-bold">Hotel Information</header>
         <div className="flex mt-3 gap-6">
           <div className="basis-[50%]">
             <p
@@ -234,16 +283,27 @@ export default function EditForm({
             )}
           </div>
         </div>
-        {/* <div className="mt-3">
-          <h1 className="font-bold text-sm">Pick a Location</h1>
+        <div className="mt-3">
+          <p
+            className={`font-bold text-sm ${
+              error.includes("location") && "text-red-500"
+            }`}
+          >
+            Pick a location
+          </p>
+          {error.includes("location") && (
+            <p className="text-xs italic text-red-500 mt-1">
+              * Please select a location for your hotel.
+            </p>
+          )}
           <div className="z-[2] h-[400px] relative  mx-4 rounded-xl overflow-hidden mt-2">
             <MapPicker
               onLocationSelect={handleLocationSelect}
-              iniLat={10.797752036781176}
-              iniLong={106.6675132954067}
+              iniLat={DEFAULT_LAT}
+              iniLong={DEFAULT_LONG}
             />
           </div>
-        </div> */}
+        </div>
         <div className="mt-5 flex gap-6">
           <div className=" basis-[50%]">
             <p
@@ -435,6 +495,9 @@ export default function EditForm({
         >
           Add hotel
         </Button>
+      </div>
+      <div ref={roomRef}>
+        <RoomEditForm />
       </div>
     </div>
   );
