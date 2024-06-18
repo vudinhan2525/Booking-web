@@ -330,7 +330,7 @@ export default function EditForm({
             )}
           </div>
         </div>
-        <div className="mt-3">
+        {/* <div className="mt-3">
           <p
             className={`font-bold text-sm ${
               error.includes("location") && "text-red-500"
@@ -350,7 +350,7 @@ export default function EditForm({
               iniLong={hotelEdit?.long ? Number(hotelEdit.long) : DEFAULT_LONG}
             />
           </div>
-        </div>
+        </div> */}
         <div className="mt-5 flex gap-6">
           <div className=" basis-[50%]">
             <p
