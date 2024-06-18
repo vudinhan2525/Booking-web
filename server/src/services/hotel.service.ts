@@ -7,6 +7,7 @@ import { Room } from 'src/entities/room.entity';
 import { RoomOpt } from 'src/entities/roomOpt.entity';
 import { getDistance } from 'geolib';
 import { IFilterHotel } from 'src/interfaces/filterObj';
+import uploadToAzureBlobStorage from 'src/utils/azureBlob';
 @Injectable()
 export class HotelService {
   constructor(
@@ -17,6 +18,47 @@ export class HotelService {
     @InjectRepository(RoomOpt)
     private roomOptRepository: Repository<RoomOpt>,
   ) {}
+  async createHotel(
+    files: Array<Express.Multer.File>,
+    body: HotelBody,
+    adminId: number,
+  ) {
+    const checkHotelName = await this.hotelRepository.findOne({
+      where: { name: body.name },
+    });
+    if (checkHotelName) {
+      return { status: 'failed', message: 'Already exist this hotel name.' };
+    }
+    const uploadedUrls = await Promise.all(
+      files.map(async (file) => {
+        const imageBuffer = file.buffer;
+        const containerName = 'shopcartctn';
+        const blobName = `${file.originalname}-${Date.now()}`;
+        const connectionString = process.env.AZURE_CONNECTION_STRING as string;
+        const imageUrl = await uploadToAzureBlobStorage(
+          imageBuffer,
+          containerName,
+          blobName,
+          connectionString,
+        );
+        return imageUrl;
+      }),
+    );
+    const hotel = await this.hotelRepository.create({
+      name: body.name,
+      accomodation: body.accomodation,
+      address: body.address,
+      location: body.location,
+      long: Number(body.long),
+      lat: Number(body.lat),
+      summary: body.summary,
+      facilities: body.facilities,
+      adminId: adminId,
+      images: JSON.stringify(uploadedUrls),
+    });
+    const result = await this.hotelRepository.save(hotel);
+    return { status: 'success', data: result };
+  }
   async importHotel(body: HotelBody[]) {
     const hotels = body.map((item) => {
       return this.hotelRepository.create({

@@ -83,7 +83,9 @@ export default function Overview({
               sizes="100%"
               quality={60}
               style={{ objectFit: "cover", objectPosition: "center" }}
-              src={hotel.images}
+              src={
+                "https://shopcartimg2.blob.core.windows.net/shopcartctn/pexels-boonkong-boonpeng-442952-1134176.jpg"
+              }
             />
           </div>
         </div>
@@ -96,7 +98,9 @@ export default function Overview({
               sizes="100%"
               quality={60}
               style={{ objectFit: "cover", objectPosition: "center" }}
-              src={hotel.images}
+              src={
+                "https://shopcartimg2.blob.core.windows.net/shopcartctn/pexels-boonkong-boonpeng-442952-1134176.jpg"
+              }
             />
           </div>
           <div className="w-full relative h-[100%] rounded-md overflow-hidden">
@@ -107,7 +111,9 @@ export default function Overview({
               sizes="100%"
               quality={60}
               style={{ objectFit: "cover", objectPosition: "center" }}
-              src={hotel.images}
+              src={
+                "https://shopcartimg2.blob.core.windows.net/shopcartctn/pexels-boonkong-boonpeng-442952-1134176.jpg"
+              }
             />
           </div>
           <div className="w-full relative h-[100%] rounded-md overflow-hidden">
@@ -118,7 +124,9 @@ export default function Overview({
               sizes="100%"
               quality={60}
               style={{ objectFit: "cover", objectPosition: "center" }}
-              src={hotel.images}
+              src={
+                "https://shopcartimg2.blob.core.windows.net/shopcartctn/pexels-boonkong-boonpeng-442952-1134176.jpg"
+              }
             />
           </div>
           <div className="w-full relative h-[100%] rounded-md overflow-hidden">
@@ -129,7 +137,9 @@ export default function Overview({
               sizes="100%"
               quality={60}
               style={{ objectFit: "cover", objectPosition: "center" }}
-              src={hotel.images}
+              src={
+                "https://shopcartimg2.blob.core.windows.net/shopcartctn/pexels-boonkong-boonpeng-442952-1134176.jpg"
+              }
             />
           </div>
         </div>

@@ -13,7 +13,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState } from "react";
 import { LatLng } from "leaflet";
 import dynamic from "next/dynamic";
-import MapPicker from "@/components/component/Map/MapPicker";
+//import MapPicker from "@/components/component/Map/MapPicker";
 import { Textarea } from "@/components/ui/textarea";
 import facilitiesMap, { facilities } from "@/utils/facilities";
 import {
@@ -25,12 +25,13 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import hotelApiRequest from "@/apiRequest/hotel";
 import RoomEditForm from "./RoomEditForm";
-// const MapPicker = dynamic(
-//   () => import("@/components/component/Map/MapPicker"),
-//   {
-//     ssr: false,
-//   }
-// );
+import Dialog from "@/components/modals/Dialog";
+const MapPicker = dynamic(
+  () => import("@/components/component/Map/MapPicker"),
+  {
+    ssr: false,
+  }
+);
 const accomodationType = [
   { name: "Homes" },
   { name: "Others" },
@@ -72,6 +73,8 @@ export default function EditForm({
   const [fac, setFac] = useState<string[]>(["AC", "Parking"]);
   const [isAdded, setIsAdded] = useState(false);
   const roomRef = useRef<HTMLDivElement>(null);
+  const [showAddHotelDialog, setShowAddHotelDialog] = useState(false);
+  const [hotelId, setHotelId] = useState<number>();
   const handleLocationSelect = (latlng: LatLng) => {
     setLocation(latlng);
   };
@@ -140,11 +143,20 @@ export default function EditForm({
         formData.append("files", file);
       });
       const response = await hotelApiRequest.addHotel(formData);
+      if (
+        response.status === "failed" &&
+        response.message === "Already exist this hotel name."
+      ) {
+        setErrorNameMsg(response.message);
+        setError((prev) => [...prev, "name"]);
+        return;
+      }
       if (response.status === "success") {
         setIsAdded(true);
+        setHotelId(response.data.id);
         roomRef.current?.scrollIntoView({
           behavior: "smooth",
-          block: "start",
+          block: "center",
         });
       }
     } catch (error) {}
@@ -182,6 +194,7 @@ export default function EditForm({
               value={name}
               onChange={(e) => {
                 setError([]);
+                setErrorNameMsg("Please enter hotel name.");
                 setName(e.target.value);
               }}
               className={`${
@@ -490,15 +503,34 @@ export default function EditForm({
           ></input>
         </div>
         <Button
-          onClick={() => handleAddHotel()}
+          onClick={() => {
+            setShowAddHotelDialog(true);
+          }}
           className="bg-primary-color hover:bg-blue-500 transition-all mt-6  font-bold px-4 py-3"
         >
           Add hotel
         </Button>
       </div>
-      <div ref={roomRef}>
-        <RoomEditForm />
-      </div>
+      {hotelId && (
+        <div>
+          <div ref={roomRef}></div>
+          <RoomEditForm />
+        </div>
+      )}
+      {showAddHotelDialog && (
+        <Dialog
+          onClose={() => {
+            setShowAddHotelDialog(false);
+          }}
+          onYes={() => {
+            handleAddHotel();
+            setShowAddHotelDialog(false);
+          }}
+          buttonContent={"Yes"}
+          message={"Are you sure want to add this hotel."}
+          content={"Hotel will be added, you cannot undo this action !!"}
+        />
+      )}
     </div>
   );
 }

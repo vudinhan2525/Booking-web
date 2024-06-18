@@ -136,7 +136,9 @@ export default function MainSearchHotelPages() {
                       priority
                       sizes="100%"
                       style={{ objectFit: "cover", objectPosition: "center" }}
-                      src={el.images}
+                      src={
+                        "https://shopcartimg2.blob.core.windows.net/shopcartctn/pexels-boonkong-boonpeng-442952-1134176.jpg"
+                      }
                     />
                     <div className="absolute right-[10px] top-[10px]">
                       <SavedBookmark hotel={el} fromHotelCart={true} />
@@ -150,7 +152,9 @@ export default function MainSearchHotelPages() {
                         priority
                         sizes="100%"
                         style={{ objectFit: "cover", objectPosition: "center" }}
-                        src={el.images}
+                        src={
+                          "https://shopcartimg2.blob.core.windows.net/shopcartctn/pexels-boonkong-boonpeng-442952-1134176.jpg"
+                        }
                       />
                     </div>
                     <div className="basis-1/3 relative h-[70px]">
@@ -160,7 +164,9 @@ export default function MainSearchHotelPages() {
                         priority
                         sizes="100%"
                         style={{ objectFit: "cover", objectPosition: "center" }}
-                        src={el.images}
+                        src={
+                          "https://shopcartimg2.blob.core.windows.net/shopcartctn/pexels-boonkong-boonpeng-442952-1134176.jpg"
+                        }
                       />
                     </div>
                     <div className="basis-1/3 relative h-[70px]">
@@ -170,7 +176,9 @@ export default function MainSearchHotelPages() {
                         priority
                         sizes="100%"
                         style={{ objectFit: "cover", objectPosition: "center" }}
-                        src={el.images}
+                        src={
+                          "https://shopcartimg2.blob.core.windows.net/shopcartctn/pexels-boonkong-boonpeng-442952-1134176.jpg"
+                        }
                       />
                     </div>
                   </div>

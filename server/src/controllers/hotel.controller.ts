@@ -52,8 +52,12 @@ export class HotelController {
     @Body() data: HotelBody,
     @Res() res: Response,
   ) {
-    console.log(files);
-    res.status(200).json({ status: 'success' });
+    const result = await this.hotelService.createHotel(
+      files,
+      data,
+      res.locals.user.id,
+    );
+    res.status(200).json(result);
   }
   @Post('getHotels')
   async getHotel(
