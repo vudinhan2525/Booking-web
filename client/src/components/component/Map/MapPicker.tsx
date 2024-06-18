@@ -16,21 +16,29 @@ L.Icon.Default.mergeOptions({
 
 interface LocationMarkerProps {
   onLocationSelect: (latlng: LatLng) => void;
+  position: LatLng | null;
 }
 
 const LocationMarker: React.FC<LocationMarkerProps> = ({
   onLocationSelect,
+  position,
 }) => {
-  const [position, setPosition] = useState<LatLng | null>(null);
+  const [markerPosition, setMarkerPosition] = useState<LatLng | null>(position);
 
   useMapEvents({
     click(e) {
-      setPosition(e.latlng);
+      setMarkerPosition(e.latlng);
       onLocationSelect(e.latlng);
     },
   });
 
-  return position === null ? null : <Marker position={position}></Marker>;
+  useEffect(() => {
+    setMarkerPosition(position);
+  }, [position]);
+
+  return markerPosition === null ? null : (
+    <Marker position={markerPosition}></Marker>
+  );
 };
 
 interface MapPickerProps {
@@ -44,9 +52,24 @@ const MapPicker: React.FC<MapPickerProps> = ({
   iniLong,
   iniLat,
 }) => {
+  const initialPosition = new LatLng(iniLat, iniLong);
+  const [currentPosition, setCurrentPosition] = useState<LatLng | null>(
+    initialPosition
+  );
+
+  useEffect(() => {
+    setCurrentPosition(initialPosition);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [iniLat, iniLong]);
+
+  const handleLocationSelect = (latlng: LatLng) => {
+    setCurrentPosition(latlng);
+    onLocationSelect(latlng);
+  };
+
   return (
     <MapContainer
-      center={[iniLat, iniLong]}
+      center={currentPosition || initialPosition}
       zoom={13}
       style={{ height: "100%", width: "100%" }}
     >
@@ -54,7 +77,10 @@ const MapPicker: React.FC<MapPickerProps> = ({
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       />
-      <LocationMarker onLocationSelect={onLocationSelect} />
+      <LocationMarker
+        onLocationSelect={handleLocationSelect}
+        position={currentPosition}
+      />
     </MapContainer>
   );
 };

@@ -2,12 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Hotel } from 'src/entities/hotel.entity';
-import { HotelBody } from 'src/dtos/hotel/hotel.dto';
+import { HotelBody, HotelUpdateBody } from 'src/dtos/hotel/hotel.dto';
 import { Room } from 'src/entities/room.entity';
 import { RoomOpt } from 'src/entities/roomOpt.entity';
 import { getDistance } from 'geolib';
 import { IFilterHotel } from 'src/interfaces/filterObj';
-import uploadToAzureBlobStorage from 'src/utils/azureBlob';
+import uploadToAzureBlobStorage, {
+  deleteFromAzureBlobStorage,
+} from 'src/utils/azureBlob';
 @Injectable()
 export class HotelService {
   constructor(
@@ -56,6 +58,60 @@ export class HotelService {
       adminId: adminId,
       images: JSON.stringify(uploadedUrls),
     });
+    const result = await this.hotelRepository.save(hotel);
+    return { status: 'success', data: result };
+  }
+  async updateHotel(files: Array<Express.Multer.File>, body: HotelUpdateBody) {
+    const connectionString = process.env.AZURE_CONNECTION_STRING as string;
+    const containerName = 'shopcartctn';
+    let imageUrls = body.oldImageUrls;
+    if (files && files.length > 0) {
+      const uploadedUrls = await Promise.all(
+        files.map(async (file) => {
+          const imageBuffer = file.buffer;
+          const containerName = 'shopcartctn';
+          const blobName = `${file.originalname}-${Date.now()}`;
+          const connectionString = process.env
+            .AZURE_CONNECTION_STRING as string;
+          const imageUrl = await uploadToAzureBlobStorage(
+            imageBuffer,
+            containerName,
+            blobName,
+            connectionString,
+          );
+          return imageUrl;
+        }),
+      );
+      imageUrls = JSON.stringify(uploadedUrls);
+      const oldImageUrls = JSON.parse(body.oldImageUrls);
+      await Promise.all(
+        oldImageUrls.map(async (oldImageUrl) => {
+          const oldBlobName = oldImageUrl.substring(
+            oldImageUrl.lastIndexOf('/') + 1,
+          );
+          await deleteFromAzureBlobStorage(
+            containerName,
+            oldBlobName,
+            connectionString,
+          );
+        }),
+      );
+    }
+    const hotel = await this.hotelRepository.findOne({
+      where: { id: Number(body.hotelId) },
+    });
+    if (!hotel) {
+      return { status: 'failed', message: "Can't find this hotel." };
+    }
+    hotel.name = body.name;
+    hotel.accomodation = body.accomodation;
+    hotel.address = body.address;
+    hotel.location = body.location;
+    hotel.long = Number(body.long);
+    hotel.lat = Number(body.lat);
+    hotel.summary = body.summary;
+    hotel.facilities = body.facilities;
+    hotel.images = imageUrls;
     const result = await this.hotelRepository.save(hotel);
     return { status: 'success', data: result };
   }

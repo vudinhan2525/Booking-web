@@ -15,6 +15,18 @@ const hotelApiRequest = {
     );
     return await response.json();
   },
+  updateHotel: async (body: FormData) => {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_ENDPOINT}/hotel/updateHotel`,
+      {
+        method: "POST",
+        body: body,
+        cache: "no-cache",
+        credentials: "include",
+      }
+    );
+    return await response.json();
+  },
   getHotels: (body: { long: number; lat: number; filter: IFilterHotel }) =>
     http.post<any>("/hotel/getHotels", body, {
       headers: { "Content-Type": "application/json" },

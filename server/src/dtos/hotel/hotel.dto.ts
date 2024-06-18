@@ -39,3 +39,44 @@ export class HotelBody {
   @Expose()
   adminId: number;
 }
+export class HotelUpdateBody {
+  @IsNotEmpty()
+  @Expose()
+  hotelId: string;
+
+  @IsNotEmpty()
+  @Expose()
+  name: string;
+
+  @IsNotEmpty()
+  @Expose()
+  accomodation: string;
+
+  @IsNotEmpty()
+  @Expose()
+  address: string;
+
+  @IsNotEmpty()
+  @Expose()
+  location: string;
+
+  @IsNotEmpty()
+  @Expose()
+  long: string;
+
+  @IsNotEmpty()
+  @Expose()
+  lat: string;
+
+  @IsNotEmpty()
+  @Expose()
+  summary: string;
+
+  @IsNotEmpty()
+  @Expose()
+  facilities: string;
+
+  @IsNotEmpty()
+  @Expose()
+  oldImageUrls: string;
+}

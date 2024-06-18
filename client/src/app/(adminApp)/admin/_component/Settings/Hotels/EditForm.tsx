@@ -1,7 +1,7 @@
 "use client";
 import { ComboBox } from "@/components/component/Search/ComboBox";
 import { IHotel } from "@/interfaces/IHotel";
-import { destinations } from "@/lib/dataHotel";
+import { destinations, destinationsMap } from "@/lib/dataHotel";
 import {
   faCamera,
   faChevronDown,
@@ -49,9 +49,11 @@ const DEFAULT_LONG = 106.6675132954067;
 export default function EditForm({
   isEditForm,
   setTurnOffForm,
+  hotelEdit,
 }: {
   isEditForm: boolean;
   setTurnOffForm: React.Dispatch<React.SetStateAction<boolean>>;
+  hotelEdit?: IHotel;
 }) {
   const [error, setError] = useState<string[]>([]);
   const [errorNameMsg, setErrorNameMsg] = useState("Please enter hotel name.");
@@ -92,6 +94,27 @@ export default function EditForm({
       };
     }
   }, [files]);
+  useEffect(() => {
+    if (isEditForm && hotelEdit) {
+      setName(hotelEdit.name);
+      setAddress(hotelEdit.address);
+      for (let j = 0; j < accomodationType.length; j++) {
+        if (accomodationType[j].name === hotelEdit.accomodation) {
+          setAccomodations({ name: accomodationType[j].name });
+          break;
+        }
+      }
+      setSummary(hotelEdit.summary);
+      setDestination(destinationsMap.get(hotelEdit.location));
+      const newLoc = new LatLng(Number(hotelEdit.lat), Number(hotelEdit.long));
+      setLocation(newLoc);
+      setFac(hotelEdit.facilities.split(","));
+      setHotelId(hotelEdit.id);
+      if (hotelEdit.images) {
+        setPreview(hotelEdit.images);
+      }
+    }
+  }, [isEditForm, hotelEdit]);
   const handleClickDeleteImage = (idx: number) => {
     const updatedFiles = files.filter((el, id) => id !== idx);
     setFiles(updatedFiles);
@@ -114,9 +137,11 @@ export default function EditForm({
       setError((prev) => [...prev, "summary"]);
       flg = 1;
     }
-    if (!files || files.length !== 5) {
-      setError((prev) => [...prev, "files"]);
-      flg = 1;
+    if (!(preview.length === 5) || !(files.length === 0)) {
+      if (!files || files.length !== 5) {
+        setError((prev) => [...prev, "files"]);
+        flg = 1;
+      }
     }
     if (!fac || fac.length === 0) {
       setError((prev) => [...prev, "facilities"]);
@@ -135,13 +160,22 @@ export default function EditForm({
       formData.append("accomodation", accomodations.name);
       formData.append("address", address);
       formData.append("summary", summary);
-      formData.append("location", destination.title);
+      formData.append("location", destination.code);
       formData.append("facilities", fac.join(","));
       formData.append("long", (location?.lng as number).toString());
       formData.append("lat", (location?.lat as number).toString());
       files.forEach((file, index) => {
         formData.append("files", file);
       });
+      if (isEditForm && hotelEdit) {
+        formData.append("oldImageUrls", JSON.stringify(hotelEdit.images));
+        formData.append("hotelId", hotelEdit.id.toString());
+        const response = await hotelApiRequest.updateHotel(formData);
+        if (response.status === "success") {
+          window.location.reload();
+        }
+        return;
+      }
       const response = await hotelApiRequest.addHotel(formData);
       if (
         response.status === "failed" &&
@@ -312,8 +346,8 @@ export default function EditForm({
           <div className="z-[2] h-[400px] relative  mx-4 rounded-xl overflow-hidden mt-2">
             <MapPicker
               onLocationSelect={handleLocationSelect}
-              iniLat={DEFAULT_LAT}
-              iniLong={DEFAULT_LONG}
+              iniLat={hotelEdit?.lat ? Number(hotelEdit.lat) : DEFAULT_LAT}
+              iniLong={hotelEdit?.long ? Number(hotelEdit.long) : DEFAULT_LONG}
             />
           </div>
         </div>
@@ -367,9 +401,9 @@ export default function EditForm({
                           }}
                           className="cursor-default flex gap-2 items-center px-4 py-2 rounded-md bg-white"
                         >
-                          <div>{facilitiesMap.get(el).icon}</div>
+                          <div>{facilitiesMap.get(el)?.icon}</div>
                           <p className="text-sm font-bold text-gray-600">
-                            {facilitiesMap.get(el).title}
+                            {facilitiesMap.get(el)?.title}
                           </p>
                           <div
                             onClick={() => {
@@ -508,7 +542,7 @@ export default function EditForm({
           }}
           className="bg-primary-color hover:bg-blue-500 transition-all mt-6  font-bold px-4 py-3"
         >
-          Add hotel
+          {isEditForm ? "Update" : "Add hotel"}
         </Button>
       </div>
       {hotelId && (
@@ -527,8 +561,8 @@ export default function EditForm({
             setShowAddHotelDialog(false);
           }}
           buttonContent={"Yes"}
-          message={"Are you sure want to add this hotel."}
-          content={"Hotel will be added, you cannot undo this action !!"}
+          message={"Are you sure want to update this hotel."}
+          content={"Hotel will be updated, you cannot undo this action !!"}
         />
       )}
     </div>

@@ -2,7 +2,7 @@ export const destinations = [
   {
     code: "DAD",
     name: "Đà Nẵng",
-    title: "Vietnam",
+    title: "Da Nang Province, Vietnam",
     lat: 16.0482957629242,
     long: 108.21930463520579,
   },

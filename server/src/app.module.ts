@@ -92,6 +92,7 @@ export class AppModule implements NestModule {
       { path: 'users/getSavedFlight', method: RequestMethod.GET },
       // hotel
       { path: 'hotel/addHotel', method: RequestMethod.POST },
+      { path: 'hotel/updateHotel', method: RequestMethod.POST },
       { path: 'hotel/getHotelFromAdmin', method: RequestMethod.POST },
       // bill hotel
       { path: 'billHotel/addBillHotel', method: RequestMethod.POST },

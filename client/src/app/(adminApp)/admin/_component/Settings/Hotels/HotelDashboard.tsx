@@ -13,6 +13,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { useAdminContext } from "../../../AdminProvider";
 import EditForm from "./EditForm";
+import { destinationsMap } from "@/lib/dataHotel";
 const accomodationType = [
   { name: "Homes" },
   { name: "Others" },
@@ -38,6 +39,7 @@ export default function HotelDashboard() {
   const [ratingSort, setRatingSort] = useState(0);
   const [showEditForm, setShowEditForm] = useState(false);
   const [showAddForm, setShowAddForm] = useState(false);
+  const [hotelSlt, setHotelSlt] = useState<IHotel>();
   const { admin } = useAdminContext();
   useEffect(() => {
     getHotels();
@@ -331,8 +333,8 @@ export default function HotelDashboard() {
                       </p>
                     </div>
                     <div className="flex items-center basis-[13%] border-r-[1px] px-4 py-2 ">
-                      <p className="text-sm font-medium text-gray-600 ">
-                        {hotel.location}
+                      <p className="text-sm line-clamp-2 font-medium text-gray-600 ">
+                        {destinationsMap.get(hotel.location).title}
                       </p>
                     </div>
                     <div className="flex items-center basis-[10%]  transition-all border-r-[1px] px-4 py-2 ">
@@ -341,7 +343,13 @@ export default function HotelDashboard() {
                       </p>
                     </div>
                     <div className="flex justify-center items-center basis-[7%] border-r-[1px] px-4 py-2">
-                      <div className="">
+                      <div
+                        onClick={() => {
+                          setShowEditForm(true);
+                          setHotelSlt(hotel);
+                        }}
+                        className=""
+                      >
                         <FontAwesomeIcon
                           icon={faPenToSquare}
                           className="hover:text-gray-700 text-gray-600 cursor-pointer transition-all"
@@ -354,8 +362,12 @@ export default function HotelDashboard() {
           </div>
         </div>
       )}
-      {showEditForm && (
-        <EditForm isEditForm={true} setTurnOffForm={setShowEditForm} />
+      {showEditForm && hotelSlt && (
+        <EditForm
+          isEditForm={true}
+          setTurnOffForm={setShowEditForm}
+          hotelEdit={hotelSlt}
+        />
       )}
       {showAddForm && (
         <EditForm isEditForm={false} setTurnOffForm={setShowAddForm} />

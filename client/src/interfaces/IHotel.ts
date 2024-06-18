@@ -17,7 +17,7 @@ export interface IHotel {
   numberOfRating: number;
   summary: string; //
   facilities: string; //
-  images: string; //
+  images: string[]; //
   adminId: number;
   rooms: IRoom[];
 }
