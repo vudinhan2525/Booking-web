@@ -36,7 +36,7 @@ export default function RoomEditForm() {
         ))}
         <div
           onClick={handleAddRoom}
-          className="px-4 w-[140px] py-2 cursor-pointer border-[1px] rounded-md border-primary-color font-bold text-primary-color text-sm"
+          className="px-4 text-center w-[180px] py-3 cursor-pointer border-[1px] rounded-md border-primary-color font-bold text-primary-color"
         >
           Add more room
         </div>

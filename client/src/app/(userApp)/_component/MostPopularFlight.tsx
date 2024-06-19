@@ -7,7 +7,7 @@ import { useState } from "react";
 
 export default function MostPopularFlight() {
   const [selectId, setSelectId] = useState(0);
-  const flight: IFlight = {
+  const flight: any = {
     id: 1,
     fromAirport: "Tan Son Nhat",
     toAirport: "Noi Bai",
@@ -21,8 +21,6 @@ export default function MostPopularFlight() {
     flightCode: "VN-124",
     departureTime: "2024-12-10T10:45:00.000Z",
     arrivalTime: "2024-12-10T12:30:00.000Z",
-    price: 1259000,
-    seatLeft: 400,
   };
   return (
     <div className="mt-4">

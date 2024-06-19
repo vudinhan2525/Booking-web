@@ -112,7 +112,23 @@ export class HotelService {
     hotel.summary = body.summary;
     hotel.facilities = body.facilities;
     hotel.images = imageUrls;
-    const result = await this.hotelRepository.save(hotel);
+    const data = await this.hotelRepository.save(hotel);
+    const rooms = await this.roomRepository
+      .createQueryBuilder('room')
+      .leftJoinAndSelect('room.roomOpts', 'roomOpt')
+      .where('room.hotelId = :hotelId', { hotelId: data.id })
+      .orderBy('roomOpt.price')
+      .getMany();
+    const sortedRooms = rooms.sort((a, b) => {
+      const minPriceA = Math.min(...a.roomOpts.map((opt) => opt.price));
+      const minPriceB = Math.min(...b.roomOpts.map((opt) => opt.price));
+      return minPriceA - minPriceB;
+    });
+    const result = {
+      ...data,
+      rooms: sortedRooms,
+      images: JSON.parse(data.images),
+    };
     return { status: 'success', data: result };
   }
   async importHotel(body: HotelBody[]) {

@@ -12,8 +12,6 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState } from "react";
 import { LatLng } from "leaflet";
-import dynamic from "next/dynamic";
-//import MapPicker from "@/components/component/Map/MapPicker";
 import { Textarea } from "@/components/ui/textarea";
 import facilitiesMap, { facilities } from "@/utils/facilities";
 import {
@@ -26,12 +24,8 @@ import { Button } from "@/components/ui/button";
 import hotelApiRequest from "@/apiRequest/hotel";
 import RoomEditForm from "./RoomEditForm";
 import Dialog from "@/components/modals/Dialog";
-const MapPicker = dynamic(
-  () => import("@/components/component/Map/MapPicker"),
-  {
-    ssr: false,
-  }
-);
+import MapPickerCaller from "@/components/component/Map/MapPickerCaller";
+
 const accomodationType = [
   { name: "Homes" },
   { name: "Others" },
@@ -50,10 +44,12 @@ export default function EditForm({
   isEditForm,
   setTurnOffForm,
   hotelEdit,
+  setHotels,
 }: {
   isEditForm: boolean;
   setTurnOffForm: React.Dispatch<React.SetStateAction<boolean>>;
   hotelEdit?: IHotel;
+  setHotels?: React.Dispatch<React.SetStateAction<IHotel[]>>;
 }) {
   const [error, setError] = useState<string[]>([]);
   const [errorNameMsg, setErrorNameMsg] = useState("Please enter hotel name.");
@@ -96,25 +92,37 @@ export default function EditForm({
   }, [files]);
   useEffect(() => {
     if (isEditForm && hotelEdit) {
-      setName(hotelEdit.name);
-      setAddress(hotelEdit.address);
-      for (let j = 0; j < accomodationType.length; j++) {
-        if (accomodationType[j].name === hotelEdit.accomodation) {
-          setAccomodations({ name: accomodationType[j].name });
-          break;
-        }
-      }
-      setSummary(hotelEdit.summary);
-      setDestination(destinationsMap.get(hotelEdit.location));
-      const newLoc = new LatLng(Number(hotelEdit.lat), Number(hotelEdit.long));
-      setLocation(newLoc);
-      setFac(hotelEdit.facilities.split(","));
-      setHotelId(hotelEdit.id);
-      if (hotelEdit.images) {
-        setPreview(hotelEdit.images);
+      iniState();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isEditForm, hotelEdit]);
+  const iniState = async () => {
+    if (!isEditForm || !hotelEdit) {
+      return;
+    }
+    setName(hotelEdit.name);
+    setAddress(hotelEdit.address);
+    for (let j = 0; j < accomodationType.length; j++) {
+      if (accomodationType[j].name === hotelEdit.accomodation) {
+        setAccomodations({ name: accomodationType[j].name });
+        break;
       }
     }
-  }, [isEditForm, hotelEdit]);
+    setSummary(hotelEdit.summary);
+    setDestination(destinationsMap.get(hotelEdit.location));
+
+    if (typeof window !== "undefined") {
+      // Dynamically import the LatLng class from leaflet
+      const { LatLng } = await import("leaflet");
+      const newLoc = new LatLng(Number(hotelEdit.lat), Number(hotelEdit.long));
+      setLocation(newLoc);
+    }
+    setFac(hotelEdit.facilities.split(","));
+    setHotelId(hotelEdit.id);
+    if (hotelEdit.images) {
+      setPreview(hotelEdit.images);
+    }
+  };
   const handleClickDeleteImage = (idx: number) => {
     const updatedFiles = files.filter((el, id) => id !== idx);
     setFiles(updatedFiles);
@@ -171,8 +179,16 @@ export default function EditForm({
         formData.append("oldImageUrls", JSON.stringify(hotelEdit.images));
         formData.append("hotelId", hotelEdit.id.toString());
         const response = await hotelApiRequest.updateHotel(formData);
-        if (response.status === "success") {
-          window.location.reload();
+        if (response.status === "success" && setHotels) {
+          setHotels((prev) => {
+            const idx = prev.findIndex((el) => el.id === hotelEdit.id);
+            if (idx !== -1) {
+              const newArr = [...prev];
+              newArr[idx] = response.data;
+              return newArr;
+            }
+            return prev;
+          });
         }
         return;
       }
@@ -330,7 +346,7 @@ export default function EditForm({
             )}
           </div>
         </div>
-        {/* <div className="mt-3">
+        <div className="mt-3">
           <p
             className={`font-bold text-sm ${
               error.includes("location") && "text-red-500"
@@ -344,13 +360,13 @@ export default function EditForm({
             </p>
           )}
           <div className="z-[2] h-[400px] relative  mx-4 rounded-xl overflow-hidden mt-2">
-            <MapPicker
+            <MapPickerCaller
               onLocationSelect={handleLocationSelect}
               iniLat={hotelEdit?.lat ? Number(hotelEdit.lat) : DEFAULT_LAT}
               iniLong={hotelEdit?.long ? Number(hotelEdit.long) : DEFAULT_LONG}
             />
           </div>
-        </div> */}
+        </div>
         <div className="mt-5 flex gap-6">
           <div className=" basis-[50%]">
             <p

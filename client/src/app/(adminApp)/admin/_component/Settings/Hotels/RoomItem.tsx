@@ -14,7 +14,20 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
+import RoomOptItem from "./RoomOptItem";
+import { v4 as uuidv4 } from "uuid";
+import Dialog from "@/components/modals/Dialog";
 
+export interface RoomOptsForm {
+  id: string;
+  numberOfGuest: number;
+  bed: string;
+  isRefundable: boolean;
+  roomLeft: number;
+  originalPrice: number;
+  price: number;
+  saved: boolean;
+}
 export default function RoomItem({
   isAddedForm,
   onDeleteForm,
@@ -22,12 +35,17 @@ export default function RoomItem({
   isAddedForm: boolean;
   onDeleteForm: () => void;
 }) {
-  const [area, setArea] = useState("");
+  const [name, setName] = useState("");
+  const [area, setArea] = useState(0);
+  const [error, setError] = useState<string[]>([]);
   const [isSmoking, setIsSmoking] = useState(false);
   const [fac, setFac] = useState<string[]>(["Wifi"]);
   const [preview, setPreview] = useState<string[]>([]);
   const [files, setFiles] = useState<File[]>([]);
+  const [roomOpts, setRoomOpts] = useState<RoomOptsForm[]>([]);
   const imagesRef = useRef<HTMLInputElement>(null);
+  const [addRoomDialog, setAddRoomDialog] = useState(false);
+  const areaRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!files) return;
     let tmp = [];
@@ -46,33 +64,97 @@ export default function RoomItem({
     const updatedFiles = files.filter((el, id) => id !== idx);
     setFiles(updatedFiles);
   };
+  useEffect(() => {
+    console.log(roomOpts);
+  }, [roomOpts]);
+  const handleAddRoom = async () => {
+    let flag = 0;
+    if (name.trim() === "") {
+      flag = 1;
+      setError((prev) => [...prev, "name"]);
+    }
+    if (!area) {
+      flag = 1;
+      if (areaRef.current) {
+        areaRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+      setError((prev) => [...prev, "area"]);
+    }
+    if (!files || files.length !== 3) {
+      flag = 1;
+      setError((prev) => [...prev, "files"]);
+    }
+    if (roomOpts.length === 0) {
+      flag = 1;
+      setError((prev) => [...prev, "roomOpt"]);
+    }
+    roomOpts.forEach((el) => {
+      if (el.saved === false) {
+        flag = 1;
+        setError((prev) => [...prev, "roomOpt"]);
+      }
+    });
+  };
   return (
     <div className="border-gray-300 border-[1px] rounded-md">
-      <div className="flex items-center px-4 justify-between py-2 border-b-[1px] border-gray-300">
-        <div className="flex items-center w-full gap-2">
-          <p className="text-sm font-bold">Name:</p>
-          <input className="px-3 w-[35%] py-2 border-[1px] rounded-md text-sm font-bold text-gray-700 outline-none"></input>
+      <div className="px-4 py-2 border-b-[1px] border-gray-300">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center w-full gap-2">
+            <p
+              className={`${
+                error.includes("name") && "text-red-500"
+              } font-bold text-sm `}
+            >
+              Name:
+            </p>
+            <input
+              value={name}
+              onChange={(e) => {
+                setError([]);
+                setName(e.target.value);
+              }}
+              className={`${
+                error.includes("name") ? "bg-red-50 border-red-300" : ""
+              } px-3 w-[35%] py-2 border-[1px] text-gray-700 rounded-md text-sm font-bold outline-none`}
+            ></input>
+          </div>
+          <div
+            onClick={() => {
+              onDeleteForm();
+            }}
+            className="cursor-pointer flex items-center justify-center"
+          >
+            <FontAwesomeIcon icon={faXmark} className="text-2xl" />
+          </div>
         </div>
-        <div
-          onClick={() => {
-            onDeleteForm();
-          }}
-          className="cursor-pointer flex items-center justify-center"
-        >
-          <FontAwesomeIcon icon={faXmark} className="text-2xl" />
-        </div>
+        {error.includes("name") && (
+          <p className="text-xs ml-14 mt-1 font-bold text-red-500">
+            Please enter name for your room.
+          </p>
+        )}
       </div>
       <div className="px-4 py-4">
         <div className="flex">
+          <div ref={areaRef}></div>
           <div className="basis-[50%] flex gap-4 items-center">
             <div className="basis-[50%]">
-              <p className={`font-bold text-sm `}>Area(m2):</p>
+              <p
+                className={`${
+                  error.includes("area") && "text-red-500"
+                } font-bold text-sm `}
+              >
+                Area(m2):
+              </p>
               <input
+                type="number"
                 value={area}
                 onChange={(e) => {
-                  setArea(e.target.value);
+                  setError([]);
+                  setArea(Number(e.target.value));
                 }}
-                className={`mt-1 text-sm w-[70%] outline-none px-4 py-2 border-[1px] rounded-md font-bold text-gray-600`}
+                className={`${
+                  error.includes("area") ? "bg-red-50 border-red-300" : ""
+                } px-3 w-[70%] mt-1 py-2 border-[1px] text-gray-700 rounded-md text-sm font-bold outline-none`}
               ></input>
             </div>
             <div className="basis-[50%]">
@@ -81,6 +163,7 @@ export default function RoomItem({
                   id="terms"
                   checked={isSmoking}
                   onCheckedChange={() => {
+                    setError([]);
                     setIsSmoking((prev) => !prev);
                   }}
                 />
@@ -142,6 +225,7 @@ export default function RoomItem({
                       <div
                         onClick={() => {
                           const id = fac.indexOf(el.title);
+                          setError([]);
                           if (id === -1) {
                             setFac((prev) => {
                               return [...prev, el.title];
@@ -165,8 +249,20 @@ export default function RoomItem({
           </div>
         </div>
         <div className="mt-3">
-          <p className={`font-bold text-sm `}>Images</p>
-          <p className={`text-sm italic `}>* 3 images is required</p>
+          <p
+            className={`font-bold text-sm ${
+              error.includes("files") && "text-red-500"
+            } `}
+          >
+            Images:
+          </p>
+          <p
+            className={`text-sm italic ${
+              error.includes("files") && "text-red-500"
+            }`}
+          >
+            * 3 images is required
+          </p>
           <div className="px-4 py-2 mt-2 bg-gray-50  rounded-lg h-[180px] max-w-[100%] flex gap-4 items-center  overflow-x-auto">
             <div
               onClick={() => {
@@ -220,16 +316,97 @@ export default function RoomItem({
             multiple
             onChange={(e) => {
               if (e.target.files && e.target.files.length > 0) {
+                setError([]);
                 const fileListAsArray = Array.from(e.target.files);
                 setFiles((prev) => [...prev, ...fileListAsArray]);
               }
             }}
           ></input>
         </div>
-        <Button className="mt-3 bg-primary-color transition-all hover:bg-blue-600  font-bold">
-          Add this room
-        </Button>
+        <div className="mt-6 border-t-[1px] pt-4">
+          <p
+            className={`font-bold text-sm ${
+              error.includes("roomOpt") && "text-red-500"
+            }`}
+          >
+            Room options:
+          </p>
+          <p
+            className={` text-sm italic ${
+              error.includes("roomOpt") && "text-red-500"
+            }`}
+          >
+            * At least 1 room options
+          </p>
+          <div
+            onClick={() => {
+              setError([]);
+            }}
+            className=""
+          >
+            {roomOpts &&
+              roomOpts.map((el, idx) => {
+                return (
+                  <RoomOptItem
+                    key={el.id}
+                    id={el.id}
+                    roomOpts={roomOpts}
+                    setRoomOpts={setRoomOpts}
+                  />
+                );
+              })}
+          </div>
+          <Button
+            onClick={() => {
+              const newItem = {
+                id: uuidv4(),
+                numberOfGuest: 0,
+                bed: "",
+                isRefundable: false,
+                roomLeft: 0,
+                originalPrice: 0,
+                price: 0,
+                saved: false,
+              };
+              setRoomOpts((prev) => {
+                if (prev) {
+                  return [...prev, newItem];
+                }
+                return [newItem];
+              });
+            }}
+            className="mt-2 bg-white border-primary-color border-[1px] transition-all text-primary-color  hover:bg-white font-bold"
+          >
+            Add room option
+          </Button>
+        </div>
+        <div className="mt-3 flex justify-end">
+          <Button
+            onClick={() => {
+              setAddRoomDialog(true);
+            }}
+            className=" bg-primary-color transition-all hover:bg-blue-600  font-bold"
+          >
+            Add this room
+          </Button>
+        </div>
       </div>
+      {addRoomDialog && (
+        <Dialog
+          onClose={() => {
+            setAddRoomDialog(false);
+          }}
+          onYes={() => {
+            handleAddRoom();
+            setAddRoomDialog(false);
+          }}
+          buttonContent={"Yes"}
+          message={"Are you sure want to add this room."}
+          content={
+            "Your room will be added to your hotel, you cannot undo this action !!"
+          }
+        />
+      )}
     </div>
   );
 }

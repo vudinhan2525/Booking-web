@@ -367,6 +367,7 @@ export default function HotelDashboard() {
           isEditForm={true}
           setTurnOffForm={setShowEditForm}
           hotelEdit={hotelSlt}
+          setHotels={setHotels}
         />
       )}
       {showAddForm && (
