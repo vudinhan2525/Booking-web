@@ -7,6 +7,6 @@ export interface IRoom {
   isSmoking: boolean;
   name: string;
   facilitiesRoom: string;
-  images: string;
+  images: string[];
   roomOpts: IRoomOpt[];
 }

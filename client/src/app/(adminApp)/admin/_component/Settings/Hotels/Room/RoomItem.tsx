@@ -17,9 +17,13 @@ import React, { useEffect, useRef, useState } from "react";
 import RoomOptItem from "./RoomOptItem";
 import { v4 as uuidv4 } from "uuid";
 import Dialog from "@/components/modals/Dialog";
+import roomApiRequest from "@/apiRequest/room";
+import { IRoom } from "@/interfaces/IRoom";
+import { useToast } from "@/components/ui/use-toast";
 
 export interface RoomOptsForm {
   id: string;
+  name: string;
   numberOfGuest: number;
   bed: string;
   isRefundable: boolean;
@@ -31,10 +35,15 @@ export interface RoomOptsForm {
 export default function RoomItem({
   isAddedForm,
   onDeleteForm,
+  hotelId,
+  roomEdit,
 }: {
   isAddedForm: boolean;
-  onDeleteForm: () => void;
+  onDeleteForm?: () => void;
+  hotelId: number;
+  roomEdit?: IRoom;
 }) {
+  const { toast } = useToast();
   const [name, setName] = useState("");
   const [area, setArea] = useState(0);
   const [error, setError] = useState<string[]>([]);
@@ -45,28 +54,55 @@ export default function RoomItem({
   const [roomOpts, setRoomOpts] = useState<RoomOptsForm[]>([]);
   const imagesRef = useRef<HTMLInputElement>(null);
   const [addRoomDialog, setAddRoomDialog] = useState(false);
+  const [deleteRoomDialog, setDeleteRoomDialog] = useState(false);
   const areaRef = useRef<HTMLDivElement>(null);
+  const [success, setSuccess] = useState(false);
+  const [isDeleted, setIsDeleted] = useState(false);
   useEffect(() => {
     if (!files) return;
-    let tmp = [];
-    for (let i = 0; i < files.length; i++) {
-      tmp.push(URL.createObjectURL(files[i]));
-    }
-    const objectUrls = tmp;
+    const objectUrls = files.map((file) => URL.createObjectURL(file));
     setPreview(objectUrls);
-    for (let i = 0; i < objectUrls.length; i++) {
-      return () => {
-        URL.revokeObjectURL(objectUrls[i]);
-      };
-    }
+    return () => {
+      objectUrls.forEach((url) => URL.revokeObjectURL(url));
+    };
   }, [files]);
+  useEffect(() => {
+    iniState();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [roomEdit, isAddedForm]);
+
+  const iniState = () => {
+    if (roomEdit && !isAddedForm) {
+      setName(roomEdit.name);
+      setArea(roomEdit.area);
+      setIsSmoking(roomEdit.isSmoking);
+      setFac(roomEdit.facilitiesRoom.split(","));
+      setPreview(roomEdit.images);
+      if (roomEdit.roomOpts && roomEdit.roomOpts.length > 0) {
+        let newArr: RoomOptsForm[] = [];
+        roomEdit.roomOpts.forEach((roomOpt) => {
+          const newItem = {
+            id: uuidv4(),
+            numberOfGuest: roomOpt.numberOfGuest,
+            name: roomOpt.name,
+            bed: roomOpt.bed,
+            isRefundable: roomOpt.isRefundable,
+            roomLeft: roomOpt.roomLeft,
+            originalPrice: roomOpt.originalPrice,
+            price: roomOpt.price,
+            saved: true,
+          };
+          newArr.push(newItem);
+        });
+        setRoomOpts(newArr);
+      }
+    }
+  };
+
   const handleClickDeleteImage = (idx: number) => {
     const updatedFiles = files.filter((el, id) => id !== idx);
     setFiles(updatedFiles);
   };
-  useEffect(() => {
-    console.log(roomOpts);
-  }, [roomOpts]);
   const handleAddRoom = async () => {
     let flag = 0;
     if (name.trim() === "") {
@@ -80,9 +116,11 @@ export default function RoomItem({
       }
       setError((prev) => [...prev, "area"]);
     }
-    if (!files || files.length !== 3) {
-      flag = 1;
-      setError((prev) => [...prev, "files"]);
+    if (!(preview.length === 3) || !(files.length === 0)) {
+      if (!files || files.length !== 3) {
+        setError((prev) => [...prev, "files"]);
+        flag = 1;
+      }
     }
     if (roomOpts.length === 0) {
       flag = 1;
@@ -94,9 +132,97 @@ export default function RoomItem({
         setError((prev) => [...prev, "roomOpt"]);
       }
     });
+    if (flag === 1) {
+      return;
+    }
+    try {
+      const body: any = {};
+      body.hotelId = hotelId;
+      body.name = name;
+      body.area = area;
+      body.isSmoking = isSmoking;
+      body.facilities = fac.join(",");
+
+      let arr: any = [];
+      roomOpts.forEach((el, idx) => {
+        arr.push({
+          name: el.name,
+          numberOfGuest: el.numberOfGuest,
+          bedType: el.bed,
+          isRefundable: el.isRefundable,
+          roomLeft: el.roomLeft,
+          originalPrice: el.originalPrice,
+          price: el.price,
+        });
+      });
+      body.roomOpts = arr;
+      const formData = new FormData();
+      if (!isAddedForm && roomEdit) {
+        body.roomId = roomEdit.id;
+        body.oldImageUrls = JSON.stringify(roomEdit.images);
+      }
+      formData.append("data", JSON.stringify(body));
+      files.forEach((file, index) => {
+        formData.append("files", file);
+      });
+      if (!isAddedForm && roomEdit) {
+        console.log(1);
+        const response = await roomApiRequest.updateRoom(formData);
+        if (response.status === "success") {
+          toast({
+            title: "",
+            status: "success",
+            description: "Update hotel successfully !",
+          });
+        }
+        return;
+      }
+
+      const response = await roomApiRequest.createRoom(formData);
+      if (response.status === "success") {
+        setSuccess(true);
+      }
+    } catch (error) {}
+  };
+  const handleDeleteRoom = async () => {
+    if (!roomEdit) return;
+    try {
+      const response = await roomApiRequest.deleteRoom({
+        roomId: roomEdit.id,
+        oldImageUrls: JSON.stringify(roomEdit.images),
+      });
+      if (response.status === "success") {
+        toast({
+          title: "",
+          status: "success",
+          description: "Delete room successfully !",
+        });
+        setIsDeleted(true);
+      } else {
+        toast({
+          title: "",
+          status: "error",
+          description: "Delete room failed !",
+        });
+      }
+    } catch (error) {}
   };
   return (
-    <div className="border-gray-300 border-[1px] rounded-md">
+    <div className={`relative border-gray-300 border-[1px] rounded-md`}>
+      {success && (
+        <div className="absolute z-[10] bg-blue-100/70 rounded-md  top-0 right-0 left-0 bottom-0 flex items-center justify-center">
+          <p className="text-xl font-bold text-primary-color">
+            Room added successfully.
+          </p>
+        </div>
+      )}
+      {isDeleted && (
+        <div className="absolute z-[10] bg-red-100/70 rounded-md  top-0 right-0 left-0 bottom-0 flex items-center justify-center">
+          <p className="text-xl font-bold text-red-500">
+            Room has been deleted.
+          </p>
+        </div>
+      )}
       <div className="px-4 py-2 border-b-[1px] border-gray-300">
         <div className="flex items-center justify-between">
           <div className="flex items-center w-full gap-2">
@@ -120,7 +246,9 @@ export default function RoomItem({
           </div>
           <div
             onClick={() => {
-              onDeleteForm();
+              if (onDeleteForm) {
+                onDeleteForm();
+              }
             }}
             className="cursor-pointer flex items-center justify-center"
           >
@@ -267,6 +395,7 @@ export default function RoomItem({
             <div
               onClick={() => {
                 if (imagesRef.current) {
+                  setError([]);
                   imagesRef.current.click();
                 }
               }}
@@ -283,30 +412,31 @@ export default function RoomItem({
                 Upload images here
               </p>
             </div>
-            {preview.map((el, idx) => {
-              return (
-                <div
-                  key={idx}
-                  className="relative min-w-[150px] h-[150px] rounded-md overflow-hidden"
-                >
-                  <Image
-                    alt="img"
-                    fill
-                    priority
-                    sizes="100%"
-                    quality={60}
-                    style={{ objectFit: "cover", objectPosition: "center" }}
-                    src={el}
-                  />
+            {preview &&
+              preview.map((el, idx) => {
+                return (
                   <div
-                    onClick={() => handleClickDeleteImage(idx)}
-                    className="absolute w-[30px] h-[30px] right-[5px] hover:bg-gray-200 transition-all top-[5px] rounded-full bg-white flex items-center justify-center cursor-pointer"
+                    key={idx}
+                    className="relative min-w-[150px] h-[150px] rounded-md overflow-hidden"
                   >
-                    <FontAwesomeIcon icon={faXmark} />
+                    <Image
+                      alt="img"
+                      fill
+                      priority
+                      sizes="100%"
+                      quality={60}
+                      style={{ objectFit: "cover", objectPosition: "center" }}
+                      src={el}
+                    />
+                    <div
+                      onClick={() => handleClickDeleteImage(idx)}
+                      className="absolute w-[30px] h-[30px] right-[5px] hover:bg-gray-200 transition-all top-[5px] rounded-full bg-white flex items-center justify-center cursor-pointer"
+                    >
+                      <FontAwesomeIcon icon={faXmark} />
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
           </div>
           <input
             type="file"
@@ -350,6 +480,7 @@ export default function RoomItem({
                   <RoomOptItem
                     key={el.id}
                     id={el.id}
+                    iniRoom={roomOpts[idx]}
                     roomOpts={roomOpts}
                     setRoomOpts={setRoomOpts}
                   />
@@ -361,6 +492,7 @@ export default function RoomItem({
               const newItem = {
                 id: uuidv4(),
                 numberOfGuest: 0,
+                name: "",
                 bed: "",
                 isRefundable: false,
                 roomLeft: 0,
@@ -380,17 +512,41 @@ export default function RoomItem({
             Add room option
           </Button>
         </div>
-        <div className="mt-3 flex justify-end">
+        <div className="mt-3 gap-2 flex justify-end">
+          {!isAddedForm && (
+            <Button
+              onClick={() => {
+                setDeleteRoomDialog(true);
+              }}
+              className=" bg-red-500 transition-all hover:bg-red-600  font-bold"
+            >
+              Delete this room
+            </Button>
+          )}
           <Button
             onClick={() => {
               setAddRoomDialog(true);
             }}
             className=" bg-primary-color transition-all hover:bg-blue-600  font-bold"
           >
-            Add this room
+            {isAddedForm ? "Add this room" : "Update this room"}
           </Button>
         </div>
       </div>
+      {deleteRoomDialog && (
+        <Dialog
+          onClose={() => {
+            setDeleteRoomDialog(false);
+          }}
+          onYes={() => {
+            handleDeleteRoom();
+            setDeleteRoomDialog(false);
+          }}
+          buttonContent={"Yes"}
+          message={`Are you sure want to delete this room.`}
+          content={`Your room will be deleted, you cannot undo this action !!`}
+        />
+      )}
       {addRoomDialog && (
         <Dialog
           onClose={() => {
@@ -401,10 +557,12 @@ export default function RoomItem({
             setAddRoomDialog(false);
           }}
           buttonContent={"Yes"}
-          message={"Are you sure want to add this room."}
-          content={
-            "Your room will be added to your hotel, you cannot undo this action !!"
-          }
+          message={`Are you sure want to ${
+            isAddedForm ? "add" : "update"
+          } this room.`}
+          content={`Your room will be ${
+            isAddedForm ? "added to your hotel" : "updated"
+          }, you cannot undo this action !!`}
         />
       )}
     </div>

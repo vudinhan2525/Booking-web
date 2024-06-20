@@ -2,8 +2,15 @@
 import React, { useState } from "react";
 import RoomItem from "./RoomItem";
 import { v4 as uuidv4 } from "uuid"; // Import uuidv4 for generating unique ids
+import { IHotel } from "@/interfaces/IHotel";
 
-export default function RoomEditForm() {
+export default function RoomEditForm({
+  hotelId,
+  hotelEdit,
+}: {
+  hotelId: number;
+  hotelEdit?: IHotel;
+}) {
   const [numberItemAdd, setNumberItemAdd] = useState<
     { id: string; data: number }[]
   >([]);
@@ -17,8 +24,8 @@ export default function RoomEditForm() {
 
   const handleAddRoom = () => {
     const newItem = {
-      id: uuidv4(), // Generate a unique id
-      data: 1, // Replace with your actual data for the room item
+      id: uuidv4(),
+      data: 1,
     };
     setNumberItemAdd((prevItems) => [...prevItems, newItem]);
   };
@@ -27,8 +34,21 @@ export default function RoomEditForm() {
     <div className="bg-white mt-6 px-6 py-6 rounded-md shadow-md">
       <header className="text-2xl mb-2 font-bold">Room Information</header>
       <div className="flex flex-col gap-2">
+        {hotelEdit &&
+          hotelEdit.rooms.map((room, idx) => {
+            return (
+              <RoomItem
+                hotelId={hotelId}
+                key={idx}
+                isAddedForm={false}
+                roomEdit={room}
+              />
+            );
+          })}
+
         {numberItemAdd.map((item) => (
           <RoomItem
+            hotelId={hotelId}
             key={item.id}
             onDeleteForm={() => handleDeleteForm(item.id)}
             isAddedForm={true}

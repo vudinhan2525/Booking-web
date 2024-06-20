@@ -44,7 +44,7 @@ export default function RoomList({
               <div className="basis-[30%] group">
                 <Carousel>
                   <CarouselContent>
-                    {[1, 2, 3].map((el, idx2) => {
+                    {room.images.map((el, idx2) => {
                       return (
                         <CarouselItem key={idx2}>
                           <div className="w-full rounded-xl overflow-hidden h-[200px] relative">
@@ -58,7 +58,7 @@ export default function RoomList({
                                 objectFit: "cover",
                                 objectPosition: "center",
                               }}
-                              src={room.images}
+                              src={el}
                             />
                           </div>
                         </CarouselItem>

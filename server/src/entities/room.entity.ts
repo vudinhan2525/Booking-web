@@ -25,7 +25,10 @@ export class Room {
   @Column()
   facilitiesRoom: string;
 
-  @Column()
+  @Column({
+    type: 'json',
+    nullable: true,
+  })
   images: string;
 
   @ManyToOne(() => Hotel, (hotel) => hotel.rooms)

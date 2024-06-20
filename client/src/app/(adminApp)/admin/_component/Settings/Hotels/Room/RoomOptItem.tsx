@@ -4,19 +4,21 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { RoomOptsForm } from "./RoomItem";
 
 export default function RoomOptItem({
   id,
   setRoomOpts,
   roomOpts,
+  iniRoom,
 }: {
   id: string;
   setRoomOpts: React.Dispatch<React.SetStateAction<RoomOptsForm[]>>;
   roomOpts: RoomOptsForm[];
+  iniRoom?: RoomOptsForm;
 }) {
-  const [bedType, setBedType] = useState({ name: "1 Single bed" });
+  const [bedType, setBedType] = useState({ name: "1 Single Bed" });
   const [isRefundable, setIsRefundable] = useState(false);
   const [error, setError] = useState<string[]>([]);
   const [name, setName] = useState("");
@@ -25,6 +27,26 @@ export default function RoomOptItem({
   const [oriPrice, setOriPrice] = useState(0);
   const [price, setPrice] = useState(0);
   const [saveSuccess, setShowSuccess] = useState(false);
+  useEffect(() => {
+    iniState();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const iniState = () => {
+    if (iniRoom) {
+      setName(iniRoom.name);
+      setNumberOfGuest(iniRoom.numberOfGuest);
+      if (iniRoom.bed) {
+        setBedType({ name: iniRoom.bed });
+      }
+      setIsRefundable(iniRoom.isRefundable);
+      setRoomLeft(iniRoom.roomLeft);
+      setOriPrice(iniRoom.originalPrice);
+      setPrice(iniRoom.price);
+      if (iniRoom.saved) {
+        setShowSuccess(true);
+      }
+    }
+  };
   const handleSaveRoomOpt = () => {
     let flag = 0;
     if (name.trim() === "") {
@@ -57,6 +79,7 @@ export default function RoomOptItem({
       if (idx !== -1) {
         newArr[idx] = {
           id: newArr[idx].id,
+          name: name,
           numberOfGuest: numberOfGuest,
           bed: bedType.name,
           isRefundable: isRefundable,
@@ -91,7 +114,7 @@ export default function RoomOptItem({
       }`}
     >
       <div className="flex px-4 justify-between border-b-[1px] py-2">
-        <div className="basis-[33%]">
+        <div className="basis-[53%]">
           <div className="flex items-center w-full gap-2">
             <p
               className={`${
@@ -103,6 +126,7 @@ export default function RoomOptItem({
             <input
               value={name}
               onChange={(e) => {
+                setShowSuccess(false);
                 handleUnSaved();
                 setError([]);
                 setName(e.target.value);
@@ -268,7 +292,7 @@ export default function RoomOptItem({
               }}
               className={`${
                 error.includes("oriPrice") ? "border-red-400 bg-red-50" : ""
-              } px-3 w-[30%] py-2 border-[1px] rounded-md text-sm font-bold text-gray-700 outline-none`}
+              } px-3 w-[40%] py-2 border-[1px] rounded-md text-sm font-bold text-gray-700 outline-none`}
             ></input>
           </div>
           {error.includes("oriPrice") && (
@@ -298,7 +322,7 @@ export default function RoomOptItem({
               }}
               className={`${
                 error.includes("price") ? "border-red-400 bg-red-50" : ""
-              } px-3 w-[30%] py-2 border-[1px] rounded-md text-sm font-bold text-gray-700 outline-none`}
+              } px-3 w-[40%] py-2 border-[1px] rounded-md text-sm font-bold text-gray-700 outline-none`}
             ></input>
           </div>
           {error.includes("price") && (

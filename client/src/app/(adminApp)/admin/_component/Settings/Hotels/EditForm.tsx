@@ -22,9 +22,10 @@ import {
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import hotelApiRequest from "@/apiRequest/hotel";
-import RoomEditForm from "./RoomEditForm";
+import RoomEditForm from "./Room/RoomEditForm";
 import Dialog from "@/components/modals/Dialog";
 import MapPickerCaller from "@/components/component/Map/MapPickerCaller";
+import { useToast } from "@/components/ui/use-toast";
 
 const accomodationType = [
   { name: "Homes" },
@@ -51,6 +52,7 @@ export default function EditForm({
   hotelEdit?: IHotel;
   setHotels?: React.Dispatch<React.SetStateAction<IHotel[]>>;
 }) {
+  const { toast } = useToast();
   const [error, setError] = useState<string[]>([]);
   const [errorNameMsg, setErrorNameMsg] = useState("Please enter hotel name.");
   const [name, setName] = useState("");
@@ -188,6 +190,11 @@ export default function EditForm({
               return newArr;
             }
             return prev;
+          });
+          toast({
+            title: "",
+            status: "success",
+            description: "Update hotel successfully !",
           });
         }
         return;
@@ -564,7 +571,7 @@ export default function EditForm({
       {hotelId && (
         <div>
           <div ref={roomRef}></div>
-          <RoomEditForm />
+          <RoomEditForm hotelId={hotelId} hotelEdit={hotelEdit} />
         </div>
       )}
       {showAddHotelDialog && (
