@@ -27,6 +27,11 @@ const hotelApiRequest = {
     );
     return await response.json();
   },
+  deleteHotel: (body: { hotelId: number }) =>
+    http.post<any>("/hotel/deleteHotel", body, {
+      headers: { "Content-Type": "application/json" },
+      withCredentials: true,
+    }),
   getHotels: (body: { long: number; lat: number; filter: IFilterHotel }) =>
     http.post<any>("/hotel/getHotels", body, {
       headers: { "Content-Type": "application/json" },

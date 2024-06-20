@@ -131,6 +131,66 @@ export class HotelService {
     };
     return { status: 'success', data: result };
   }
+  async deleteHotel(body: { hotelId: number }) {
+    const connectionString = process.env.AZURE_CONNECTION_STRING as string;
+    const containerName = 'shopcartctn';
+    const hotel = await this.hotelRepository.findOne({
+      where: { id: Number(body.hotelId) },
+    });
+    if (!hotel) {
+      return { status: 'failed', message: "Can't find this hotel." };
+    }
+    const rooms = await this.roomRepository
+      .createQueryBuilder('room')
+      .where('hotelId = :id', { id: hotel.id })
+      .getMany();
+    await Promise.all(
+      rooms.map(async (room) => {
+        if (
+          room.images &&
+          Array.isArray(room.images) &&
+          (room.images as unknown as string[]).length > 0
+        ) {
+          await Promise.all(
+            (room.images as unknown as string[]).map(async (oldImageUrl) => {
+              const oldBlobName = oldImageUrl.substring(
+                oldImageUrl.lastIndexOf('/') + 1,
+              );
+              await deleteFromAzureBlobStorage(
+                containerName,
+                oldBlobName,
+                connectionString,
+              );
+            }),
+          );
+        }
+        await this.roomOptRepository.delete({ roomId: room.id });
+
+        await this.roomRepository.delete({ id: room.id });
+      }),
+    );
+    if (
+      hotel.images &&
+      Array.isArray(hotel.images) &&
+      (hotel.images as unknown as string[]).length > 0
+    ) {
+      await Promise.all(
+        (hotel.images as unknown as string[]).map(async (oldImageUrl) => {
+          const oldBlobName = oldImageUrl.substring(
+            oldImageUrl.lastIndexOf('/') + 1,
+          );
+          await deleteFromAzureBlobStorage(
+            containerName,
+            oldBlobName,
+            connectionString,
+          );
+        }),
+      );
+    }
+    await this.hotelRepository.delete({ id: hotel.id });
+
+    return { status: 'success' };
+  }
   async importHotel(body: HotelBody[]) {
     const hotels = body.map((item) => {
       return this.hotelRepository.create({

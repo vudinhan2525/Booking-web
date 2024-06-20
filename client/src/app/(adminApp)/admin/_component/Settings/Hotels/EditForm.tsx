@@ -74,6 +74,7 @@ export default function EditForm({
   const [isAdded, setIsAdded] = useState(false);
   const roomRef = useRef<HTMLDivElement>(null);
   const [showAddHotelDialog, setShowAddHotelDialog] = useState(false);
+  const [showDeleteHotelDialog, setShowDeleteHotelDialog] = useState(false);
   const [hotelId, setHotelId] = useState<number>();
   const handleLocationSelect = (latlng: LatLng) => {
     setLocation(latlng);
@@ -215,6 +216,17 @@ export default function EditForm({
           behavior: "smooth",
           block: "center",
         });
+      }
+    } catch (error) {}
+  };
+  const handleDeleteHotel = async () => {
+    if (!hotelEdit) return;
+    try {
+      const response = await hotelApiRequest.deleteHotel({
+        hotelId: hotelEdit.id,
+      });
+      if (response.status === "success") {
+        window.location.reload();
       }
     } catch (error) {}
   };
@@ -567,6 +579,16 @@ export default function EditForm({
         >
           {isEditForm ? "Update" : "Add hotel"}
         </Button>
+        {isEditForm && (
+          <Button
+            onClick={() => {
+              setShowDeleteHotelDialog(true);
+            }}
+            className="ml-2 bg-red-500 hover:bg-red-600 transition-all mt-6  font-bold px-4 py-3"
+          >
+            Delete
+          </Button>
+        )}
       </div>
       {hotelId && (
         <div>
@@ -586,6 +608,22 @@ export default function EditForm({
           buttonContent={"Yes"}
           message={"Are you sure want to update this hotel."}
           content={"Hotel will be updated, you cannot undo this action !!"}
+        />
+      )}
+      {showDeleteHotelDialog && (
+        <Dialog
+          onClose={() => {
+            setShowDeleteHotelDialog(false);
+          }}
+          onYes={() => {
+            handleDeleteHotel();
+            setShowDeleteHotelDialog(false);
+          }}
+          buttonContent={"Yes"}
+          message={"Are you sure want to delete this hotel."}
+          content={
+            "Your hotel and all hotel's rooms will be deleted, you cannot undo this action !!"
+          }
         />
       )}
     </div>

@@ -166,7 +166,6 @@ export default function RoomItem({
         formData.append("files", file);
       });
       if (!isAddedForm && roomEdit) {
-        console.log(1);
         const response = await roomApiRequest.updateRoom(formData);
         if (response.status === "success") {
           toast({

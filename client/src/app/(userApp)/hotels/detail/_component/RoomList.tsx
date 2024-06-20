@@ -44,26 +44,27 @@ export default function RoomList({
               <div className="basis-[30%] group">
                 <Carousel>
                   <CarouselContent>
-                    {room.images.map((el, idx2) => {
-                      return (
-                        <CarouselItem key={idx2}>
-                          <div className="w-full rounded-xl overflow-hidden h-[200px] relative">
-                            <Image
-                              alt="img"
-                              fill
-                              priority
-                              sizes="100%"
-                              quality={60}
-                              style={{
-                                objectFit: "cover",
-                                objectPosition: "center",
-                              }}
-                              src={el}
-                            />
-                          </div>
-                        </CarouselItem>
-                      );
-                    })}
+                    {room.images &&
+                      room.images.map((el, idx2) => {
+                        return (
+                          <CarouselItem key={idx2}>
+                            <div className="w-full rounded-xl overflow-hidden h-[200px] relative">
+                              <Image
+                                alt="img"
+                                fill
+                                priority
+                                sizes="100%"
+                                quality={60}
+                                style={{
+                                  objectFit: "cover",
+                                  objectPosition: "center",
+                                }}
+                                src={el}
+                              />
+                            </div>
+                          </CarouselItem>
+                        );
+                      })}
                   </CarouselContent>
                   <CarouselPrevious className="left-0 transition-all group-hover:inline-flex hidden" />
                   <CarouselNext className="right-0 transition-all group-hover:inline-flex hidden" />

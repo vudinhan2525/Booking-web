@@ -122,4 +122,9 @@ export class HotelController {
     const result = await this.hotelService.getHotelFromAdmin(body);
     res.status(200).json({ status: 'success', data: result });
   }
+  @Post('deleteHotel')
+  async deleteHotel(@Body() body: { hotelId: number }, @Res() res: Response) {
+    const result = await this.hotelService.deleteHotel(body);
+    res.status(200).json(result);
+  }
 }
