@@ -3,33 +3,36 @@ export const airports = [
     name: "Ha Noi",
     nameAirport: "HAN - Noibai International Airport",
     code: "HAN",
+    image: "https://shopcartimg2.blob.core.windows.net/shopcartctn/hanoi.jpg",
   },
   {
     name: "Ho Chi Minh",
     nameAirport: "SGN - Tan Son Nhat International Airport",
     code: "SGN",
+    image: "https://shopcartimg2.blob.core.windows.net/shopcartctn/tphcm.webp",
   },
   {
     name: "Da Nang",
     nameAirport: "DAD - Da Nang Airport",
     code: "DAD",
+    image: "https://shopcartimg2.blob.core.windows.net/shopcartctn/danang.jpg",
+  },
+  {
+    name: "Da Lat",
+    nameAirport: "DLI - Lien Khuong Airport",
+    code: "DLI",
+    image: "https://shopcartimg2.blob.core.windows.net/shopcartctn/dalat.jpg",
+  },
+  {
+    name: "Ha Long",
+    nameAirport: "VDO - Van Don Airport",
+    code: "VDO",
+    image: "https://shopcartimg2.blob.core.windows.net/shopcartctn/halong.jpg",
   },
 ];
 const getAirport = new Map();
-getAirport.set("HAN", {
-  nameAirport: "HAN - Noibai International Airport",
-  name: "Ha Noi",
-  code: "HAN",
-});
-getAirport.set("SGN", {
-  nameAirport: "SGN - Tan Son Nhat International Airport",
-  name: "Ho Chi Minh",
-  code: "SGN",
-});
-getAirport.set("DAD", {
-  nameAirport: "DAD - Da Nang Airport",
-  name: "Da Nang",
-  code: "DAD",
+airports.map((item) => {
+  getAirport.set(item.code, item);
 });
 export { getAirport };
 const getAirline = new Map();

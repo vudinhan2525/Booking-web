@@ -15,7 +15,7 @@ export default function Header({ fromAdminPage }: { fromAdminPage?: boolean }) {
   const router = useRouter();
   const [onTop, setOnTop] = useState(false);
   const debounce = useDebounce(onTop, 500);
-  const { isAuthenticated, user } = useAppContext();
+  const { isAuthenticated, user, setShowLoginModal } = useAppContext();
   const { isAdminAuthenticated, admin } = useAdminContext();
   useEffect(() => {
     function handleScroll() {
@@ -73,6 +73,10 @@ export default function Header({ fromAdminPage }: { fromAdminPage?: boolean }) {
             <div className="flex gap-2">
               <Button
                 onClick={() => {
+                  if (!isAuthenticated) {
+                    setShowLoginModal(true);
+                    return;
+                  }
                   router.push("/user?slt=2");
                 }}
                 variant={onTop ? "transparent" : "outline"}
@@ -86,6 +90,10 @@ export default function Header({ fromAdminPage }: { fromAdminPage?: boolean }) {
               </Button>
               <Button
                 onClick={() => {
+                  if (!isAuthenticated) {
+                    setShowLoginModal(true);
+                    return;
+                  }
                   router.push("/user?slt=1");
                 }}
                 variant={onTop ? "transparent" : "outline"}
@@ -125,7 +133,7 @@ export default function Header({ fromAdminPage }: { fromAdminPage?: boolean }) {
               {isAuthenticated && user && (
                 <Button
                   onClick={() => {
-                    router.push("/user");
+                    router.push("/user?slt=0");
                   }}
                   variant={onTop ? "transparent" : "outline"}
                   className={`${

@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import { Body, Controller, Post, Query, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { FlightBody, FlightQuery } from 'src/dtos/flight/flightBody.dto';
 import { FlightService } from 'src/services/flight.service';
@@ -12,8 +12,17 @@ export class FlightController {
     res.status(200).json({ status: 'success' });
   }
   @Post('getFlight')
-  async getFlight(@Body() data: FlightQuery, @Res() res: Response) {
-    const result = await this.flightService.getFlight(data);
-    res.status(200).json({ status: 'success', data: result });
+  async getFlight(
+    @Body() data: FlightQuery,
+    @Query('page') page: number,
+    @Query('limit') limit: number,
+    @Res() res: Response,
+  ) {
+    const result = await this.flightService.getFlight(data, page, limit);
+    res.status(200).json({
+      status: 'success',
+      data: result.flights,
+      totalCount: result.totalCount,
+    });
   }
 }

@@ -100,7 +100,7 @@ export default function MainSearchFlightPage() {
     }
     if (filterObj)
       try {
-        const response = await flightApiRequest.getFlights(obj);
+        const response = await flightApiRequest.getFlights(obj, "");
         if (response.status === "success") {
           setFlightData(response.data);
         }

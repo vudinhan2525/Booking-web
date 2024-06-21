@@ -1,4 +1,5 @@
 import { IFlight } from "@/interfaces/IFlight";
+import { getAirport } from "@/lib/dataAir";
 import { formatNumber, toDayMonthYear } from "@/utils/convertTime";
 import Image from "next/image";
 import React from "react";
@@ -8,7 +9,7 @@ export default function FlightCart({ flight }: { flight: IFlight }) {
     <div className="shadow-xl rounded-xl">
       <div className="rounded-xl overflow-hidden w-full h-[250px] relative">
         <Image
-          src="https://shopcartimg2.blob.core.windows.net/shopcartctn/tphcm.webp"
+          src={getAirport.get(flight.toCode).image}
           alt="pic"
           fill
           quality={70}

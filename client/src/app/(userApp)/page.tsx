@@ -27,11 +27,11 @@ export default function Home() {
       </div>
       <div className="py-12 h-[1000px] px-24">
         <div className="flex items-center gap-4">
-          <h1 className="text-[26px] font-bold">Most popular flights</h1>
+          <h1 className="text-3xl font-bold">Most popular flights</h1>
           <div>
             <FontAwesomeIcon
               icon={faStar}
-              className="text-[26px] text-primary-color"
+              className="text-3xl text-primary-color"
             />
           </div>
         </div>

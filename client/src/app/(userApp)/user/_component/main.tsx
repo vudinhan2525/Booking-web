@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   faBookmark,
   faFileInvoice,
@@ -27,13 +27,13 @@ const settings = [
 ];
 export default function MainUserPage() {
   const searchParams = useSearchParams();
-  const [optSlt, setOptSlt] = useState(() => {
-    if (searchParams.get("slt")) {
-      return Number(searchParams.get("slt"));
-    }
-    return 0;
-  });
+  const [optSlt, setOptSlt] = useState(0);
   const { isAuthenticated, user } = useAppContext();
+  useEffect(() => {
+    if (searchParams.get("slt")) {
+      setOptSlt(Number(searchParams.get("slt")));
+    }
+  }, [searchParams]);
   return (
     <div>
       {isAuthenticated && (

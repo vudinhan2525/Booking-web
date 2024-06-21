@@ -1,8 +1,8 @@
 import http from "@/lib/http";
 
 const flightApiRequest = {
-  getFlights: (body: any) =>
-    http.post<any>("/flight/getFlight", body, {
+  getFlights: (body: any, params: string) =>
+    http.post<any>(`/flight/getFlight${params}`, body, {
       headers: { "Content-Type": "application/json" },
     }),
   addBillFlight: (body: {

@@ -29,7 +29,7 @@ export class FlightService {
     });
     await Promise.all(flightPromises);
   }
-  async getFlight(body: FlightQuery) {
+  async getFlight(body: FlightQuery, page: number, limit: number) {
     // i have body.seatType if a type of this seat how i can leftJoin with flightSeat that have flightSeat.seatType = body.seatType
     let query;
     if (body.seatType === 'Business') {
@@ -58,27 +58,18 @@ export class FlightService {
     if (body.to) {
       query = query.andWhere('toCode = :toCode', { toCode: body.to });
     }
-    // if (body.departureTime) {
-    //   if (body.arrivalTime) {
-    //     query = query.andWhere(`departureTime BETWEEN :from AND :to`, {
-    //       from: new Date(body.departureTime),
-    //       to: new Date(body.arrivalTime),
-    //     });
-    //   } else {
-    //     const departureTime = new Date(body.departureTime);
-    //     const nextDay = new Date(departureTime);
-    //     nextDay.setDate(departureTime.getDate() + 1);
-    //     query = query.andWhere(`departureTime BETWEEN :from AND :to`, {
-    //       from: new Date(body.departureTime),
-    //       to: nextDay,
-    //     });
-    //   }
-    // }
     if (body.airline && body.airline.length > 0) {
       query = query.andWhere(`airline IN (:...airlines)`, {
         airlines: body.airline,
       });
     }
+    const totalCount = await query.getCount();
+    // Apply pagination
+    if (page && limit) {
+      const offset = (page - 1) * limit;
+      query = query.skip(offset).take(limit);
+    }
+
     let flights = await query.getMany();
     if (body.departureTime) {
       const departureTime: Date = new Date(body.departureTime);
@@ -132,7 +123,7 @@ export class FlightService {
       });
       return result;
     }
-    return flights;
+    return { flights, totalCount };
   }
 
   isTimeInRange(dateTime: Date, part: number) {
