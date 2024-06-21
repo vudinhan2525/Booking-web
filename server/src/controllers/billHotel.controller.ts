@@ -16,4 +16,25 @@ export class BillHotelController {
     const result = await this.billHotelService.getBillHotel(body);
     res.status(200).json({ status: 'success', data: result });
   }
+  @Post('getBillHotelForAdmin')
+  async getBillHotelForAdmin(
+    @Body() body: { adminId: number; search: string; status: string },
+    @Res() res: Response,
+  ) {
+    const result = await this.billHotelService.getBillHotelForAdmin(body);
+    res.status(200).json({ status: 'success', data: result });
+  }
+  @Post('checkIn')
+  async checkIn(
+    @Body() body: { billHotelId: string; floor: string; roomCode: string },
+    @Res() res: Response,
+  ) {
+    const result = await this.billHotelService.checkIn(body);
+    res.status(200).json({ status: 'success', data: result });
+  }
+  @Post('checkOut')
+  async checkOut(@Body() body: { billHotelId: string }, @Res() res: Response) {
+    const result = await this.billHotelService.checkOut(body);
+    res.status(200).json({ status: 'success', data: result });
+  }
 }

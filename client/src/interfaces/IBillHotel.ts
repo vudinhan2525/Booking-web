@@ -7,6 +7,7 @@ export interface IBillHotel {
   dateCheckIn: string;
   dateCheckOut: string;
   duration: number;
+  isPayment: boolean;
   isCheckIn: boolean;
   isCheckOut: boolean;
   numberOfPassenger: number;

@@ -15,6 +15,11 @@ export class BillHotel {
   @Column()
   price: number;
 
+  @Column({
+    default: false,
+  })
+  isPayment: boolean;
+
   @Column()
   isRefundable: boolean;
 

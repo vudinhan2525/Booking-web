@@ -36,12 +36,14 @@ export default function RoomItem({
   isAddedForm,
   onDeleteForm,
   hotelId,
+  id,
   roomEdit,
 }: {
   isAddedForm: boolean;
   onDeleteForm?: () => void;
   hotelId: number;
   roomEdit?: IRoom;
+  id: string;
 }) {
   const { toast } = useToast();
   const [name, setName] = useState("");
@@ -287,7 +289,7 @@ export default function RoomItem({
             <div className="basis-[50%]">
               <div className="flex items-center mt-4 space-x-2">
                 <Checkbox
-                  id="terms"
+                  id={`checkbox-${id}`}
                   checked={isSmoking}
                   onCheckedChange={() => {
                     setError([]);
@@ -295,7 +297,7 @@ export default function RoomItem({
                   }}
                 />
                 <label
-                  htmlFor="terms"
+                  htmlFor={`checkbox-${id}`}
                   className="text-sm cursor-pointer font-bold leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
                   Can smoking?

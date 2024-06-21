@@ -180,7 +180,7 @@ export default function SheetSelectRoom({
         <div className="mt-4 relative group rounded-xl overflow-hidden">
           <Carousel>
             <CarouselContent>
-              {[1, 2, 3].map((el, idx2) => {
+              {/* {[1, 2, 3].map((el, idx2) => {
                 return (
                   <CarouselItem key={idx2}>
                     <div className="w-full rounded-xl overflow-hidden h-[200px] relative">
@@ -199,7 +199,7 @@ export default function SheetSelectRoom({
                     </div>
                   </CarouselItem>
                 );
-              })}
+              })} */}
             </CarouselContent>
             <CarouselPrevious className="left-0 transition-all group-hover:inline-flex hidden" />
             <CarouselNext className="right-0 transition-all group-hover:inline-flex hidden" />

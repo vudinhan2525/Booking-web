@@ -10,6 +10,7 @@ import { useSearchParams } from "next/navigation";
 import React, { useState } from "react";
 import HotelDashboard from "./Settings/Hotels/HotelDashboard";
 import { useAdminContext } from "../AdminProvider";
+import BillDashBoard from "./Settings/Bills/BillDashBoard";
 const settings = [
   {
     title: "Hotels",
@@ -35,7 +36,7 @@ export default function MainPage() {
   });
   return (
     <div className="flex gap-12">
-      <div className="basis-[20%] px-6 py-6 bg-white min-h-[80vh] border-[1px] rounded-md border-gray-300">
+      <div className="basis-[20%] px-6 py-6 bg-white h-[80vh] border-[1px] rounded-md border-gray-300">
         <div className="flex flex-col gap-2">
           {settings.map((el, idx) => {
             return (
@@ -60,6 +61,7 @@ export default function MainPage() {
       {isAdminAuthenticated && (
         <div className="basis-[75%] min-w-[75%]">
           {optSlt === 0 && <HotelDashboard />}
+          {optSlt === 1 && <BillDashBoard />}
           {optSlt === 2 && <Account />}
         </div>
       )}

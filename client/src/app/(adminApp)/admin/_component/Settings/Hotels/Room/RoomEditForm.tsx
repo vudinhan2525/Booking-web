@@ -40,6 +40,7 @@ export default function RoomEditForm({
               <RoomItem
                 hotelId={hotelId}
                 key={idx}
+                id={uuidv4()}
                 isAddedForm={false}
                 roomEdit={room}
               />
@@ -50,6 +51,7 @@ export default function RoomEditForm({
           <RoomItem
             hotelId={hotelId}
             key={item.id}
+            id={uuidv4()}
             onDeleteForm={() => handleDeleteForm(item.id)}
             isAddedForm={true}
           />

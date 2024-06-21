@@ -60,4 +60,61 @@ export class BillHotelService {
       .getMany();
     return billHotels;
   }
+  async getBillHotelForAdmin(body: {
+    adminId: number;
+    search: string;
+    status: string;
+  }) {
+    let query = await this.billHotelRepository
+      .createQueryBuilder('bill_hotel')
+      .where('adminId = :adminId', { adminId: body.adminId });
+    if (body.status) {
+      if (body.status !== 'all') {
+        query = query.andWhere('status = :status', { status: body.status });
+      }
+    }
+    if (body.search) {
+      query = query.andWhere('id LIKE :searchText', {
+        searchText: `%${body.search}%`,
+      });
+    }
+    const billHotels = await query.getMany();
+    return billHotels;
+  }
+  async checkIn(body: {
+    billHotelId: string;
+    floor: string;
+    roomCode: string;
+  }) {
+    const billHotel = await this.billHotelRepository.findOne({
+      where: { id: body.billHotelId },
+    });
+
+    if (billHotel) {
+      billHotel.floor = body.floor;
+      billHotel.roomCode = body.roomCode;
+      billHotel.isCheckIn = true;
+      billHotel.isPayment = true;
+
+      const updatedBillHotel = await this.billHotelRepository.save(billHotel);
+      return updatedBillHotel;
+    } else {
+      throw new Error('Bill not found');
+    }
+  }
+  async checkOut(body: { billHotelId: string }) {
+    const billHotel = await this.billHotelRepository.findOne({
+      where: { id: body.billHotelId },
+    });
+
+    if (billHotel) {
+      billHotel.status = 'completed';
+      billHotel.isCheckOut = true;
+
+      const updatedBillHotel = await this.billHotelRepository.save(billHotel);
+      return updatedBillHotel;
+    } else {
+      throw new Error('Bill not found');
+    }
+  }
 }

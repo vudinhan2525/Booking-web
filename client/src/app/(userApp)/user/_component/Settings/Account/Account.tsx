@@ -6,9 +6,10 @@ import Security from "./Security";
 
 export default function Account() {
   const [tabSlt, setTabSlt] = useState(0);
+
   return (
     <div className="">
-      <header className="text-2xl font-bold">Account</header>
+      <header className="text-3xl font-bold">Account</header>
       <div className="flex mt-4">
         <div
           onClick={() => setTabSlt(0)}

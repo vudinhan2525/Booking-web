@@ -14,6 +14,8 @@ import {
   faBed,
   faCalendarDays,
   faCircleNotch,
+  faDoorClosed,
+  faHotel,
   faMoon,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -219,17 +221,52 @@ export default function HotelBooking() {
                         <p className="text-sm font-bold text-gray-600">{`${el.duration} Night(s), ${el.numberOfRoom} Room(s)`}</p>
                       </div>
                     </div>
+                    <div className="flex gap-2 flex-col">
+                      {el.floor && (
+                        <div className="flex gap-2 items-center">
+                          <div className="min-w-[18px]">
+                            <FontAwesomeIcon
+                              icon={faHotel}
+                              className="text-gray-800"
+                            />
+                          </div>
+                          <p className="text-sm font-bold text-gray-600">{`Floor: ${el.floor}`}</p>
+                        </div>
+                      )}
+                      {el.roomCode && (
+                        <div className="flex gap-2 items-center">
+                          <div className="min-w-[18px]">
+                            <FontAwesomeIcon
+                              icon={faDoorClosed}
+                              className="text-gray-800"
+                            />
+                          </div>
+                          <p className="text-sm font-bold text-gray-600">{`Room code: ${el.roomCode}`}</p>
+                        </div>
+                      )}
+                    </div>
                   </div>
                   <div className="bg-gray-300 w-full h-[0.5px] my-4"></div>
                   <div className="flex items-center justify-between">
                     <p className="font-bold text-gray-600">Total price:</p>
                     <div className="flex items-center gap-1">
-                      <p className="text-xl font-bold text-orange-600">{`${formatNumber(
-                        el.price
-                      )}`}</p>
-                      <p className="mt-[3px] text-xs font-semibold text-gray-500">
-                        VNĐ
-                      </p>
+                      <div className="flex flex-col justify-center items-center">
+                        <div className="flex items-center gap-1 ">
+                          <p
+                            className={`${
+                              el.isPayment && "line-through"
+                            } text-xl font-bold text-orange-600`}
+                          >{`${formatNumber(el.price)}`}</p>
+                          <p className="mt-[3px] text-xs font-semibold text-gray-500">
+                            VNĐ
+                          </p>
+                        </div>
+                        {el.isPayment && (
+                          <p className="text-sm font-bold text-orange-600">
+                            Payment completed
+                          </p>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
