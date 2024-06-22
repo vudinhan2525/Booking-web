@@ -213,3 +213,13 @@ export function getCurISOString() {
   var localISOTime = new Date(Date.now() - tzoffset).toISOString().slice(0, -1);
   return localISOTime;
 }
+// Output: "2024-06-22"
+export function getCurrentDateFormatted(): string {
+  const now = new Date();
+
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+}

@@ -3,6 +3,9 @@ import SearchForm from "@/components/component/Search/SearchForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import MostPopularFlight from "./_component/MostPopularFlight";
+import TrendingDestination from "./_component/TrendingDestination";
+import MostPopularHotel from "./_component/MostPopularHotel";
+import WhyChooseUs from "./_component/WhyChooseUs";
 
 export default function Home() {
   return (
@@ -25,7 +28,7 @@ export default function Home() {
           <SearchForm />
         </div>
       </div>
-      <div className="py-12 h-[1000px] px-24">
+      <div className="py-12 px-24">
         <div className="flex items-center gap-4">
           <h1 className="text-3xl font-bold">Most popular flights</h1>
           <div>
@@ -37,6 +40,9 @@ export default function Home() {
         </div>
         <MostPopularFlight />
       </div>
+      <TrendingDestination />
+      <MostPopularHotel />
+      <WhyChooseUs />
     </div>
   );
 }

@@ -15,14 +15,17 @@ export default function SavedBookmark({
   hotel: IHotel;
   fromHotelCart?: boolean;
 }) {
-  const { setUser, user } = useAppContext();
+  const { setUser, user, setShowLoginModal } = useAppContext();
   const { toast } = useToast();
   const handleSavedHotel = async (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     e.preventDefault();
     e.stopPropagation();
-    if (!user) return;
+    if (!user) {
+      setShowLoginModal(true);
+      return;
+    }
     if (user && user.savedHotel.split(",").includes(hotel.id.toString())) {
       //handle remove saved
       try {

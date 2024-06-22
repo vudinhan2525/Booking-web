@@ -84,7 +84,9 @@ export default function Overview({
               quality={60}
               style={{ objectFit: "cover", objectPosition: "center" }}
               src={
-                "https://shopcartimg2.blob.core.windows.net/shopcartctn/pexels-boonkong-boonpeng-442952-1134176.jpg"
+                hotel.images[0]
+                  ? hotel.images[0]
+                  : "https://shopcartimg2.blob.core.windows.net/shopcartctn/pexels-boonkong-boonpeng-442952-1134176.jpg"
               }
             />
           </div>
@@ -99,7 +101,9 @@ export default function Overview({
               quality={60}
               style={{ objectFit: "cover", objectPosition: "center" }}
               src={
-                "https://shopcartimg2.blob.core.windows.net/shopcartctn/pexels-boonkong-boonpeng-442952-1134176.jpg"
+                hotel.images[1]
+                  ? hotel.images[1]
+                  : "https://shopcartimg2.blob.core.windows.net/shopcartctn/pexels-boonkong-boonpeng-442952-1134176.jpg"
               }
             />
           </div>
@@ -112,7 +116,9 @@ export default function Overview({
               quality={60}
               style={{ objectFit: "cover", objectPosition: "center" }}
               src={
-                "https://shopcartimg2.blob.core.windows.net/shopcartctn/pexels-boonkong-boonpeng-442952-1134176.jpg"
+                hotel.images[2]
+                  ? hotel.images[2]
+                  : "https://shopcartimg2.blob.core.windows.net/shopcartctn/pexels-boonkong-boonpeng-442952-1134176.jpg"
               }
             />
           </div>
@@ -125,7 +131,9 @@ export default function Overview({
               quality={60}
               style={{ objectFit: "cover", objectPosition: "center" }}
               src={
-                "https://shopcartimg2.blob.core.windows.net/shopcartctn/pexels-boonkong-boonpeng-442952-1134176.jpg"
+                hotel.images[3]
+                  ? hotel.images[3]
+                  : "https://shopcartimg2.blob.core.windows.net/shopcartctn/pexels-boonkong-boonpeng-442952-1134176.jpg"
               }
             />
           </div>
@@ -138,7 +146,9 @@ export default function Overview({
               quality={60}
               style={{ objectFit: "cover", objectPosition: "center" }}
               src={
-                "https://shopcartimg2.blob.core.windows.net/shopcartctn/pexels-boonkong-boonpeng-442952-1134176.jpg"
+                hotel.images[4]
+                  ? hotel.images[4]
+                  : "https://shopcartimg2.blob.core.windows.net/shopcartctn/pexels-boonkong-boonpeng-442952-1134176.jpg"
               }
             />
           </div>

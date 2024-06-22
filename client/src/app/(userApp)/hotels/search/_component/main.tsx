@@ -24,6 +24,7 @@ import SkeletonItem from "./skeletonItem";
 import useDebounce from "@/hooks/useDebounce";
 import objectToQueryString from "@/utils/convertToQueryString";
 import SavedBookmark from "@/components/component/Saved/SavedBookmark";
+import { destinationsMap } from "@/lib/dataHotel";
 const sortArr = ["Lowest Price", "Highest Price", "Top Rating", "Most Viewed"];
 const initialFilObj: IFilterHotel = {
   rating: "",
@@ -57,11 +58,14 @@ export default function MainSearchHotelPages() {
     const long = Number(searchParams.get("long"));
     const lat = Number(searchParams.get("lat"));
     try {
-      const hotels = await hotelApiRequest.getHotels({
-        long,
-        lat,
-        filter: filterObj,
-      });
+      const hotels = await hotelApiRequest.getHotels(
+        {
+          long,
+          lat,
+          filter: filterObj,
+        },
+        ""
+      );
       setHotels(hotels.data);
     } catch (error) {
       console.log(error);
@@ -137,7 +141,9 @@ export default function MainSearchHotelPages() {
                       sizes="100%"
                       style={{ objectFit: "cover", objectPosition: "center" }}
                       src={
-                        "https://shopcartimg2.blob.core.windows.net/shopcartctn/pexels-boonkong-boonpeng-442952-1134176.jpg"
+                        el.images
+                          ? el.images[0]
+                          : "https://shopcartimg2.blob.core.windows.net/shopcartctn/pexels-boonkong-boonpeng-442952-1134176.jpg"
                       }
                     />
                     <div className="absolute right-[10px] top-[10px]">
@@ -153,7 +159,9 @@ export default function MainSearchHotelPages() {
                         sizes="100%"
                         style={{ objectFit: "cover", objectPosition: "center" }}
                         src={
-                          "https://shopcartimg2.blob.core.windows.net/shopcartctn/pexels-boonkong-boonpeng-442952-1134176.jpg"
+                          el.images
+                            ? el.images[1]
+                            : "https://shopcartimg2.blob.core.windows.net/shopcartctn/pexels-boonkong-boonpeng-442952-1134176.jpg"
                         }
                       />
                     </div>
@@ -165,7 +173,9 @@ export default function MainSearchHotelPages() {
                         sizes="100%"
                         style={{ objectFit: "cover", objectPosition: "center" }}
                         src={
-                          "https://shopcartimg2.blob.core.windows.net/shopcartctn/pexels-boonkong-boonpeng-442952-1134176.jpg"
+                          el.images
+                            ? el.images[2]
+                            : "https://shopcartimg2.blob.core.windows.net/shopcartctn/pexels-boonkong-boonpeng-442952-1134176.jpg"
                         }
                       />
                     </div>
@@ -177,7 +187,9 @@ export default function MainSearchHotelPages() {
                         sizes="100%"
                         style={{ objectFit: "cover", objectPosition: "center" }}
                         src={
-                          "https://shopcartimg2.blob.core.windows.net/shopcartctn/pexels-boonkong-boonpeng-442952-1134176.jpg"
+                          el.images
+                            ? el.images[3]
+                            : "https://shopcartimg2.blob.core.windows.net/shopcartctn/pexels-boonkong-boonpeng-442952-1134176.jpg"
                         }
                       />
                     </div>
@@ -213,7 +225,9 @@ export default function MainSearchHotelPages() {
                           className="text-gray-600"
                         />
                       </div>
-                      <p className="text-sm text-gray-700">{el.location}</p>
+                      <p className="text-sm text-gray-700">
+                        {destinationsMap.get(el.location).title}
+                      </p>
                     </div>
                     <div className="flex mt-1">
                       <div className="text-sm px-3 py-1 bg-blue-100/60 rounded-full text-blue-600">

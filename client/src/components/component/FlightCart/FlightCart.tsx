@@ -1,12 +1,25 @@
 import { IFlight } from "@/interfaces/IFlight";
 import { getAirport } from "@/lib/dataAir";
-import { formatNumber, toDayMonthYear } from "@/utils/convertTime";
+import {
+  convertTime,
+  formatNumber,
+  getCurrentDateFormatted,
+  toDayMonthYear,
+} from "@/utils/convertTime";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 export default function FlightCart({ flight }: { flight: IFlight }) {
   return (
-    <div className="shadow-xl rounded-xl">
+    <Link
+      href={`/flights/search?from=${flight.fromCode}&to=${
+        flight.toCode
+      }&departureTime=${convertTime(
+        flight.departureTime
+      )}&numberPassenger=1-0-0&seatType=Economy`}
+      className="shadow-xl hover:scale-[1.02] cursor-pointer transition-all rounded-xl"
+    >
       <div className="rounded-xl overflow-hidden w-full h-[250px] relative">
         <Image
           src={getAirport.get(flight.toCode).image}
@@ -30,6 +43,6 @@ export default function FlightCart({ flight }: { flight: IFlight }) {
         </div>
         <p className="text-orange-500 font-bold">{formatNumber(1250000)}VND</p>
       </div>
-    </div>
+    </Link>
   );
 }

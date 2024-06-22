@@ -21,7 +21,11 @@ export default function HotelCart({ hotel }: { hotel: IHotel }) {
           sizes="100%"
           quality={60}
           style={{ objectFit: "cover", objectPosition: "center" }}
-          src="https://shopcartimg2.blob.core.windows.net/shopcartctn/hotel2.jpg"
+          src={
+            hotel.images[0]
+              ? hotel.images[0]
+              : "https://shopcartimg2.blob.core.windows.net/shopcartctn/hotel2.jpg"
+          }
         />
         <div className="absolute right-[10px] top-[10px]">
           <SavedBookmark hotel={hotel} fromHotelCart={true} />

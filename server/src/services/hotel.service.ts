@@ -84,18 +84,20 @@ export class HotelService {
       );
       imageUrls = JSON.stringify(uploadedUrls);
       const oldImageUrls = JSON.parse(body.oldImageUrls);
-      await Promise.all(
-        oldImageUrls.map(async (oldImageUrl) => {
-          const oldBlobName = oldImageUrl.substring(
-            oldImageUrl.lastIndexOf('/') + 1,
-          );
-          await deleteFromAzureBlobStorage(
-            containerName,
-            oldBlobName,
-            connectionString,
-          );
-        }),
-      );
+      if (oldImageUrls && oldImageUrls.length > 0) {
+        await Promise.all(
+          oldImageUrls.map(async (oldImageUrl) => {
+            const oldBlobName = oldImageUrl.substring(
+              oldImageUrl.lastIndexOf('/') + 1,
+            );
+            await deleteFromAzureBlobStorage(
+              containerName,
+              oldBlobName,
+              connectionString,
+            );
+          }),
+        );
+      }
     }
     const hotel = await this.hotelRepository.findOne({
       where: { id: Number(body.hotelId) },
@@ -213,7 +215,11 @@ export class HotelService {
     );
     await Promise.all(savePromises);
   }
-  async getHotel(body: { long: number; lat: number; filter: IFilterHotel }) {
+  async getHotel(
+    body: { long: number; lat: number; filter: IFilterHotel },
+    page: number,
+    limit: number,
+  ) {
     const accomodations = body.filter.accomodation.split(',');
     const facilities = body.filter.facilities.split(',');
     const ratings = body.filter.rating.split(',').map(Number);
@@ -250,6 +256,12 @@ export class HotelService {
       }, {});
 
       query = query.andWhere(`(${ratingConditions})`, ratingParams);
+    }
+    const totalCount = await query.getCount();
+    // Apply pagination
+    if (page && limit) {
+      const offset = (page - 1) * limit;
+      query = query.skip(offset).take(limit);
     }
     let hotels = await query.getMany();
 
@@ -297,39 +309,41 @@ export class HotelService {
       hotelWithRooms = newArr;
     }
     //Sort hotels
-    if (body.filter.sortBy === 'Lowest Price') {
-      const result = hotelWithRooms.sort((a, b) => {
-        let minA = 10000000;
-        let minB = 10000000;
-        if (a?.rooms.length > 0 && a.rooms[0]?.roomOpts.length > 0) {
-          minA = a.rooms[0].roomOpts[0].price;
-        }
-        if (b?.rooms.length > 0 && b.rooms[0]?.roomOpts.length > 0) {
-          minB = b.rooms[0].roomOpts[0].price;
-        }
-        return minA - minB;
-      });
-      return result;
-    } else if (body.filter.sortBy === 'Highest Price') {
-      const result = hotelWithRooms.sort((a, b) => {
-        let minA = 10000000;
-        let minB = 10000000;
-        if (a?.rooms.length > 0 && a.rooms[0]?.roomOpts.length > 0) {
-          minA = a.rooms[0].roomOpts[0].price;
-        }
-        if (b?.rooms.length > 0 && b.rooms[0]?.roomOpts.length > 0) {
-          minB = b.rooms[0].roomOpts[0].price;
-        }
-        return minB - minA;
-      });
-      return result;
-    } else if (body.filter.sortBy === 'Top Rating') {
-      const result = hotelWithRooms.sort((a, b) => {
-        return b.rating - a.rating;
-      });
-      return result;
+    if (body.filter.sortBy) {
+      if (body.filter.sortBy === 'Lowest Price') {
+        const result = hotelWithRooms.sort((a, b) => {
+          let minA = 10000000;
+          let minB = 10000000;
+          if (a?.rooms.length > 0 && a.rooms[0]?.roomOpts.length > 0) {
+            minA = a.rooms[0].roomOpts[0].price;
+          }
+          if (b?.rooms.length > 0 && b.rooms[0]?.roomOpts.length > 0) {
+            minB = b.rooms[0].roomOpts[0].price;
+          }
+          return minA - minB;
+        });
+        return { hotelWithRooms: result, totalCount };
+      } else if (body.filter.sortBy === 'Highest Price') {
+        const result = hotelWithRooms.sort((a, b) => {
+          let minA = 10000000;
+          let minB = 10000000;
+          if (a?.rooms.length > 0 && a.rooms[0]?.roomOpts.length > 0) {
+            minA = a.rooms[0].roomOpts[0].price;
+          }
+          if (b?.rooms.length > 0 && b.rooms[0]?.roomOpts.length > 0) {
+            minB = b.rooms[0].roomOpts[0].price;
+          }
+          return minB - minA;
+        });
+        return { hotelWithRooms: result, totalCount };
+      } else if (body.filter.sortBy === 'Top Rating') {
+        const result = hotelWithRooms.sort((a, b) => {
+          return b.rating - a.rating;
+        });
+        return { hotelWithRooms: result, totalCount };
+      }
     }
-    return hotelWithRooms;
+    return { hotelWithRooms, totalCount };
   }
   async getOneHotel(hotelId: number) {
     const hotel = await this.hotelRepository

@@ -4,6 +4,7 @@ import {
   HttpException,
   HttpStatus,
   Post,
+  Query,
   Res,
   UploadedFiles,
   UseInterceptors,
@@ -100,9 +101,15 @@ export class HotelController {
   async getHotel(
     @Body() data: { long: number; lat: number; filter: IFilterHotel },
     @Res() res: Response,
+    @Query('page') page: number,
+    @Query('limit') limit: number,
   ) {
-    const result = await this.hotelService.getHotel(data);
-    res.status(200).json({ status: 'success', data: result });
+    const result: any = await this.hotelService.getHotel(data, page, limit);
+    res.status(200).json({
+      status: 'success',
+      data: result.hotelWithRooms,
+      totalCount: result.totalCount,
+    });
   }
   @Post('getOneHotel')
   async getOneHotel(@Body() data, @Res() res: Response) {

@@ -89,11 +89,14 @@ export default function MainHotelDetail() {
         rating: "",
         sortBy: "",
       };
-      const result = await hotelApiRequest.getHotels({
-        long: Number(hotel.long),
-        lat: Number(hotel.lat),
-        filter: tmpObj,
-      });
+      const result = await hotelApiRequest.getHotels(
+        {
+          long: Number(hotel.long),
+          lat: Number(hotel.lat),
+          filter: tmpObj,
+        },
+        ""
+      );
       if (result.status === "success") {
         setHotelsNearBy(result.data);
       }

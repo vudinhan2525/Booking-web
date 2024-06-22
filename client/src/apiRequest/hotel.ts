@@ -32,8 +32,11 @@ const hotelApiRequest = {
       headers: { "Content-Type": "application/json" },
       withCredentials: true,
     }),
-  getHotels: (body: { long: number; lat: number; filter: IFilterHotel }) =>
-    http.post<any>("/hotel/getHotels", body, {
+  getHotels: (
+    body: { long: number; lat: number; filter: IFilterHotel },
+    params: string
+  ) =>
+    http.post<any>(`/hotel/getHotels${params}`, body, {
       headers: { "Content-Type": "application/json" },
     }),
   getOneHotel: (body: any) =>
