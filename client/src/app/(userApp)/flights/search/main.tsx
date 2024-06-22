@@ -18,7 +18,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import flightApiRequest from "@/apiRequest/flight";
 import { IFlight } from "@/interfaces/IFlight";
 import { getAirport } from "@/lib/dataAir";
@@ -28,6 +28,8 @@ import SearchFlight from "@/components/component/Search/SearchFlight";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import SheetSelectFlight from "./_component/SheetSelectFlight";
 import FlightItem from "@/components/component/FlightCart/FlightItem";
+import PaginationCustom from "@/components/component/Pagination/PaginationCustom";
+import Image from "next/image";
 const initialObj: IfilterObj = {
   airline: [],
   depatureTime: 0,
@@ -39,23 +41,20 @@ export default function MainSearchFlightPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
+  const [curPage, setCurPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(4);
   const [filterObj, setFilterObj] = useState(initialObj);
   const [flightData, setFlightData] = useState<IFlight[]>();
   const [showSearchFlightForm, setShowSearchFlightForm] = useState(false);
   const [idSlt, setIdSlt] = useState(0);
+  const topRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (searchParams) {
       getFlightList();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams]);
+  }, [searchParams, curPage]);
 
-  function pad(number: number): string {
-    if (number < 10) {
-      return "0" + number;
-    }
-    return number.toString();
-  }
   const getFlightList = async () => {
     let obj: any = {};
     const numberPassenger = searchParams.get("numberPassenger")?.split("-");
@@ -100,9 +99,19 @@ export default function MainSearchFlightPage() {
     }
     if (filterObj)
       try {
-        const response = await flightApiRequest.getFlights(obj, "");
+        const response = await flightApiRequest.getFlights(
+          obj,
+          `?page=${curPage}&limit=6`
+        );
         if (response.status === "success") {
           setFlightData(response.data);
+          setTotalPages(Math.ceil(response.totalCount / 6));
+          if (topRef.current) {
+            topRef.current.scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+            });
+          }
         }
       } catch (error) {
         console.log(error);
@@ -196,6 +205,7 @@ export default function MainSearchFlightPage() {
           </div>
         )}
         <div className="basis-[68%]">
+          <div ref={topRef}></div>
           <div className="w-full  bg-flight-ct rounded-xl px-4 py-4">
             <div className="bg-white rounded-lg flex justify-between items-center w-[70%]   ">
               <div className="px-4 py-3">
@@ -262,6 +272,7 @@ export default function MainSearchFlightPage() {
             </div>
           </div>
           {flightData &&
+            flightData.length > 0 &&
             flightData.map((el, idx) => {
               return (
                 <FlightItem
@@ -273,6 +284,34 @@ export default function MainSearchFlightPage() {
                 />
               );
             })}
+          {flightData && flightData.length === 0 && (
+            <div className="px-4 py-4 flex bg-white gap-8 mt-2 border-[1px] rounded-md">
+              <div className="relative w-[180px] h-[130px]">
+                <Image
+                  alt="logo"
+                  quality={100}
+                  src="https://shopcartimg2.blob.core.windows.net/shopcartctn/emptyInvoice.webp"
+                  fill
+                  sizes="100%"
+                  style={{ objectFit: "contain" }}
+                />
+              </div>
+              <div className="">
+                <header className="font-bold text-lg mt-4">
+                  No result found
+                </header>
+                <p className=" max-w-[500px]">
+                  Could not find a result for the flight tickets. Change filter
+                  to see all flight tickets.
+                </p>
+              </div>
+            </div>
+          )}
+          <PaginationCustom
+            totalPages={totalPages}
+            curPage={curPage}
+            setCurPage={setCurPage}
+          />
         </div>
       </div>
     </Sheet>

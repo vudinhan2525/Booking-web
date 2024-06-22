@@ -1,11 +1,6 @@
 import { IFlight } from "@/interfaces/IFlight";
 import { getAirport } from "@/lib/dataAir";
-import {
-  convertTime,
-  formatNumber,
-  getCurrentDateFormatted,
-  toDayMonthYear,
-} from "@/utils/convertTime";
+import { convertTime, formatNumber, toDayMonthYear } from "@/utils/convertTime";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";

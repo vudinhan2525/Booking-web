@@ -257,14 +257,9 @@ export class HotelService {
 
       query = query.andWhere(`(${ratingConditions})`, ratingParams);
     }
-    const totalCount = await query.getCount();
-    // Apply pagination
-    if (page && limit) {
-      const offset = (page - 1) * limit;
-      query = query.skip(offset).take(limit);
-    }
-    let hotels = await query.getMany();
 
+    let hotels = await query.getMany();
+    //
     //Filter by range
     const distanceFromPoint = (hotel) => {
       const hotelLat = Number(hotel.lat);
@@ -279,6 +274,15 @@ export class HotelService {
       const datas = hotels.filter(distanceFromPoint);
       hotels = datas;
     }
+    // can you change this i want get totalCount and hotels pagination after filter by distance
+    const totalCount = hotels.length;
+
+    // Apply pagination
+    if (page && limit) {
+      const offset = (page - 1) * limit;
+      hotels = hotels.slice(offset, offset + limit);
+    }
+
     let hotelWithRooms = await Promise.all(
       hotels.map(async (hotel) => {
         const rooms = await this.roomRepository

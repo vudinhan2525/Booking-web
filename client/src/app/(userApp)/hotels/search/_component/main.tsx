@@ -13,7 +13,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Tooltip,
   TooltipContent,
@@ -25,6 +25,7 @@ import useDebounce from "@/hooks/useDebounce";
 import objectToQueryString from "@/utils/convertToQueryString";
 import SavedBookmark from "@/components/component/Saved/SavedBookmark";
 import { destinationsMap } from "@/lib/dataHotel";
+import PaginationCustom from "@/components/component/Pagination/PaginationCustom";
 const sortArr = ["Lowest Price", "Highest Price", "Top Rating", "Most Viewed"];
 const initialFilObj: IFilterHotel = {
   rating: "",
@@ -43,30 +44,43 @@ export default function MainSearchHotelPages() {
   const [filterObj, setFilterObj] = useState<IFilterHotel>(initialFilObj);
   const debouncedSearchParams = useDebounce(searchParams, 500);
   const debouncedFilterObj = useDebounce(filterObj, 500);
+  const [curPage, setCurPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(4);
+  const topRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (debouncedSearchParams && debouncedFilterObj) {
       getHotels();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedSearchParams, debouncedFilterObj]);
+  }, [debouncedSearchParams, debouncedFilterObj, curPage]);
+
   const delay = (ms: number) =>
     new Promise((resolve) => setTimeout(resolve, ms));
   const getHotels = async () => {
     if (isLoading) return;
     setIsLoading(true);
-    await delay(1000);
+    await delay(500);
     const long = Number(searchParams.get("long"));
     const lat = Number(searchParams.get("lat"));
     try {
-      const hotels = await hotelApiRequest.getHotels(
+      const response = await hotelApiRequest.getHotels(
         {
           long,
           lat,
           filter: filterObj,
         },
-        ""
+        `?page=${curPage}&limit=4`
       );
-      setHotels(hotels.data);
+      if (response.status === "success") {
+        setHotels(response.data);
+        setTotalPages(Math.ceil(response.totalCount / 4));
+        if (topRef.current) {
+          topRef.current.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+        }
+      }
     } catch (error) {
       console.log(error);
     }
@@ -95,6 +109,7 @@ export default function MainSearchHotelPages() {
         <SortBarHotels filterObj={filterObj} setFilterObj={setFilterObj} />
       </div>
       <div className="basis-[73%]">
+        <div ref={topRef}></div>
         <div className="flex items-center bg-white px-6 gap-4 py-4 shadow-md rounded-lg">
           <p>Sort by:</p>
           {sortArr.map((el, idx) => {
@@ -303,8 +318,14 @@ export default function MainSearchHotelPages() {
             <SkeletonItem />
             <SkeletonItem />
             <SkeletonItem />
+            <SkeletonItem />
           </div>
         )}
+        <PaginationCustom
+          totalPages={totalPages}
+          curPage={curPage}
+          setCurPage={setCurPage}
+        />
       </div>
     </div>
   );

@@ -63,12 +63,7 @@ export class FlightService {
         airlines: body.airline,
       });
     }
-    const totalCount = await query.getCount();
-    // Apply pagination
-    if (page && limit) {
-      const offset = (page - 1) * limit;
-      query = query.skip(offset).take(limit);
-    }
+    let totalCount = await query.getCount();
 
     let flights = await query.getMany();
     if (body.departureTime) {
@@ -123,7 +118,10 @@ export class FlightService {
       });
       return result;
     }
-    return { flights, totalCount };
+    const offset = (page - 1) * limit;
+    const paginatedFlights = flights.slice(offset, offset + limit);
+    totalCount = flights.length;
+    return { flights: paginatedFlights, totalCount };
   }
 
   isTimeInRange(dateTime: Date, part: number) {
