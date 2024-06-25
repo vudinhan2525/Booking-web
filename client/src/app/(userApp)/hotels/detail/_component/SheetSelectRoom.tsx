@@ -27,6 +27,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
+import Payment from "./Payment";
+import paymentApiRequest from "@/apiRequest/payment";
 
 export default function SheetSelectRoom({
   hotel,
@@ -39,6 +41,7 @@ export default function SheetSelectRoom({
   roomOptSelected: number;
   user: IUser;
 }) {
+  const [paymentSlt, setPaymentSlt] = useState("direct");
   const searchParams = useSearchParams();
   const [duration, setDuration] = useState(() => {
     const string = searchParams.get("duration");
@@ -106,7 +109,7 @@ export default function SheetSelectRoom({
   const [arrivalTime, setArrivalTime] = useState<Date>();
   const { toast } = useToast();
   const [price, setPrice] = useState(0);
-  const [methods, setMethod] = useState([1, 0]);
+
   const closeRef = useRef<HTMLButtonElement>(null);
   useEffect(() => {
     if (departureTime && duration) {
@@ -150,9 +153,23 @@ export default function SheetSelectRoom({
       userId: user.id,
       adminId: hotel.adminId,
     };
+    if (paymentSlt === "momo") {
+      try {
+        const response = await paymentApiRequest.getMomo(body);
+        if (response.status === "success") {
+          window.location.href = response.data.payUrl;
+        }
+      } catch (error) {}
+      return;
+    }
     try {
       const response = await billHotelApiRequest.addBillHotel(body);
       if (response.status === "success") {
+        toast({
+          title: "",
+          status: "success",
+          description: "Booking successfully !",
+        });
       }
     } catch (error) {}
   };
@@ -289,62 +306,7 @@ export default function SheetSelectRoom({
         </div>
       </div>
       <div className="w-full h-[1px] bg-gray-300 my-4"></div>
-      <div className=" mt-2">
-        <header className="text-xl text-black font-bold">
-          Payment methods
-        </header>
-        <div
-          onClick={() => {
-            setMethod([1, 0]);
-          }}
-          className={`${
-            methods[0] === 1 ? "bg-gray-100" : ""
-          } mt-2 flex items-center cursor-pointer transition-all px-4 py-4 border-[1px] rounded-lg`}
-        >
-          <Checkbox
-            id="terms1"
-            defaultChecked={!!methods[0]}
-            checked={!!methods[0]}
-          />
-          <div className="ml-3 mt-[2px]">
-            <FontAwesomeIcon icon={faHotel} className="text-gray-600" />
-          </div>
-          <p className="ml-[6px] select-none font-semibold cursor-pointer">
-            Pay at hotel
-          </p>
-        </div>
-        <div
-          onClick={() => {
-            setMethod([0, 1]);
-          }}
-          className={`${
-            methods[1] === 1 ? "bg-gray-100" : ""
-          } mt-2 flex items-center cursor-pointer transition-all px-4 py-4 border-[1px] rounded-lg`}
-        >
-          <Checkbox
-            id="terms2"
-            defaultChecked={!!methods[1]}
-            checked={!!methods[1]}
-          />
-          <div className="ml-3 mt-[2px] relative w-[40px] h-[20px] ">
-            <Image
-              alt="img"
-              fill
-              priority
-              sizes="100%"
-              quality={60}
-              style={{
-                objectFit: "cover",
-                objectPosition: "center",
-              }}
-              src="https://shopcartimg2.blob.core.windows.net/shopcartctn/paypal.png"
-            />
-          </div>
-          <p className="ml-[10px] mt-[2px] select-none font-semibold cursor-pointer">
-            Paypal
-          </p>
-        </div>
-      </div>
+      <Payment paymentSlt={paymentSlt} setPaymentSlt={setPaymentSlt} />
       <div className="w-full h-[1px] bg-gray-300 my-5"></div>
       <div className="px-4 py-4 border-[1px] rounded-lg mt-2">
         <header className="text-xl text-black font-bold">Price detail</header>
@@ -411,11 +373,6 @@ export default function SheetSelectRoom({
             handleAddBill();
             setShowPaymentDialog(false);
             closeRef.current?.click();
-            toast({
-              title: "",
-              status: "success",
-              description: "Booking successfully !",
-            });
           }}
           onClose={() => {
             setShowPaymentDialog(false);

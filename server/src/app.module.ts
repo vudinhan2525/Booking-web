@@ -28,6 +28,7 @@ import { FlightSeat } from './entities/flightSeat.entity';
 import { FlightSeatModule } from './modules/flightSeat.module';
 import { BillFlight } from './entities/billFlight.entity';
 import { BillFlightModule } from './modules/billFlight.module';
+import { PaymentModule } from './modules/payment.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -73,6 +74,7 @@ import { BillFlightModule } from './modules/billFlight.module';
     BillHotelModule,
     FlightSeatModule,
     BillFlightModule,
+    PaymentModule,
   ],
   controllers: [AppController],
   providers: [AppService],

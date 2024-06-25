@@ -58,6 +58,11 @@ export class BillHotelService {
       .createQueryBuilder('bill_hotel')
       .where('userId = :userId', { userId: body.userId })
       .getMany();
+
+    billHotels.sort((a, b) => {
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    });
+
     return billHotels;
   }
   async getBillHotelForAdmin(body: {
