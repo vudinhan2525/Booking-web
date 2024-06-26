@@ -4,9 +4,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "shopcartimg2.blob.core.windows.net",
-        port: "",
-        pathname: "/shopcartctn/**",
+        hostname: "**",
       },
     ],
   },

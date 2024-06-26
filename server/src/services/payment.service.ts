@@ -169,7 +169,6 @@ export class PaymentService {
     } catch (error) {}
   }
   async getStripe(body: BillHotelBody) {
-    console.log(body);
     const session = await stripe.checkout.sessions.create(
       {
         payment_method_types: ['card'],
@@ -184,7 +183,7 @@ export class PaymentService {
                   'https://shopcartimg2.blob.core.windows.net/shopcartctn/halong.jpg',
                 ],
               },
-              unit_amount: 25000,
+              unit_amount: body.price,
             },
             quantity: 1,
           },
@@ -224,7 +223,7 @@ export class PaymentService {
         //console.log('Payment completed:', session);
         return { status: 'success', data: JSON.parse(session.metadata.data) };
       case 'checkout.session.failed':
-        const failedSession = event.data.object;
+        //const failedSession = event.data.object;
         // Handle failed checkout sessions
         //console.log('Payment failed:', failedSession);
         break;

@@ -38,12 +38,12 @@ export default function Payment({
       <p className="text-sm font-semibold text-gray-400 mt-2">Online payment</p>
       <div className="grid grid-cols-4 mt-2 gap-2">
         <div
-          onClick={() => {
-            setPaymentSlt("paypal");
-          }}
+          // onClick={() => {
+          //   setPaymentSlt("paypal");
+          // }}
           className={`${
             paymentSlt === "paypal" && " border-primary-color"
-          } cursor-pointer px-2 py-2 border-[1px] flex justify-center items-center rounded-md overflow-hidden`}
+          } relative px-2 py-2 border-[1px] flex justify-center items-center rounded-md overflow-hidden`}
         >
           <div className="relative w-[80px] h-[20px] ">
             <Image
@@ -58,6 +58,7 @@ export default function Payment({
               }
             />
           </div>
+          <div className="absolute top-0 left-0 right-0 bottom-0 bg-gray-200/70"></div>
         </div>
         <div
           onClick={() => {
@@ -105,12 +106,12 @@ export default function Payment({
           <p className="text-sm font-bold">MoMo</p>
         </div>
         <div
-          onClick={() => {
-            setPaymentSlt("zalopay");
-          }}
+          // onClick={() => {
+          //   setPaymentSlt("zalopay");
+          // }}
           className={`${
             paymentSlt === "zalopay" && " border-primary-color"
-          } cursor-pointer px-2 py-2 border-[1px] flex justify-center gap-1 items-center rounded-md overflow-hidden`}
+          } px-2 relative  py-2 border-[1px] flex justify-center gap-1 items-center rounded-md overflow-hidden`}
         >
           <div className="relative w-[20px] h-[20px] rounded-sm overflow-hidden">
             <Image
@@ -126,6 +127,7 @@ export default function Payment({
             />
           </div>
           <p className="text-sm font-bold">ZaloPay</p>
+          <div className="absolute top-0 left-0 right-0 bottom-0 bg-gray-200/70"></div>
         </div>
       </div>
     </div>

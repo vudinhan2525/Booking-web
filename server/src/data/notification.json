@@ -1,0 +1,18 @@
+[
+  {
+    "header": "Payment successfully.",
+    "content": "Your payment for booking code #ASYUDA successfully.",
+    "userId": 1
+  },
+  {
+    "header": "Winter sale up to 40%",
+    "content": "This promotion is limited! So let's start a booking right now.",
+    "isGlobal": true,
+    "image": "https://images.squarespace-cdn.com/content/v1/5f738b58b6e09b752a8d9b05/dc9c320a-4da1-4660-bd2a-3cef4b8a0c04/LV14_FlashSale_40percentOff_Social_Aug20233.jpg"
+  },
+  {
+    "header": "Payment failed.",
+    "content": "Your payment for booking code #UAISHS failed.",
+    "userId": 1
+  }
+]

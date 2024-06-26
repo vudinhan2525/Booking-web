@@ -8,12 +8,16 @@ import useDebounce from "@/hooks/useDebounce";
 import { useAppContext } from "@/app/(userApp)/AppProvider";
 import { useRouter, usePathname } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
+import { faBell, faUser } from "@fortawesome/free-solid-svg-icons";
 import { useAdminContext } from "@/app/(adminApp)/admin/AdminProvider";
+import NotificationMenu from "./NotificationMenu";
+import notiApiRequest from "@/apiRequest/notifications";
+import { INoti } from "@/interfaces/INoti";
 export default function Header({ fromAdminPage }: { fromAdminPage?: boolean }) {
   const pathname = usePathname();
   const router = useRouter();
   const [onTop, setOnTop] = useState(false);
+  const [notifications, setNotifications] = useState<INoti[]>([]);
   const debounce = useDebounce(onTop, 500);
   const { isAuthenticated, user, setShowLoginModal } = useAppContext();
   const { isAdminAuthenticated, admin } = useAdminContext();
@@ -36,6 +40,18 @@ export default function Header({ fromAdminPage }: { fromAdminPage?: boolean }) {
       window.removeEventListener("scroll", handleScroll);
     };
   }, [pathname]);
+  useEffect(() => {
+    getNotifications();
+  }, [user]);
+  const getNotifications = async () => {
+    if (!isAuthenticated || !user) return;
+    try {
+      const response = await notiApiRequest.getNoti({ userId: user.id });
+      if (response.status === "success") {
+        setNotifications(response.data);
+      }
+    } catch (error) {}
+  };
   return (
     <div
       className={`${!onTop && "bg-white"} transition-all pb-2 px-24 z-20 ${
@@ -129,6 +145,14 @@ export default function Header({ fromAdminPage }: { fromAdminPage?: boolean }) {
                     Register
                   </CustomButton>
                 </div>
+              )}
+              {isAuthenticated && user && (
+                <NotificationMenu
+                  onTop={onTop}
+                  user={user}
+                  notifications={notifications}
+                  setNotifications={setNotifications}
+                />
               )}
               {isAuthenticated && user && (
                 <Button

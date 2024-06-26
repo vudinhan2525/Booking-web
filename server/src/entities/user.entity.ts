@@ -2,6 +2,7 @@ import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import * as crypto from 'crypto';
 import { Hotel } from './hotel.entity';
 import { BillFlight } from './billFlight.entity';
+import { Notifications } from './notifications.entity';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -74,4 +75,7 @@ export class User {
 
   @OneToMany(() => BillFlight, (billFlight) => billFlight.user)
   billFlights: BillFlight[];
+
+  @OneToMany(() => Notifications, (notification) => notification.user)
+  notifications: Notifications[];
 }
