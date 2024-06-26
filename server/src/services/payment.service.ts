@@ -4,8 +4,11 @@ import * as CryptoJS from 'crypto-js'; // npm install crypto-js
 import * as moment from 'moment'; // npm install moment
 import * as crypto from 'crypto';
 import { BillHotelBody } from 'src/dtos/bill/billHotel.dto';
+import Stripe from 'stripe';
+import RequestWithRawBody from 'src/interfaces/requestWithRawBody.interface';
 const accessKey = 'F8BBA842ECF85';
 const secretkey = 'K951B6PE1waDMi640xX08PD3vg6EkVlz';
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 @Injectable()
 export class PaymentService {
   async getMomo(body: BillHotelBody) {
@@ -164,5 +167,71 @@ export class PaymentService {
 
       return response.data;
     } catch (error) {}
+  }
+  async getStripe(body: BillHotelBody) {
+    console.log(body);
+    const session = await stripe.checkout.sessions.create(
+      {
+        payment_method_types: ['card'],
+        line_items: [
+          {
+            price_data: {
+              currency: 'vnd', // Adjust currency as needed
+              product_data: {
+                name: 'SunTravel thanh toán đặt vé.',
+                description: 'Thanh toán đặt vé du lịch tại SunTravel.',
+                images: [
+                  'https://shopcartimg2.blob.core.windows.net/shopcartctn/halong.jpg',
+                ],
+              },
+              unit_amount: 25000,
+            },
+            quantity: 1,
+          },
+        ],
+        mode: 'payment',
+        success_url: `${process.env.CLIENT_ENDPOINT}/user?slt=1`,
+        cancel_url: `${process.env.CLIENT_ENDPOINT}`,
+        customer_email: 'vudinhan000@gmail.com',
+        metadata: {
+          data: JSON.stringify(body),
+        },
+      },
+      {
+        apiKey: process.env.STRIPE_SECRET_KEY,
+      },
+    );
+    return session;
+  }
+  async successStripe(req: RequestWithRawBody, sig: string) {
+    let event;
+    try {
+      event = stripe.webhooks.constructEvent(
+        req.rawBody,
+        sig,
+        process.env.STRIPE_WEBHOOK_SECRET_KEY,
+      );
+    } catch (err) {
+      //console.log(`Webhook Error: ${err.message}`);
+      return { status: 'error' };
+    }
+
+    // Handle the event
+    switch (event.type) {
+      case 'checkout.session.completed':
+        const session = event.data.object;
+        // Process the completed checkout session
+        //console.log('Payment completed:', session);
+        return { status: 'success', data: JSON.parse(session.metadata.data) };
+      case 'checkout.session.failed':
+        const failedSession = event.data.object;
+        // Handle failed checkout sessions
+        //console.log('Payment failed:', failedSession);
+        break;
+      // Add more cases for other events you want to handle
+      default:
+        console.log(`Unhandled event type: ${event.type}`);
+    }
+    return { status: 'error' };
   }
 }

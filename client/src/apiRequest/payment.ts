@@ -6,5 +6,10 @@ const paymentApiRequest = {
       headers: { "Content-Type": "application/json" },
       withCredentials: true,
     }),
+  getStripe: (body: any) =>
+    http.post<any>("/payment/stripe", body, {
+      headers: { "Content-Type": "application/json" },
+      withCredentials: true,
+    }),
 };
 export default paymentApiRequest;

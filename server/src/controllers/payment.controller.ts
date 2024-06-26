@@ -1,6 +1,7 @@
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import { Body, Controller, Headers, Post, Req, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { BillHotelBody } from 'src/dtos/bill/billHotel.dto';
+import RequestWithRawBody from 'src/interfaces/requestWithRawBody.interface';
 import { BillHotelService } from 'src/services/billHotel.service';
 import { PaymentService } from 'src/services/payment.service';
 
@@ -35,5 +36,22 @@ export class PaymentController {
   async getZaloPay(@Body() body, @Res() res: Response) {
     const result = await this.paymentService.getZaloPay(body);
     res.status(200).json({ status: 'success', data: result });
+  }
+  @Post('stripe')
+  async getStripe(@Body() body: BillHotelBody, @Res() res: Response) {
+    const result = await this.paymentService.getStripe(body);
+    res.status(200).json({ status: 'success', data: result });
+  }
+  @Post('successStripe')
+  async successStripe(
+    @Headers('stripe-signature') sig: string,
+    @Req() req: RequestWithRawBody,
+    @Res() res: Response,
+  ) {
+    const result = await this.paymentService.successStripe(req, sig);
+    if (result.status === 'success' && result.data) {
+      await this.billHotelService.addBillHotel(result.data);
+    }
+    res.json({ received: true });
   }
 }

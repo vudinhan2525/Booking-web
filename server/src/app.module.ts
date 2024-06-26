@@ -110,5 +110,7 @@ export class AppModule implements NestModule {
       { path: 'billFlight/addBillFlight', method: RequestMethod.POST },
       { path: 'billFlight/getBillFlight', method: RequestMethod.POST },
     );
+    // .apply(RawBodyMiddleware)
+    // .forRoutes({ path: 'payment/successStripe', method: RequestMethod.POST });
   }
 }

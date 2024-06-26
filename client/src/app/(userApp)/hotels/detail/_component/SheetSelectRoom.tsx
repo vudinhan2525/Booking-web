@@ -162,6 +162,15 @@ export default function SheetSelectRoom({
       } catch (error) {}
       return;
     }
+    if (paymentSlt === "stripe") {
+      try {
+        const response = await paymentApiRequest.getStripe(body);
+        if (response.status === "success") {
+          window.location.href = response.data.url;
+        }
+      } catch (error) {}
+      return;
+    }
     try {
       const response = await billHotelApiRequest.addBillHotel(body);
       if (response.status === "success") {
