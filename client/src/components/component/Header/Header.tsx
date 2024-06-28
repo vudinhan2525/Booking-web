@@ -42,6 +42,7 @@ export default function Header({ fromAdminPage }: { fromAdminPage?: boolean }) {
   }, [pathname]);
   useEffect(() => {
     getNotifications();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
   const getNotifications = async () => {
     if (!isAuthenticated || !user) return;

@@ -20,7 +20,7 @@ export class PaymentService {
     const orderInfo = 'pay with MoMo';
     const redirectUrl = `${process.env.CLIENT_ENDPOINT}/user?slt=1`;
     const ipnUrl =
-      'https://6c57-171-252-188-218.ngrok-free.app/payment/successMomo';
+      'https://e935-171-252-188-218.ngrok-free.app/payment/successMomo';
     // const ipnUrl = redirectUrl = "https://webhook.site/454e7b77-f177-4ece-8236-ddf1c26ba7f8";
     const amount = '2000';
     const requestType = 'captureWallet';

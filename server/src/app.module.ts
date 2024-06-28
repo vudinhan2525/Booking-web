@@ -31,6 +31,8 @@ import { BillFlightModule } from './modules/billFlight.module';
 import { PaymentModule } from './modules/payment.module';
 import { NotificationModule } from './modules/notification.module';
 import { Notifications } from './entities/notifications.entity';
+import { Coupon } from './entities/coupon.entity';
+import { CouponModule } from './modules/coupon.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -53,6 +55,7 @@ import { Notifications } from './entities/notifications.entity';
         FlightSeat,
         BillFlight,
         Notifications,
+        Coupon,
       ],
       synchronize: true,
     }),
@@ -67,6 +70,7 @@ import { Notifications } from './entities/notifications.entity';
       FlightSeat,
       BillFlight,
       Notifications,
+      Coupon,
     ]),
     UserModule,
     AuthModule,
@@ -80,6 +84,7 @@ import { Notifications } from './entities/notifications.entity';
     BillFlightModule,
     PaymentModule,
     NotificationModule,
+    CouponModule,
   ],
   controllers: [AppController],
   providers: [AppService],
@@ -115,9 +120,11 @@ export class AppModule implements NestModule {
       { path: 'billFlight/addBillFlight', method: RequestMethod.POST },
       { path: 'billFlight/getBillFlight', method: RequestMethod.POST },
       //notifications
-      //{ path: 'noti/addNoti', method: RequestMethod.POST },
+      { path: 'noti/addNoti', method: RequestMethod.POST },
       { path: 'noti/getNoti', method: RequestMethod.POST },
       { path: 'noti/readNoti', method: RequestMethod.POST },
+      //coupon
+      { path: 'coupon/getCoupon', method: RequestMethod.POST },
     );
     // .apply(RawBodyMiddleware)
     // .forRoutes({ path: 'payment/successStripe', method: RequestMethod.POST });

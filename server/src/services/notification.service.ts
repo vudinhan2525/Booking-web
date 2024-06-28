@@ -32,6 +32,10 @@ export class NotificationService {
       .where('notification.isGlobal = :isGlobal', { isGlobal: true })
       .orWhere('notification.userId = :userId', { userId })
       .getMany();
+    notifications.sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    );
 
     return notifications;
   }

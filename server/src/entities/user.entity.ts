@@ -3,6 +3,7 @@ import * as crypto from 'crypto';
 import { Hotel } from './hotel.entity';
 import { BillFlight } from './billFlight.entity';
 import { Notifications } from './notifications.entity';
+import { Coupon } from './coupon.entity';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -78,4 +79,7 @@ export class User {
 
   @OneToMany(() => Notifications, (notification) => notification.user)
   notifications: Notifications[];
+
+  @OneToMany(() => Coupon, (coupon) => coupon.user)
+  coupons: Coupon[];
 }

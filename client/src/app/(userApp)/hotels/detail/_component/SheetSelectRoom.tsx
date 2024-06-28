@@ -29,6 +29,7 @@ import { useSearchParams } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import Payment from "./Payment";
 import paymentApiRequest from "@/apiRequest/payment";
+import Coupon from "@/components/component/Coupon/Coupon";
 
 export default function SheetSelectRoom({
   hotel,
@@ -109,7 +110,7 @@ export default function SheetSelectRoom({
   const [arrivalTime, setArrivalTime] = useState<Date>();
   const { toast } = useToast();
   const [price, setPrice] = useState(0);
-
+  const [discountPrice, setDiscountPrice] = useState(0);
   const closeRef = useRef<HTMLButtonElement>(null);
   useEffect(() => {
     if (departureTime && duration) {
@@ -137,7 +138,7 @@ export default function SheetSelectRoom({
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
   const handleAddBill = async () => {
     const body = {
-      price: (price * 110) / 100,
+      price: (price * 110) / 100 - discountPrice,
       status: "pending",
       isRefundable:
         hotel.rooms[roomSelected].roomOpts[roomOptSelected].isRefundable,
@@ -182,7 +183,6 @@ export default function SheetSelectRoom({
       }
     } catch (error) {}
   };
-
   return (
     <div>
       <div>
@@ -317,6 +317,13 @@ export default function SheetSelectRoom({
       <div className="w-full h-[1px] bg-gray-300 my-4"></div>
       <Payment paymentSlt={paymentSlt} setPaymentSlt={setPaymentSlt} />
       <div className="w-full h-[1px] bg-gray-300 my-5"></div>
+      <Coupon
+        paymentPrice={(price * 110) / 100}
+        userId={user.id}
+        setDiscountPrice={setDiscountPrice}
+      />
+      <div className="w-full h-[1px] bg-gray-300 my-5"></div>
+
       <div className="px-4 py-4 border-[1px] rounded-lg mt-2">
         <header className="text-xl text-black font-bold">Price detail</header>
         <div className="flex mt-2 justify-between items-center">
@@ -360,7 +367,7 @@ export default function SheetSelectRoom({
               ) + " VNĐ"}
             </p>
             <p className=" text-orange-600 font-bold">
-              {formatNumber((price * 110) / 100) + " VNĐ"}
+              {formatNumber((price * 110) / 100 - discountPrice) + " VNĐ"}
             </p>
           </div>
           <Button

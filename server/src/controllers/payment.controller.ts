@@ -3,6 +3,7 @@ import { Response } from 'express';
 import { BillHotelBody } from 'src/dtos/bill/billHotel.dto';
 import RequestWithRawBody from 'src/interfaces/requestWithRawBody.interface';
 import { BillHotelService } from 'src/services/billHotel.service';
+import { NotificationService } from 'src/services/notification.service';
 import { PaymentService } from 'src/services/payment.service';
 
 @Controller('payment')
@@ -10,6 +11,7 @@ export class PaymentController {
   constructor(
     private paymentService: PaymentService,
     private billHotelService: BillHotelService,
+    private notiService: NotificationService,
   ) {}
 
   @Post('momo')
@@ -22,7 +24,15 @@ export class PaymentController {
   async successMomo(@Body() body, @Res() res: Response) {
     const data = await this.paymentService.successMomo(body);
     if (data) {
-      await this.billHotelService.addBillHotel(data);
+      const hotelBill = await this.billHotelService.addBillHotel(data);
+      await this.notiService.addNoti({
+        header: 'Payment successfully.',
+        content: `Your payment for booking code #${hotelBill.id} successfully.`,
+        userId: hotelBill.userId,
+        isGlobal: false,
+        image: null,
+        link: `${process.env.CLIENT_ENDPOINT}/user?slt=1`,
+      });
     }
     res.status(200).json(body);
   }
@@ -50,7 +60,15 @@ export class PaymentController {
   ) {
     const result = await this.paymentService.successStripe(req, sig);
     if (result.status === 'success' && result.data) {
-      await this.billHotelService.addBillHotel(result.data);
+      const hotelBill = await this.billHotelService.addBillHotel(result.data);
+      await this.notiService.addNoti({
+        header: 'Payment successfully.',
+        content: `Your payment for booking code #${hotelBill.id} successfully.`,
+        userId: hotelBill.userId,
+        isGlobal: false,
+        image: null,
+        link: `${process.env.CLIENT_ENDPOINT}/user?slt=1`,
+      });
     }
     res.json({ received: true });
   }
