@@ -3,15 +3,18 @@ import axios from 'axios'; // npm install axios
 import * as CryptoJS from 'crypto-js'; // npm install crypto-js
 import * as moment from 'moment'; // npm install moment
 import * as crypto from 'crypto';
-import { BillHotelBody } from 'src/dtos/bill/billHotel.dto';
 import Stripe from 'stripe';
 import RequestWithRawBody from 'src/interfaces/requestWithRawBody.interface';
+import * as zlib from 'zlib';
+import { promisify } from 'util';
+const gunzip = promisify(zlib.gunzip);
+const gzip = promisify(zlib.gzip);
 const accessKey = 'F8BBA842ECF85';
 const secretkey = 'K951B6PE1waDMi640xX08PD3vg6EkVlz';
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 @Injectable()
 export class PaymentService {
-  async getMomo(body: BillHotelBody) {
+  async getMomo(body) {
     //https://developers.momo.vn/#/docs/en/aiov2/?id=payment-method
     //parameters
     const partnerCode = 'MOMO';
@@ -20,7 +23,7 @@ export class PaymentService {
     const orderInfo = 'pay with MoMo';
     const redirectUrl = `${process.env.CLIENT_ENDPOINT}/user?slt=1`;
     const ipnUrl =
-      'https://e935-171-252-188-218.ngrok-free.app/payment/successMomo';
+      'https://192f-171-252-188-218.ngrok-free.app/payment/successMomo';
     // const ipnUrl = redirectUrl = "https://webhook.site/454e7b77-f177-4ece-8236-ddf1c26ba7f8";
     const amount = '2000';
     const requestType = 'captureWallet';
@@ -168,7 +171,12 @@ export class PaymentService {
       return response.data;
     } catch (error) {}
   }
-  async getStripe(body: BillHotelBody) {
+  async getStripe(body) {
+    // Compress the metadata
+    const compressedMetadata = await gzip(JSON.stringify(body));
+
+    // Encode the compressed metadata in Base64
+    const encodedMetadata = compressedMetadata.toString('base64');
     const session = await stripe.checkout.sessions.create(
       {
         payment_method_types: ['card'],
@@ -193,7 +201,7 @@ export class PaymentService {
         cancel_url: `${process.env.CLIENT_ENDPOINT}`,
         customer_email: 'vudinhan000@gmail.com',
         metadata: {
-          data: JSON.stringify(body),
+          data: encodedMetadata,
         },
       },
       {
@@ -219,15 +227,14 @@ export class PaymentService {
     switch (event.type) {
       case 'checkout.session.completed':
         const session = event.data.object;
-        // Process the completed checkout session
-        //console.log('Payment completed:', session);
-        return { status: 'success', data: JSON.parse(session.metadata.data) };
+        const encodedMetadata = session.metadata.data;
+        const metadataBuffer = Buffer.from(encodedMetadata, 'base64');
+        const compressedMetadata = await gunzip(metadataBuffer);
+        const decodedMetadata = JSON.parse(compressedMetadata.toString());
+        // how i can decode and return here
+        return { status: 'success', data: decodedMetadata };
       case 'checkout.session.failed':
-        //const failedSession = event.data.object;
-        // Handle failed checkout sessions
-        //console.log('Payment failed:', failedSession);
         break;
-      // Add more cases for other events you want to handle
       default:
         console.log(`Unhandled event type: ${event.type}`);
     }

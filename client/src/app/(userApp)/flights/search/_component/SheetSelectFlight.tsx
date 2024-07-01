@@ -12,6 +12,8 @@ import PassengerItem from "./PassengerItem";
 import flightApiRequest from "@/apiRequest/flight";
 import { useToast } from "@/components/ui/use-toast";
 import Coupon from "@/components/component/Coupon/Coupon";
+import Payment from "@/components/component/Payment/Payment";
+import paymentApiRequest from "@/apiRequest/payment";
 
 export default function SheetSelectFlight({
   flight,
@@ -72,6 +74,7 @@ export default function SheetSelectFlight({
     phone: "",
     email: "",
   });
+  const [paymentSlt, setPaymentSlt] = useState("direct");
   const [isCheckedInfo, setIsCheckedInfo] = useState(false);
   const [showErrorSavedInfo, setShowErrorSavedInfo] = useState(false);
   const [infoPassenger, setInfoPassenger] = useState([
@@ -99,21 +102,41 @@ export default function SheetSelectFlight({
   }, [flight, sltSeatType, numberPassenger]);
   const handleAddBillFlight = async () => {
     if (!user) return;
+    const body = {
+      userId: user.id,
+      username: infoContact.firstName + " " + infoContact.lastName,
+      email: infoContact.email,
+      phone: infoContact.phone,
+      airline: flight.airline,
+      flightCode: flight.flightCode,
+      departureTime: flight.departureTime,
+      arrivalTime: flight.arrivalTime,
+      from: `${flight.from}  (${flight.fromCode})`,
+      to: `${flight.to}  (${flight.toCode})`,
+      passenger: JSON.stringify(infoPassenger),
+      price: totalPrice - discountPrice,
+      isFlightBody: true,
+    };
+    if (paymentSlt === "momo") {
+      try {
+        const response = await paymentApiRequest.getMomo(body);
+        if (response.status === "success") {
+          window.location.href = response.data.payUrl;
+        }
+      } catch (error) {}
+      return;
+    }
+    if (paymentSlt === "stripe") {
+      try {
+        const response = await paymentApiRequest.getStripe(body);
+        if (response.status === "success") {
+          window.location.href = response.data.url;
+        }
+      } catch (error) {}
+      return;
+    }
     try {
-      const response = await flightApiRequest.addBillFlight({
-        userId: user.id,
-        username: infoContact.firstName + " " + infoContact.lastName,
-        email: infoContact.email,
-        phone: infoContact.phone,
-        airline: flight.airline,
-        flightCode: flight.flightCode,
-        departureTime: flight.departureTime,
-        arrivalTime: flight.arrivalTime,
-        from: `${flight.from}  (${flight.fromCode})`,
-        to: `${flight.to}  (${flight.toCode})`,
-        passenger: JSON.stringify(infoPassenger),
-        price: totalPrice - discountPrice,
-      });
+      const response = await flightApiRequest.addBillFlight(body);
       if (response.status === "success") {
         toast({
           title: "",
@@ -148,6 +171,7 @@ export default function SheetSelectFlight({
               setShowErrorSavedInfo={setShowErrorSavedInfo}
             />
             <div ref={refPass}></div>
+
             <div className="px-6 mt-4">
               <header
                 className={`${
@@ -195,6 +219,9 @@ export default function SheetSelectFlight({
                   );
                 })}
               </div>
+            </div>
+            <div className="px-6 mt-3 w-[90%]">
+              <Payment paymentSlt={paymentSlt} setPaymentSlt={setPaymentSlt} />
             </div>
             <div className="px-6 pb-6 mt-4">
               <Coupon

@@ -5,11 +5,9 @@ import { Button } from "@/components/ui/button";
 import {
   Carousel,
   CarouselContent,
-  CarouselItem,
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { Checkbox } from "@/components/ui/checkbox";
 import { SheetClose } from "@/components/ui/sheet";
 import { useToast } from "@/components/ui/use-toast";
 import { IHotel } from "@/interfaces/IHotel";
@@ -19,17 +17,15 @@ import { convertTime4, formatNumber } from "@/utils/convertTime";
 import {
   faBanSmoking,
   faBed,
-  faHotel,
   faStar,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
-import Payment from "./Payment";
 import paymentApiRequest from "@/apiRequest/payment";
 import Coupon from "@/components/component/Coupon/Coupon";
+import Payment from "@/components/component/Payment/Payment";
 
 export default function SheetSelectRoom({
   hotel,
@@ -153,6 +149,7 @@ export default function SheetSelectRoom({
       duration: duration,
       userId: user.id,
       adminId: hotel.adminId,
+      isHotelBody: true,
     };
     if (paymentSlt === "momo") {
       try {
