@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import { UserIcon } from "@/lib/icon";
 import { Button } from "@/components/ui/button";
 import CustomButton from "@/components/ui/CustomButton";
@@ -13,6 +12,7 @@ import { useAdminContext } from "@/app/(adminApp)/admin/AdminProvider";
 import NotificationMenu from "./NotificationMenu";
 import notiApiRequest from "@/apiRequest/notifications";
 import { INoti } from "@/interfaces/INoti";
+import Logo from "./Logo";
 export default function Header({ fromAdminPage }: { fromAdminPage?: boolean }) {
   const pathname = usePathname();
   const router = useRouter();
@@ -66,25 +66,7 @@ export default function Header({ fromAdminPage }: { fromAdminPage?: boolean }) {
     >
       <div className="absolute z-[100] right-0"></div>
       <div className="flex items-center justify-between ">
-        <div
-          onClick={() => {
-            router.push("/");
-          }}
-          className="flex cursor-pointer justify-center items-center"
-        >
-          <Image
-            alt="logo"
-            src={"/logo.png"}
-            priority={true}
-            width={80}
-            height="0"
-            style={{ width: "100%", height: "auto" }}
-          />
-          <div className="flex select-none ml-[-10px]">
-            <p className="text-[#31AE84] text-2xl font-bold">Sun</p>
-            <p className="text-[#14B0C4] text-2xl font-bold">Travel</p>
-          </div>
-        </div>
+        <Logo />
         {!fromAdminPage && (
           <div className={`flex gap-2`}>
             <div className="flex gap-2">
@@ -240,7 +222,7 @@ export default function Header({ fromAdminPage }: { fromAdminPage?: boolean }) {
           </div>
         )}
       </div>
-      {!isAdminAuthenticated && (
+      {!fromAdminPage && (
         <div className="mt-2 flex gap-2">
           <Button
             onClick={() => {

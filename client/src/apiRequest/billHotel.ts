@@ -6,8 +6,8 @@ const billHotelApiRequest = {
       headers: { "Content-Type": "application/json" },
       withCredentials: true,
     }),
-  getBillHotel: (body: { userId: number }) =>
-    http.post<any>("/billHotel/getBillHotel", body, {
+  getBillHotel: (body: { userId: number }, params: string) =>
+    http.post<any>(`/billHotel/getBillHotel${params}`, body, {
       headers: { "Content-Type": "application/json" },
       withCredentials: true,
     }),

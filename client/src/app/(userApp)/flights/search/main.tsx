@@ -30,6 +30,7 @@ import SheetSelectFlight from "./_component/SheetSelectFlight";
 import FlightItem from "@/components/component/FlightCart/FlightItem";
 import PaginationCustom from "@/components/component/Pagination/PaginationCustom";
 import Image from "next/image";
+import { useAppContext } from "../../AppProvider";
 const initialObj: IfilterObj = {
   airline: [],
   depatureTime: 0,
@@ -47,6 +48,7 @@ export default function MainSearchFlightPage() {
   const [flightData, setFlightData] = useState<IFlight[]>();
   const [showSearchFlightForm, setShowSearchFlightForm] = useState(false);
   const [idSlt, setIdSlt] = useState(0);
+  const { user, setShowLoginModal } = useAppContext();
   const topRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (searchParams) {
@@ -278,7 +280,11 @@ export default function MainSearchFlightPage() {
                 <FlightItem
                   flight={el}
                   key={idx}
-                  handleSelectFlight={() => {
+                  handleSelectFlight={(e) => {
+                    if (!user) {
+                      e.preventDefault();
+                      setShowLoginModal(true);
+                    }
                     setIdSlt(idx);
                   }}
                 />

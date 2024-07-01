@@ -28,7 +28,7 @@ export default function MainHotelDetail() {
   const roomRef = useRef<HTMLInputElement>(null);
   const reviewRef = useRef<HTMLInputElement>(null);
   const locationRef = useRef<HTMLInputElement>(null);
-  const { user, setUser } = useAppContext();
+  const { user, setUser, setShowLoginModal } = useAppContext();
   const [showRatingModal, setShowRatingModal] = useState(() => {
     if (searchParams.get("rating") === "1") return true;
     return false;
@@ -161,6 +161,8 @@ export default function MainHotelDetail() {
           {hotel && (
             <RoomList
               hotel={hotel}
+              user={user}
+              setShowLoginModal={setShowLoginModal}
               setRoomSelected={setRoomSelected}
               setRoomOptSelected={setRoomOptSelected}
             />

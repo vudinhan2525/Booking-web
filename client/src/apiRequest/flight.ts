@@ -23,8 +23,8 @@ const flightApiRequest = {
       headers: { "Content-Type": "application/json" },
       withCredentials: true,
     }),
-  getBillFlight: (body: { userId: number; from: string }) =>
-    http.post<any>("/billFlight/getBillFlight", body, {
+  getBillFlight: (body: { userId: number; from: string }, params: string) =>
+    http.post<any>(`/billFlight/getBillFlight${params}`, body, {
       headers: { "Content-Type": "application/json" },
       withCredentials: true,
     }),

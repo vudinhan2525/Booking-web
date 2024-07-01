@@ -28,7 +28,9 @@ export default function FlightItem({
   fromSavedPage,
 }: {
   flight: IFlight;
-  handleSelectFlight?: () => void;
+  handleSelectFlight?: (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => void;
   fromSavedPage?: boolean;
 }) {
   const [opt, setOpt] = useState("");
@@ -218,7 +220,13 @@ export default function FlightItem({
         </div>
         <div className="basis-[20%]">
           {!fromSavedPage && (
-            <SheetTrigger onClick={handleSelectFlight}>
+            <SheetTrigger
+              onClick={(e) => {
+                if (handleSelectFlight) {
+                  handleSelectFlight(e);
+                }
+              }}
+            >
               <div className="bg-primary-color py-2 rounded-md  text-white font-semibold px-8 hover:bg-primary-color hover:opacity-80 transition-all text-[15px]">
                 Choose
               </div>

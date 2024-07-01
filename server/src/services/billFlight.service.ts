@@ -50,7 +50,11 @@ export class BillFlightService {
 
     return this.generateUniqueBillHotelId(attempts + 1);
   }
-  async getBillFlight(body: { userId: number; from: string }) {
+  async getBillFlight(
+    body: { userId: number; from: string },
+    page: number,
+    limit: number,
+  ) {
     const billFlights = await this.billFlightRepository
       .createQueryBuilder('bill_flight')
       .where('userId = :userId', { userId: body.userId })
@@ -69,6 +73,10 @@ export class BillFlightService {
       }
       return -1;
     });
-    return result;
+    const totalCount = result.length ? result.length : 0;
+    // Paginate the results
+    const offset = (page - 1) * limit;
+    const paginatedBills = result.slice(offset, offset + limit);
+    return { bills: paginatedBills, totalCount };
   }
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import { Body, Controller, Post, Query, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { BillFlightBody } from 'src/dtos/bill/billFlight.dto';
 import { BillFlightService } from 'src/services/billFlight.service';
@@ -14,9 +14,19 @@ export class BillFlightController {
   @Post('getBillFlight')
   async getBillFlight(
     @Body() body: { userId: number; from: string },
+    @Query('page') page: number,
+    @Query('limit') limit: number,
     @Res() res: Response,
   ) {
-    const result = await this.billFlightService.getBillFlight(body);
-    res.status(200).json({ status: 'success', data: result });
+    const result = await this.billFlightService.getBillFlight(
+      body,
+      page,
+      limit,
+    );
+    res.status(200).json({
+      status: 'success',
+      data: result.bills,
+      totalCount: result.totalCount,
+    });
   }
 }

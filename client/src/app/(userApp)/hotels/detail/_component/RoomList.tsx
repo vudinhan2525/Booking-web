@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/carousel";
 import { SheetTrigger } from "@/components/ui/sheet";
 import { IHotel } from "@/interfaces/IHotel";
+import { IUser } from "@/interfaces/IUser";
 import { RefundableIcon } from "@/lib/icon";
 import { formatNumber } from "@/utils/convertTime";
 import { facilitiesRoom, facilitiesRoomMap } from "@/utils/facilities";
@@ -21,10 +22,14 @@ import Image from "next/image";
 
 export default function RoomList({
   hotel,
+  user,
   setRoomSelected,
+  setShowLoginModal,
   setRoomOptSelected,
 }: {
   hotel: IHotel;
+  user: IUser | null;
+  setShowLoginModal: (t: boolean) => void;
   setRoomSelected: React.Dispatch<React.SetStateAction<number>>;
   setRoomOptSelected: React.Dispatch<React.SetStateAction<number>>;
 }) {
@@ -165,7 +170,11 @@ export default function RoomList({
                       </div>
                       <div className="basis-[20%] px-3  py-3 border-l-[1px]">
                         <SheetTrigger
-                          onClick={() => {
+                          onClick={(e) => {
+                            if (!user) {
+                              setShowLoginModal(true);
+                              e.preventDefault();
+                            }
                             setRoomOptSelected(id);
                             setRoomSelected(idx);
                           }}

@@ -32,6 +32,8 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
       const response = await userApiRequest.getMeFromClient();
       if (response.status === "success" && response.data.role === "admin") {
         setAdmin(response.data);
+      } else {
+        setShowLoginAdminModal(true);
       }
     } catch (error: any) {
       console.log(error);

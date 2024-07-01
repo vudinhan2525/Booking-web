@@ -6,9 +6,10 @@ import { formatNumber } from "@/utils/convertTime";
 import { faCircleNotch, faPlane } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import DetailFlightBooking from "./DetailFlightBooking";
 import { delay } from "@/utils/delay";
+import PaginationCustom from "@/components/component/Pagination/PaginationCustom";
 const datas = ["3 Months ago", "2 Months ago", "1 Month ago", "All time"];
 export default function FlightBooking() {
   const [filterSlt, setFilterSlt] = useState(0);
@@ -17,10 +18,13 @@ export default function FlightBooking() {
   const [showDetailFlight, setShowDetailFlight] = useState(false);
   const [detailFlightBooking, setDetailFlightBooking] = useState<IBillFlight>();
   const [isLoading, setIsLoading] = useState(false);
+  const [curPage, setCurPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(4);
+  const topRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     getBillFlight();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterSlt]);
+  }, [filterSlt, curPage]);
 
   const getBillFlight = async () => {
     if (!user) return;
@@ -38,9 +42,19 @@ export default function FlightBooking() {
       } else if (filterSlt === 3) {
         body.from = getDateAgo(360);
       }
-      const response = await flightApiRequest.getBillFlight(body);
+      const response = await flightApiRequest.getBillFlight(
+        body,
+        `?page=${curPage}&limit=4`
+      );
       if (response.status === "success") {
         setBillFlights(response.data);
+        setTotalPages(Math.ceil(response.totalCount / 4));
+        if (topRef.current) {
+          topRef.current.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+        }
       }
     } catch (error) {}
     setIsLoading(false);
@@ -61,6 +75,7 @@ export default function FlightBooking() {
   };
   return (
     <div className="mt-3">
+      <div ref={topRef}></div>
       {!showDetailFlight && (
         <div>
           <div className="flex gap-2">
@@ -174,6 +189,11 @@ export default function FlightBooking() {
                   })}
                 </div>
               )}
+              <PaginationCustom
+                totalPages={totalPages}
+                curPage={curPage}
+                setCurPage={setCurPage}
+              />
             </div>
           )}
         </div>

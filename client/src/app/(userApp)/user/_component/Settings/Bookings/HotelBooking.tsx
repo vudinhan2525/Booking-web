@@ -2,13 +2,8 @@
 import billHotelApiRequest from "@/apiRequest/billHotel";
 import { useAppContext } from "@/app/(userApp)/AppProvider";
 import { IBillHotel } from "@/interfaces/IBillHotel";
-import { RefundableIcon, RescheduleIcon } from "@/lib/icon";
-import {
-  convertTime,
-  convertTime4,
-  formatISODate,
-  formatNumber,
-} from "@/utils/convertTime";
+import { RefundableIcon } from "@/lib/icon";
+import { convertTime4, formatISODate, formatNumber } from "@/utils/convertTime";
 import { delay } from "@/utils/delay";
 import {
   faBed,
@@ -18,29 +13,54 @@ import {
   faHotel,
   faMoon,
 } from "@fortawesome/free-solid-svg-icons";
+import PaginationCustom from "@/components/component/Pagination/PaginationCustom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
-
+import React, { useEffect, useRef, useState } from "react";
+const datas = ["3 Months ago", "2 Months ago", "1 Month ago", "All time"];
 export default function HotelBooking() {
   const { user } = useAppContext();
+  const [filterSlt, setFilterSlt] = useState(0);
+
   const [isLoading, setIsLoading] = useState(false);
   const [billHotels, setBillHotels] = useState<IBillHotel[]>([]);
+  const [curPage, setCurPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(4);
+  const topRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     getHotelBookings();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [filterSlt, curPage]);
   const getHotelBookings = async () => {
     if (!user) return;
     if (isLoading) return;
     setIsLoading(true);
     await delay(500);
     try {
-      const response = await billHotelApiRequest.getBillHotel({
-        userId: user.id,
-      });
+      const body: any = { userId: user.id };
+      if (filterSlt === 0) {
+        body.from = getDateAgo(3);
+      } else if (filterSlt === 1) {
+        body.from = getDateAgo(2);
+      } else if (filterSlt === 2) {
+        body.from = getDateAgo(1);
+      } else if (filterSlt === 3) {
+        body.from = getDateAgo(360);
+      }
+      const response = await billHotelApiRequest.getBillHotel(
+        body,
+        `?page=${curPage}&limit=4`
+      );
       if (response.status === "success") {
         setBillHotels(response.data);
+        setTotalPages(Math.ceil(response.totalCount / 4));
+        if (topRef.current) {
+          topRef.current.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+        }
       }
     } catch (error) {}
     setIsLoading(false);
@@ -48,8 +68,38 @@ export default function HotelBooking() {
   function capitalizeFirstLetter(string: string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
+  const getDateAgo = (monthAgo: number) => {
+    // Get the current date
+    const currentDate = new Date();
+
+    // Clone the current date to avoid modifying it
+    const pastDate = new Date(currentDate);
+
+    // Set the month to three months ago
+    pastDate.setMonth(pastDate.getMonth() - monthAgo);
+    return pastDate.toString();
+  };
   return (
     <div>
+      <div ref={topRef}></div>
+      <div className="flex gap-2 mt-3">
+        {datas.map((el, idx) => {
+          return (
+            <div
+              key={idx}
+              onClick={() => setFilterSlt(idx)}
+              className={`${
+                filterSlt === idx
+                  ? "bg-primary-color text-white border-white"
+                  : "border-black"
+              } text-sm font-bold cursor-pointer hover:opacity-80 transition-all px-3 py-2 border-[1px]  rounded-md`}
+            >
+              {el}
+            </div>
+          );
+        })}
+      </div>
+      <p className="mt-4 font-bold">{datas[filterSlt]}</p>
       {isLoading && (
         <div className="w-full">
           <div className="flex my-12 items-center justify-center">
@@ -272,6 +322,11 @@ export default function HotelBooking() {
                 </div>
               );
             })}
+          <PaginationCustom
+            totalPages={totalPages}
+            curPage={curPage}
+            setCurPage={setCurPage}
+          />
         </div>
       )}
     </div>

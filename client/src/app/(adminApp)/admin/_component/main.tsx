@@ -11,6 +11,7 @@ import React, { useState } from "react";
 import HotelDashboard from "./Settings/Hotels/HotelDashboard";
 import { useAdminContext } from "../AdminProvider";
 import BillDashBoard from "./Settings/Bills/BillDashBoard";
+import Logo from "@/components/component/Header/Logo";
 const settings = [
   {
     title: "Hotels",
@@ -27,7 +28,7 @@ const settings = [
 ];
 export default function MainPage() {
   const searchParams = useSearchParams();
-  const { isAdminAuthenticated } = useAdminContext();
+  const { isAdminAuthenticated, setShowLoginAdminModal } = useAdminContext();
   const [optSlt, setOptSlt] = useState(() => {
     if (searchParams.get("slt")) {
       return Number(searchParams.get("slt"));
@@ -63,6 +64,26 @@ export default function MainPage() {
           {optSlt === 0 && <HotelDashboard />}
           {optSlt === 1 && <BillDashBoard />}
           {optSlt === 2 && <Account />}
+        </div>
+      )}
+      {!isAdminAuthenticated && (
+        <div className="basis-[75%] rounded-md shadow-md flex-col bg-white flex items-center min-w-[75%]">
+          <div className="w-[200px] mt-12">
+            <Logo />
+          </div>
+          <div className="w-[400px] h-[0.5px] bg-gray-300 my-6"></div>
+          <p className="text-primary-color text-3xl font-bold">
+            Welcome back!!
+          </p>
+          <p className="text-sm text-gray-600 my-4">Please Login to continue</p>
+          <div
+            onClick={() => {
+              setShowLoginAdminModal(true);
+            }}
+            className="px-5 py-2 border-primary-color rounded-md border-[1px] font-bold text-primary-color cursor-pointer hover:bg-gray-50"
+          >
+            Login now
+          </div>
         </div>
       )}
     </div>

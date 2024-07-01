@@ -53,17 +53,31 @@ export class BillHotelService {
 
     return this.generateUniqueBillHotelId(attempts + 1);
   }
-  async getBillHotel(body: { userId: number }) {
+  async getBillHotel(
+    body: { userId: number; from: string },
+    page: number,
+    limit: number,
+  ) {
     const billHotels = await this.billHotelRepository
       .createQueryBuilder('bill_hotel')
-      .where('userId = :userId', { userId: body.userId })
+      .where('bill_hotel.userId = :userId', { userId: body.userId })
       .getMany();
 
-    billHotels.sort((a, b) => {
-      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-    });
+    // Filter and sort the bills in memory
+    const fromDate = new Date(body.from);
+    const filteredBills = billHotels
+      .filter((bill) => new Date(bill.createdAt) >= fromDate)
+      .sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      );
 
-    return billHotels;
+    const totalCount = filteredBills.length ? filteredBills.length : 0;
+    // Paginate the results
+    const offset = (page - 1) * limit;
+    const paginatedBills = filteredBills.slice(offset, offset + limit);
+
+    return { bills: paginatedBills, totalCount };
   }
   async getBillHotelForAdmin(body: {
     adminId: number;
