@@ -11,6 +11,7 @@ import Overview from "./Overview";
 import PassengerItem from "./PassengerItem";
 import flightApiRequest from "@/apiRequest/flight";
 import { useToast } from "@/components/ui/use-toast";
+import Coupon from "@/components/component/Coupon/Coupon";
 
 export default function SheetSelectFlight({
   flight,
@@ -20,6 +21,7 @@ export default function SheetSelectFlight({
   iniNumberPassenger: string | null;
 }) {
   const { toast } = useToast();
+  const [discountPrice, setDiscountPrice] = useState(0);
   const { user } = useAppContext();
   const [sltSeatType, setSltSeatType] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -110,7 +112,7 @@ export default function SheetSelectFlight({
         from: `${flight.from}  (${flight.fromCode})`,
         to: `${flight.to}  (${flight.toCode})`,
         passenger: JSON.stringify(infoPassenger),
-        price: totalPrice,
+        price: totalPrice - discountPrice,
       });
       if (response.status === "success") {
         toast({
@@ -194,13 +196,20 @@ export default function SheetSelectFlight({
                 })}
               </div>
             </div>
+            <div className="px-6 pb-6 mt-4">
+              <Coupon
+                paymentPrice={totalPrice}
+                userId={user.id}
+                setDiscountPrice={setDiscountPrice}
+              />
+            </div>
             <div className="items-center px-6 py-1 justify-between bottom-0 flex border-t-[1px]  w-full bg-white">
               <div className="mt-2">
                 <p className="text-gray-600 text-sm">{`Total for ${
                   numberPassenger.adult + numberPassenger.child
                 } passenger(s) | ${numberPassenger.infant} infant(s)`}</p>
                 <p className="text-lg font-bold text-orange-600">{`${formatNumber(
-                  totalPrice
+                  totalPrice - discountPrice
                 )} VNĐ`}</p>
               </div>
               <Button

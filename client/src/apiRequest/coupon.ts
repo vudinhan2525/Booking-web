@@ -6,5 +6,10 @@ const couponApiRequest = {
       headers: { "Content-Type": "application/json" },
       withCredentials: true,
     }),
+  checkCoupon: (body: { couponId: string; payment: number }) =>
+    http.post<any>("/coupon/checkCoupon", body, {
+      headers: { "Content-Type": "application/json" },
+      withCredentials: true,
+    }),
 };
 export default couponApiRequest;

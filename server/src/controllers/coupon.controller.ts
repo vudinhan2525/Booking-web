@@ -16,4 +16,12 @@ export class CouponController {
     const result = await this.couponService.getCoupon(body);
     res.status(200).json({ status: 'success', data: result });
   }
+  @Post('/checkCoupon')
+  async checkCoupon(
+    @Body() body: { couponId: string; payment: number },
+    @Res() res: Response,
+  ) {
+    const result = await this.couponService.checkCoupon(body);
+    res.status(200).json(result);
+  }
 }

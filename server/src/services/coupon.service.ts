@@ -37,6 +37,33 @@ export class CouponService {
       .where('coupon.userId = :userId', { userId: body.userId })
       .getMany();
   }
+  async checkCoupon(body: { couponId: string; payment: number }) {
+    const coupon = await this.couponRepository.findOne({
+      where: { code: body.couponId },
+    });
+    if (!coupon || !coupon.isGlobal) {
+      return { status: 'failed', message: 'Invalid coupon code' };
+    }
+    const now = new Date();
+    const expiredDate = new Date(coupon.expiredDate);
+
+    if (expiredDate < now) {
+      return { status: 'failed', message: 'Coupon has expired' };
+    }
+    if (coupon.quantity <= 0) {
+      return { status: 'failed', message: 'Coupon is no longer available' };
+    }
+    // Check price or percent conditions if needed
+    if (coupon.priceRequire && body.payment < coupon.priceRequire) {
+      return {
+        status: 'failed',
+        message: 'Minimum payment requirement not met',
+      };
+    }
+    // coupon.quantity -= 1;
+    const data = await this.couponRepository.save(coupon);
+    return { status: 'success', data: data };
+  }
   private async generateUniqueBillHotelId(attempts = 0): Promise<string> {
     const uniqueId = generateUniqueId();
     const existingCoupon = await this.couponRepository.findOne({
