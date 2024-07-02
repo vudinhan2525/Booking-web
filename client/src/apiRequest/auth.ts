@@ -20,5 +20,15 @@ const authApiRequest = {
       headers: { "Content-Type": "application/json" },
       withCredentials: true,
     }),
+  googleAuth: (body: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    role: string;
+  }) =>
+    http.post<any>("auth/googleAuth", body, {
+      headers: { "Content-Type": "application/json" },
+      withCredentials: true,
+    }),
 };
 export default authApiRequest;

@@ -40,7 +40,7 @@ export class User {
   })
   role: string;
 
-  @Column({ select: false })
+  @Column({ select: false, nullable: true })
   password: string;
   @Column({ nullable: true })
   passwordConfirm: string;

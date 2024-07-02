@@ -5,6 +5,7 @@ import ShowModal from "@/components/modals/ShowModal";
 import Header from "@/components/component/Header/Header";
 import { Toaster } from "@/components/ui/toaster";
 import "../globals.css";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import Footer from "@/components/component/Footer/Footer";
 const nunito = Nunito({ subsets: ["latin"] });
 
@@ -19,16 +20,20 @@ export default async function UserAppLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={nunito.className}>
-        <AppProvider>
-          <Header />
-          {children}
-          <ShowModal />
-        </AppProvider>
-        <Toaster />
-        <Footer />
-      </body>
-    </html>
+    <GoogleOAuthProvider
+      clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string}
+    >
+      <html lang="en">
+        <body className={nunito.className}>
+          <AppProvider>
+            <Header />
+            {children}
+            <ShowModal />
+          </AppProvider>
+          <Toaster />
+          <Footer />;
+        </body>
+      </html>
+    </GoogleOAuthProvider>
   );
 }

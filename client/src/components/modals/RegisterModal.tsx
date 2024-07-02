@@ -21,11 +21,63 @@ import {
 } from "@/utils/schemaValidations/auth.schema";
 import authApiRequest from "@/apiRequest/auth";
 import { useAdminContext } from "@/app/(adminApp)/admin/AdminProvider";
+import { useGoogleLogin } from "@react-oauth/google";
 export default function RegisterModal({
   fromAdminPage,
 }: {
   fromAdminPage?: boolean;
 }) {
+  const login = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        const response = await fetch("/api/google", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ code: tokenResponse.code }),
+        });
+
+        if (!response.ok) {
+          throw new Error(
+            "Failed to exchange authorization code for access token"
+          );
+        }
+
+        const data = await response.json();
+        // Xử lý phản hồi (ví dụ: lưu mã truy cập, chuyển hướng)
+        const userInfoResponse = await fetch(
+          "https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=" +
+            data.access_token
+        );
+
+        if (!userInfoResponse.ok) {
+          throw new Error("Failed to fetch user info");
+        }
+
+        const userInfo = await userInfoResponse.json();
+
+        const body = {
+          firstName: userInfo.family_name,
+          lastName: userInfo.given_name,
+          email: userInfo.email,
+          role: "user",
+        };
+        if (fromAdminPage) {
+          body.role = "admin";
+        }
+        const res = await authApiRequest.googleAuth(body);
+        if (res.status === "success") {
+          window.location.reload();
+        } else if (res.status === "failed") {
+          form.setError("email", { message: res.message });
+        }
+      } catch (error) {
+        console.error("Lỗi khi gọi API endpoint", error);
+      }
+    },
+    flow: "auth-code",
+  });
   const { setShowRegisterModal } = useAppContext();
   const { setShowRegisterAdminModal } = useAdminContext();
   const handleTurnOffModal = (e: any) => {
@@ -259,7 +311,10 @@ export default function RegisterModal({
             <div className=" h-[1px] w-full bg-gray-300"></div>
           </div>
           <div className="my-4">
-            <div className="flex items-center gap-1 border-[1px] w-fit mx-auto px-8 py-[6px] border-primary-color rounded-lg cursor-pointer">
+            <div
+              onClick={() => login()}
+              className="flex items-center gap-1 border-[1px] w-fit mx-auto px-8 py-[6px] border-primary-color rounded-lg cursor-pointer"
+            >
               <GoogleIcons width="30px" height="30px"></GoogleIcons>
               <p className="text-primary-color font-bold">
                 Continue with Google
