@@ -250,7 +250,7 @@ export default function Header({ fromAdminPage }: { fromAdminPage?: boolean }) {
           >
             Flights
           </Button>
-          <Button
+          {/* <Button
             variant={onTop ? "transparent" : "outline"}
             className={`${
               onTop
@@ -259,7 +259,7 @@ export default function Header({ fromAdminPage }: { fromAdminPage?: boolean }) {
             } text-[15px] font-bold `}
           >
             Car Rentals
-          </Button>
+          </Button> */}
         </div>
       )}
     </div>

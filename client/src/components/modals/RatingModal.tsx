@@ -71,6 +71,7 @@ export default function RatingModal({
             method: "POST",
             body: formData,
             cache: "no-cache",
+            credentials: "include",
           }
         );
         const result = await response.json();
@@ -100,6 +101,7 @@ export default function RatingModal({
           method: "POST",
           body: formData,
           cache: "no-cache",
+          credentials: "include",
         }
       );
       const result = await response.json();

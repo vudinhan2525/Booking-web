@@ -20,4 +20,5 @@ export interface IBillHotel {
   floor: string;
   userId: number;
   adminId: number;
+  hotelId: number;
 }

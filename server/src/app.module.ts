@@ -126,6 +126,11 @@ export class AppModule implements NestModule {
       //coupon
       { path: 'coupon/getCoupon', method: RequestMethod.POST },
       { path: 'coupon/checkCoupon', method: RequestMethod.POST },
+      //review
+      { path: 'review/replyReview', method: RequestMethod.POST },
+      { path: 'review/addReview', method: RequestMethod.POST },
+      { path: 'review/updateReview', method: RequestMethod.POST },
+      { path: 'review/getReviewsForAdmin', method: RequestMethod.POST },
     );
     // .apply(RawBodyMiddleware)
     // .forRoutes({ path: 'payment/successStripe', method: RequestMethod.POST });

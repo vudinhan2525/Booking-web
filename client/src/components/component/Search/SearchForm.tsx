@@ -17,10 +17,10 @@ export default function SearchForm() {
       title: "Flights",
       icon: <FontAwesomeIcon className="text-[22px]" icon={faPlane} />,
     },
-    {
-      title: "Car Rentals",
-      icon: <FontAwesomeIcon className="text-[22px]" icon={faCar} />,
-    },
+    // {
+    //   title: "Car Rentals",
+    //   icon: <FontAwesomeIcon className="text-[22px]" icon={faCar} />,
+    // },
   ];
   return (
     <div>

@@ -28,10 +28,20 @@ export class BillHotelController {
   @Post('getBillHotelForAdmin')
   async getBillHotelForAdmin(
     @Body() body: { adminId: number; search: string; status: string },
+    @Query('page') page: number,
+    @Query('limit') limit: number,
     @Res() res: Response,
   ) {
-    const result = await this.billHotelService.getBillHotelForAdmin(body);
-    res.status(200).json({ status: 'success', data: result });
+    const result = await this.billHotelService.getBillHotelForAdmin(
+      body,
+      page,
+      limit,
+    );
+    res.status(200).json({
+      status: 'success',
+      data: result.bills,
+      totalCount: result.totalCount,
+    });
   }
   @Post('checkIn')
   async checkIn(

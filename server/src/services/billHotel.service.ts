@@ -33,6 +33,7 @@ export class BillHotelService {
       nameHotel: body.nameHotel,
       userId: body.userId,
       adminId: body.adminId,
+      hotelId: body.hotelId,
     });
     const result = await this.billHotelRepository.save(billHotel);
     return result;
@@ -79,11 +80,15 @@ export class BillHotelService {
 
     return { bills: paginatedBills, totalCount };
   }
-  async getBillHotelForAdmin(body: {
-    adminId: number;
-    search: string;
-    status: string;
-  }) {
+  async getBillHotelForAdmin(
+    body: {
+      adminId: number;
+      search: string;
+      status: string;
+    },
+    page: number,
+    limit: number,
+  ) {
     let query = await this.billHotelRepository
       .createQueryBuilder('bill_hotel')
       .where('adminId = :adminId', { adminId: body.adminId });
@@ -98,7 +103,11 @@ export class BillHotelService {
       });
     }
     const billHotels = await query.getMany();
-    return billHotels;
+    const totalCount = billHotels.length ? billHotels.length : 0;
+    // Paginate the results
+    const offset = (page - 1) * limit;
+    const paginatedBills = billHotels.slice(offset, offset + limit);
+    return { bills: paginatedBills, totalCount };
   }
   async checkIn(body: {
     billHotelId: string;

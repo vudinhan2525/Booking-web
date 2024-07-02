@@ -21,6 +21,7 @@ import { delay } from "@/utils/delay";
 import Image from "next/image";
 import Dialog from "@/components/modals/Dialog";
 import { useToast } from "@/components/ui/use-toast";
+import PaginationCustom from "@/components/component/Pagination/PaginationCustom";
 
 export default function BillDashBoard() {
   const { toast } = useToast();
@@ -34,24 +35,30 @@ export default function BillDashBoard() {
   const [floor, setFloor] = useState(0);
   const [roomCode, serRoomCode] = useState("");
   const [error, setError] = useState<string[]>([]);
+  const [curPage, setCurPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(4);
   const { admin } = useAdminContext();
   useEffect(() => {
     getBills();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [curPage]);
   const getBills = async () => {
     if (isLoading) return;
     setIsLoading(true);
     await delay(500);
     if (!admin) return;
     try {
-      const response = await billHotelApiRequest.getBillHotelForAdmin({
-        adminId: admin.id,
-        search: search,
-        status: unCapitalizeFirstLetter(status.name),
-      });
+      const response = await billHotelApiRequest.getBillHotelForAdmin(
+        {
+          adminId: admin.id,
+          search: search,
+          status: unCapitalizeFirstLetter(status.name),
+        },
+        `?page=${curPage}&limit=4`
+      );
       if (response.status === "success") {
         setBills(response.data);
+        setTotalPages(Math.ceil(response.totalCount / 4));
       }
     } catch (error) {}
     setIsLoading(false);
@@ -410,6 +417,11 @@ export default function BillDashBoard() {
               </div>
             </div>
           )}
+          <PaginationCustom
+            totalPages={totalPages}
+            curPage={curPage}
+            setCurPage={setCurPage}
+          />
         </div>
       )}
       <div className="h-[200px]"></div>

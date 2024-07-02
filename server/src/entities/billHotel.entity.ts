@@ -82,4 +82,7 @@ export class BillHotel {
   @ManyToOne(() => User)
   @JoinColumn({ name: 'adminId' })
   admin: User;
+
+  @Column()
+  hotelId: number;
 }

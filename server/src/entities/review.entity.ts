@@ -22,7 +22,7 @@ export class Review {
   })
   summary: string;
   @Column({ nullable: false })
-  dateRate: Date;
+  dateRate: string;
 
   @Column()
   hotelId: number;
@@ -51,5 +51,5 @@ export class Review {
   })
   reply: string;
   @Column({ nullable: true })
-  replyDate: Date;
+  replyDate: string;
 }

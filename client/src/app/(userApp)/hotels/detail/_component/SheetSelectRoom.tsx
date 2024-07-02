@@ -149,6 +149,7 @@ export default function SheetSelectRoom({
       duration: duration,
       userId: user.id,
       adminId: hotel.adminId,
+      hotelId: hotel.id,
       isHotelBody: true,
     };
     if (paymentSlt === "momo") {

@@ -17,6 +17,7 @@ import PaginationCustom from "@/components/component/Pagination/PaginationCustom
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 const datas = ["3 Months ago", "2 Months ago", "1 Month ago", "All time"];
 export default function HotelBooking() {
   const { user } = useAppContext();
@@ -26,6 +27,7 @@ export default function HotelBooking() {
   const [billHotels, setBillHotels] = useState<IBillHotel[]>([]);
   const [curPage, setCurPage] = useState(1);
   const [totalPages, setTotalPages] = useState(4);
+  const router = useRouter();
   const topRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -299,23 +301,42 @@ export default function HotelBooking() {
                   <div className="bg-gray-300 w-full h-[0.5px] my-4"></div>
                   <div className="flex items-center justify-between">
                     <p className="font-bold text-gray-600">Total price:</p>
-                    <div className="flex items-center gap-1">
-                      <div className="flex flex-col justify-center items-center">
-                        <div className="flex items-center gap-1 ">
-                          <p
-                            className={`${
-                              el.isPayment && "line-through"
-                            } text-xl font-bold text-orange-600`}
-                          >{`${formatNumber(el.price)}`}</p>
-                          <p className="mt-[3px] text-xs font-semibold text-gray-500">
-                            VNĐ
-                          </p>
+                    <div className="flex items-center gap-3 ">
+                      <div className="flex items-center gap-1">
+                        <div className="flex flex-col justify-center items-center">
+                          <div className="flex items-center gap-1 ">
+                            <p
+                              className={`${
+                                el.isPayment && "line-through"
+                              } text-xl font-bold text-orange-600`}
+                            >{`${formatNumber(el.price)}`}</p>
+                            <p className="mt-[3px] text-xs font-semibold text-gray-500">
+                              VNĐ
+                            </p>
+                          </div>
+                          {el.isPayment && (
+                            <p className="text-sm font-bold text-orange-600">
+                              Payment completed
+                            </p>
+                          )}
                         </div>
-                        {el.isPayment && (
-                          <p className="text-sm font-bold text-orange-600">
-                            Payment completed
-                          </p>
-                        )}
+                      </div>
+                      <div
+                        onClick={() => {
+                          localStorage.setItem(
+                            "rating",
+                            JSON.stringify({
+                              showRating: true,
+                              hotelId: el.hotelId,
+                            })
+                          );
+                          router.push(
+                            `/hotels/detail?hotelId=${el.hotelId}&code=DAD&departureTime=2024-07-02&duration=1&numberPassenger=1-0-1`
+                          );
+                        }}
+                        className="px-4 py-2 border-[1px] cursor-pointer hover:bg-gray-50 transition-all border-orange-600 text-orange-600 font-bold text-sm rounded-md"
+                      >
+                        Rating now
                       </div>
                     </div>
                   </div>

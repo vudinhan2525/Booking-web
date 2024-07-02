@@ -62,6 +62,14 @@ export class ReviewController {
     const result = await this.reviewService.getReviews(data);
     res.status(200).json({ status: 'success', data: result });
   }
+  @Post('getReviewsForAdmin')
+  async getReviewsForAdmin(
+    @Body() body: { adminId: number },
+    @Res() res: Response,
+  ) {
+    const result = await this.reviewService.getReviewsForAdmin(body);
+    res.status(200).json(result);
+  }
   @Post('checkCanReview')
   async checkCanReview(
     @Body() data: { hotelId: number; userId: number },
@@ -105,6 +113,15 @@ export class ReviewController {
     @Res() res: Response,
   ) {
     const result = await this.reviewService.updateReviews(files, data);
+    res.status(200).json({ status: 'success', data: result });
+  }
+
+  @Post('replyReview')
+  async replyReview(
+    @Body() body: { reviewId: number; reply: string },
+    @Res() res: Response,
+  ) {
+    const result = await this.reviewService.replyReview(body);
     res.status(200).json({ status: 'success', data: result });
   }
 }

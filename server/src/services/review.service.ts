@@ -31,13 +31,13 @@ export class ReviewService {
         return imageUrl;
       }),
     );
-    const formattedDateTime = this.getFormattedDateTimeInTimeZone(7);
+    const date = new Date();
     const review = await this.reviewRepository.create({
       rating: Number(body.rating),
       summary: body.summary,
       hotelId: Number(body.hotelId),
       userId: Number(body.userId),
-      dateRate: formattedDateTime,
+      dateRate: date.toString(),
       imageUrls: JSON.stringify(uploadedUrls),
     });
     const result = await this.reviewRepository.save(review);
@@ -84,11 +84,38 @@ export class ReviewService {
 
     return reviews;
   }
+  async getReviewsForAdmin(body: { adminId: number }) {
+    if (!body.adminId) {
+      return { status: 'failed', message: 'adminId not found.' };
+    }
+    const hotels = await this.hotelRepository
+      .createQueryBuilder('hotel')
+
+      .where(`adminId = :adminId`, { adminId: body.adminId })
+      .getMany();
+    const fetchReviewsPromises = hotels.map(async (hotel) => {
+      return await this.reviewRepository
+        .createQueryBuilder('review')
+        .leftJoinAndSelect('review.user', 'user')
+        .where('hotelId = :hotelId', { hotelId: hotel.id })
+        .getMany();
+    });
+    const reviewsResults = await Promise.all(fetchReviewsPromises);
+    const reviews = reviewsResults
+      .flat()
+      .filter((review) => review.dateRate)
+      .sort((a, b) => {
+        const r = new Date(b.dateRate).getTime();
+        const q = new Date(a.dateRate).getTime();
+        return r - q;
+      });
+    return { status: 'success', data: reviews };
+  }
   async checkCanReview(body: { hotelId: number; userId: number }) {
     const review = await this.reviewRepository
       .createQueryBuilder('review')
       .where('hotelId = :hotelId', { hotelId: body.hotelId })
-      .andWhere('review.userId != :userId', { userId: body.userId })
+      .andWhere('review.userId = :userId', { userId: body.userId })
       .getOne();
     if (!review) return true;
     return false;
@@ -96,38 +123,41 @@ export class ReviewService {
   async updateReviews(files: Array<Express.Multer.File>, body: ReviewBodyDto) {
     const connectionString = process.env.AZURE_CONNECTION_STRING as string;
     const containerName = 'shopcartctn';
-    const uploadedUrls = await Promise.all(
-      files.map(async (file) => {
-        const imageBuffer = file.buffer;
-        const containerName = 'shopcartctn';
-        const blobName = `${file.originalname}-${Date.now()}`;
-        const connectionString = process.env.AZURE_CONNECTION_STRING as string;
-        const imageUrl = await uploadToAzureBlobStorage(
-          imageBuffer,
-          containerName,
-          blobName,
-          connectionString,
-        );
-        return imageUrl;
-      }),
-    );
-    //delete old image
+    let imageUrls = body.oldImageUrls;
     if (files && files.length > 0) {
-      const oldImageUrls = JSON.parse(body.oldImageUrls);
-      await Promise.all(
-        oldImageUrls.map(async (oldImageUrl) => {
-          const oldBlobName = oldImageUrl.substring(
-            oldImageUrl.lastIndexOf('/') + 1,
-          );
-          await deleteFromAzureBlobStorage(
+      const uploadedUrls = await Promise.all(
+        files.map(async (file) => {
+          const imageBuffer = file.buffer;
+          const containerName = 'shopcartctn';
+          const blobName = `${file.originalname}-${Date.now()}`;
+          const connectionString = process.env
+            .AZURE_CONNECTION_STRING as string;
+          const imageUrl = await uploadToAzureBlobStorage(
+            imageBuffer,
             containerName,
-            oldBlobName,
+            blobName,
             connectionString,
           );
+          return imageUrl;
         }),
       );
+      imageUrls = JSON.stringify(uploadedUrls);
+      const oldImageUrls = JSON.parse(body.oldImageUrls);
+      if (oldImageUrls && oldImageUrls.length > 0) {
+        await Promise.all(
+          oldImageUrls.map(async (oldImageUrl) => {
+            const oldBlobName = oldImageUrl.substring(
+              oldImageUrl.lastIndexOf('/') + 1,
+            );
+            await deleteFromAzureBlobStorage(
+              containerName,
+              oldBlobName,
+              connectionString,
+            );
+          }),
+        );
+      }
     }
-
     const review = await this.reviewRepository.findOne({
       where: { hotelId: Number(body.hotelId), userId: body.userId },
     });
@@ -136,7 +166,7 @@ export class ReviewService {
     }
     review.rating = body.rating;
     review.summary = body.summary;
-    review.imageUrls = JSON.stringify(uploadedUrls);
+    review.imageUrls = imageUrls;
     const result = await this.reviewRepository.save(review);
     await this.updateHotel(body.hotelId);
     return result;
@@ -187,5 +217,18 @@ export class ReviewService {
     hotel.fourStar = four;
     hotel.fiveStar = five;
     await this.hotelRepository.save(hotel);
+  }
+  async replyReview(body: { reviewId: number; reply: string }) {
+    const review = await this.reviewRepository
+      .createQueryBuilder('review')
+      .where('id = :reviewId', { reviewId: body.reviewId })
+      .getOne();
+    if (review) {
+      const curDate = new Date();
+      review.reply = body.reply;
+      review.replyDate = curDate.toString();
+    }
+    const data = await this.reviewRepository.save(review);
+    return data;
   }
 }

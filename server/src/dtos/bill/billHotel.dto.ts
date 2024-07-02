@@ -55,4 +55,8 @@ export class BillHotelBody {
   @IsNotEmpty()
   @Expose()
   adminId: number;
+
+  @IsNotEmpty()
+  @Expose()
+  hotelId: number;
 }

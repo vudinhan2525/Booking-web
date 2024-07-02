@@ -11,12 +11,15 @@ const billHotelApiRequest = {
       headers: { "Content-Type": "application/json" },
       withCredentials: true,
     }),
-  getBillHotelForAdmin: (body: {
-    adminId: number;
-    search: string;
-    status: string;
-  }) =>
-    http.post<any>("/billHotel/getBillHotelForAdmin", body, {
+  getBillHotelForAdmin: (
+    body: {
+      adminId: number;
+      search: string;
+      status: string;
+    },
+    params: string
+  ) =>
+    http.post<any>(`/billHotel/getBillHotelForAdmin${params}`, body, {
       headers: { "Content-Type": "application/json" },
       withCredentials: true,
     }),

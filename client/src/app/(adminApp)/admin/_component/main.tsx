@@ -3,6 +3,7 @@ import Account from "@/app/(userApp)/user/_component/Settings/Account/Account";
 import {
   faFileInvoice,
   faHotel,
+  faStar,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,6 +13,7 @@ import HotelDashboard from "./Settings/Hotels/HotelDashboard";
 import { useAdminContext } from "../AdminProvider";
 import BillDashBoard from "./Settings/Bills/BillDashBoard";
 import Logo from "@/components/component/Header/Logo";
+import ReviewDashboard from "./Settings/Reviews/ReviewDashboard";
 const settings = [
   {
     title: "Hotels",
@@ -20,6 +22,10 @@ const settings = [
   {
     title: "Bills",
     icon: <FontAwesomeIcon icon={faFileInvoice} />,
+  },
+  {
+    title: "Reviews",
+    icon: <FontAwesomeIcon icon={faStar} />,
   },
   {
     title: "Account",
@@ -63,7 +69,8 @@ export default function MainPage() {
         <div className="basis-[75%] min-w-[75%]">
           {optSlt === 0 && <HotelDashboard />}
           {optSlt === 1 && <BillDashBoard />}
-          {optSlt === 2 && <Account />}
+          {optSlt === 2 && <ReviewDashboard />}
+          {optSlt === 3 && <Account />}
         </div>
       )}
       {!isAdminAuthenticated && (

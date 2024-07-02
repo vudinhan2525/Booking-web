@@ -29,12 +29,17 @@ export default function MainHotelDetail() {
   const reviewRef = useRef<HTMLInputElement>(null);
   const locationRef = useRef<HTMLInputElement>(null);
   const { user, setUser, setShowLoginModal } = useAppContext();
-  const [showRatingModal, setShowRatingModal] = useState(() => {
-    if (searchParams.get("rating") === "1") return true;
-    return false;
-  });
+  const [showRatingModal, setShowRatingModal] = useState(false);
   useEffect(() => {
     window.scrollTo(0, 0);
+    const data = localStorage.getItem("rating");
+    localStorage.removeItem("rating");
+    if (data) {
+      const rating = JSON.parse(data);
+      if (rating.showRating === true) {
+        setShowRatingModal(true);
+      }
+    }
     getHotel();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
