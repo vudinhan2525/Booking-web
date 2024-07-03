@@ -64,7 +64,7 @@ export class ReviewController {
   }
   @Post('getReviewsForAdmin')
   async getReviewsForAdmin(
-    @Body() body: { adminId: number },
+    @Body() body: { adminId: number; hotelId: number },
     @Res() res: Response,
   ) {
     const result = await this.reviewService.getReviewsForAdmin(body);

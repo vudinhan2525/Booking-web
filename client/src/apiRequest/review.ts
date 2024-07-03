@@ -10,8 +10,13 @@ const reviewApiRequest = {
       headers: { "Content-Type": "application/json" },
       withCredentials: true,
     }),
-  getReviewsForAdmin: (body: { adminId: number }) =>
+  getReviewsForAdmin: (body: { adminId: number; hotelId: number }) =>
     http.post<any>("review/getReviewsForAdmin", body, {
+      headers: { "Content-Type": "application/json" },
+      withCredentials: true,
+    }),
+  replyReview: (body: { reviewId: number; reply: string }) =>
+    http.post<any>("review/replyReview", body, {
       headers: { "Content-Type": "application/json" },
       withCredentials: true,
     }),

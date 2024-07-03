@@ -5,7 +5,7 @@ import { Progress } from "@/components/ui/progress";
 import { IHotel } from "@/interfaces/IHotel";
 import { IReview } from "@/interfaces/IReview";
 import { IUser } from "@/interfaces/IUser";
-import { toDayMonthYear } from "@/utils/convertTime";
+import { convertTime4, toDayMonthYear } from "@/utils/convertTime";
 import { faPen, faPencil, faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
@@ -194,23 +194,17 @@ export default function Rating({
                   );
                 })}
               </div>
-              <div className="px-4 py-4 bg-gray-100 rounded-lg mt-4">
-                <p className="text-blue-700 font-bold">
-                  Accomodation&apos;s reply
-                </p>
-                <p className="text-sm font-bold text-gray-700 mt-1">
-                  21 Jan, 2024
-                </p>
-                <p className="text-sm mt-2">
-                  Dear Dey Maputra! Greetings from seashore hotel-APARTMENT.
-                  Thank you for sharing your experience during your recent stay
-                  with us and for recommending us to people. Nothing gives us
-                  more pleasure knowing that you have had an enjoyable
-                  experience. We are very much overwhelmed by your kind words.
-                  It would be nice to be able to welcome you back again in our
-                  hotel in the near future. Seashore team.
-                </p>
-              </div>
+              {el.reply && el.replyDate && (
+                <div className="px-4 py-4 bg-gray-100 rounded-lg mt-4">
+                  <p className="text-blue-700 font-bold">
+                    Accomodation&apos;s reply
+                  </p>
+                  <p className="text-sm font-bold text-gray-700 mt-1">
+                    {convertTime4(el.replyDate)}
+                  </p>
+                  <p className="text-sm mt-2">{el.reply}</p>
+                </div>
+              )}
             </div>
           </div>
         );

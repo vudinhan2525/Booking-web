@@ -19,6 +19,7 @@ export function ComboBox({
   isAirportList,
   isCalendar,
   departureDate,
+  isReviews,
   isSeatList,
   isSetNumberPassenger,
   isDestination,
@@ -39,6 +40,7 @@ export function ComboBox({
   isSetNumberPassenger?: boolean;
   isDestination?: boolean;
   isDurationList?: boolean;
+  isReviews?: boolean;
 }) {
   const [isFirst, setIsFirst] = React.useState(true);
   const [open, setOpen] = React.useState(false);
@@ -87,6 +89,8 @@ export function ComboBox({
             isSeatList && "w-[200px]"
           } ${isSetNumberPassenger && "w-full"} ${isDestination && "w-full"} ${
             isDurationList && "w-[165px]"
+          } ${
+            isReviews && "w-full"
           } py-3  bg-white animate-fadeIn border-[1px] rounded-lg max-h-[300px] overflow-y-auto absolute z-10`}
         >
           {frameworks &&

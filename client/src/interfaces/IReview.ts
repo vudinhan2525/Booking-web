@@ -3,7 +3,6 @@ export interface IReview {
   rating: number;
   summary: string;
   dateRate: string;
-
   hotelId: number;
   userId: number;
   imageUrls: string[];
@@ -13,4 +12,6 @@ export interface IReview {
     lastName: string;
     isActive: boolean;
   };
+  reply: string | null;
+  replyDate: string | null;
 }

@@ -84,15 +84,17 @@ export class ReviewService {
 
     return reviews;
   }
-  async getReviewsForAdmin(body: { adminId: number }) {
+  async getReviewsForAdmin(body: { adminId: number; hotelId: number }) {
     if (!body.adminId) {
       return { status: 'failed', message: 'adminId not found.' };
     }
-    const hotels = await this.hotelRepository
+    let query = await this.hotelRepository
       .createQueryBuilder('hotel')
-
-      .where(`adminId = :adminId`, { adminId: body.adminId })
-      .getMany();
+      .where(`adminId = :adminId`, { adminId: body.adminId });
+    if (body.hotelId > 0) {
+      query = query.andWhere(`id = :hotelId`, { hotelId: body.hotelId });
+    }
+    const hotels = await query.getMany();
     const fetchReviewsPromises = hotels.map(async (hotel) => {
       return await this.reviewRepository
         .createQueryBuilder('review')
@@ -229,6 +231,11 @@ export class ReviewService {
       review.replyDate = curDate.toString();
     }
     const data = await this.reviewRepository.save(review);
-    return data;
+    const result = await this.reviewRepository
+      .createQueryBuilder('review')
+      .leftJoinAndSelect('review.user', 'user')
+      .where('review.id = :reviewId', { reviewId: data.id })
+      .getOne();
+    return result;
   }
 }
