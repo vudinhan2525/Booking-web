@@ -62,11 +62,13 @@ export default function MainSearchHotelPages() {
     await delay(500);
     const long = Number(searchParams.get("long"));
     const lat = Number(searchParams.get("lat"));
+    const searchTxt = searchParams.get("search");
     try {
       const response = await hotelApiRequest.getHotels(
         {
           long,
           lat,
+          searchTxt,
           filter: filterObj,
         },
         `?page=${curPage}&limit=4`

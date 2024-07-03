@@ -9,7 +9,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ComboBox } from "./ComboBox";
-import { useEffect, useState } from "react";
+import { KeyboardEvent, useCallback, useEffect, useState } from "react";
 import { destinations } from "@/lib/dataHotel";
 import {
   convertTime,
@@ -18,6 +18,11 @@ import {
 } from "@/utils/convertTime";
 import { useRouter } from "next/navigation";
 import objectToQueryString from "@/utils/convertToQueryString";
+import hotelApiRequest from "@/apiRequest/hotel";
+import useDebounce from "@/hooks/useDebounce";
+import { IHotel } from "@/interfaces/IHotel";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function SearchHotels({
   fromHotelsPage,
@@ -83,18 +88,27 @@ export default function SearchHotels({
       bedroom: 1,
     };
   });
+  const [search, setSearch] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
+  const [preview, setPreview] = useState<JSX.Element | null>(null);
+  const debouncedSearch = useDebounce(search, 500);
   const router = useRouter();
   useEffect(() => {
     if (departureTime !== "") {
       setArrivalTime(getFutureDate(departureTime, duration));
     }
   }, [departureTime, duration]);
+
   const handleNavigate = () => {
     const obj: any = {};
-    if (destination.lat && destination.long && destination.code) {
-      obj.lat = destination.lat;
-      obj.long = destination.long;
-      obj.code = destination.code;
+    if (!isSearching) {
+      if (destination.lat && destination.long && destination.code) {
+        obj.lat = destination.lat;
+        obj.long = destination.long;
+        obj.code = destination.code;
+      }
+    } else {
+      obj.search = search;
     }
     if (departureTime) {
       obj.departureTime = convertTime(departureTime);
@@ -122,6 +136,80 @@ export default function SearchHotels({
     }
     router.push("/hotels/search?" + objectToQueryString(obj));
   };
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      handleNavigate();
+    }
+  };
+
+  useEffect(() => {
+    if (isSearching && debouncedSearch.trim() !== "") {
+      renderPreviewHotel();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedSearch, isSearching]);
+  const renderPreviewHotel = async () => {
+    if (!isSearching || search.trim() === "") return;
+    try {
+      const response = await hotelApiRequest.getHotels(
+        {
+          long: 0,
+          lat: 0,
+          searchTxt: debouncedSearch,
+          filter: {
+            rating: "",
+            facilities: "",
+            priceMin: 0,
+            priceMax: 10000000,
+            accomodation: "Hotels",
+            sortBy: "Top Rating",
+          },
+        },
+        `?page=1&limit=4`
+      );
+      if (response.status === "success") {
+        const previewJSX = (
+          <div className="flex flex-col">
+            {response.data &&
+              response.data.map((el: IHotel, idx: number) => {
+                return (
+                  <Link
+                    key={idx}
+                    href={`/hotels/detail?hotelId=${el.id}`}
+                    className="flex w-full gap-4 px-4 py-2 hover:bg-gray-50 cursor-pointer"
+                  >
+                    <div className="flex items-center justify-center">
+                      <div className="w-[60px] rounded-md overflow-hidden relative h-[50px]">
+                        <Image
+                          alt="img"
+                          fill
+                          priority
+                          sizes="100%"
+                          style={{
+                            objectFit: "cover",
+                            objectPosition: "center",
+                          }}
+                          src={
+                            el.images
+                              ? el.images[0]
+                              : "https://shopcartimg2.blob.core.windows.net/shopcartctn/pexels-boonkong-boonpeng-442952-1134176.jpg"
+                          }
+                        />
+                      </div>
+                    </div>
+                    <div className="basis-[80%]">
+                      <p className="font-bold">{el.name}</p>
+                      <p className="text-[14px]">{el.address}</p>
+                    </div>
+                  </Link>
+                );
+              })}
+          </div>
+        );
+        setPreview(previewJSX);
+      }
+    } catch (error) {}
+  };
   return (
     <div
       className={`${
@@ -139,6 +227,9 @@ export default function SearchHotels({
                 value={destination}
                 frameworks={destinations}
                 setValue={setDestination}
+                setSearchTxt={setSearch}
+                setIsSearching={setIsSearching}
+                preview={preview}
                 child={
                   <div className="flex  items-center gap-2 bg-gray-300/25 px-4 py-2 rounded-lg">
                     <div>
@@ -147,11 +238,16 @@ export default function SearchHotels({
                         className="text-white"
                       />
                     </div>
-                    <p className="text-white font-semibold mt-[2px]">
-                      {destination.name
-                        ? destination.name + ", Việt Nam"
-                        : "Select city, destination,..."}
-                    </p>
+                    <input
+                      onKeyDown={handleKeyDown}
+                      placeholder="Select city, destination,..."
+                      value={search}
+                      onChange={(e) => {
+                        setSearch(e.target.value);
+                        setIsSearching(true);
+                      }}
+                      className="w-full text-white placeholder:text-white bg-transparent outline-none font-semibold mt-[2px]"
+                    ></input>
                   </div>
                 }
               />
@@ -264,6 +360,9 @@ export default function SearchHotels({
             value={destination}
             frameworks={destinations}
             setValue={setDestination}
+            setSearchTxt={setSearch}
+            setIsSearching={setIsSearching}
+            preview={preview}
             child={
               <div
                 className={`${
@@ -276,11 +375,16 @@ export default function SearchHotels({
                     className="text-primary-color"
                   />
                 </div>
-                <p>
-                  {destination.name
-                    ? destination.name + ", Việt Nam"
-                    : "Select city, destination,..."}
-                </p>
+                <input
+                  onKeyDown={handleKeyDown}
+                  placeholder="Select city, destination,..."
+                  value={search}
+                  onChange={(e) => {
+                    setSearch(e.target.value);
+                    setIsSearching(true);
+                  }}
+                  className="w-full text-gray-700 placeholder:text-gray-500 bg-transparent outline-none font-semibold mt-[2px]"
+                ></input>
               </div>
             }
           />

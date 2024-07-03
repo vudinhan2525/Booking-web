@@ -24,6 +24,9 @@ export function ComboBox({
   isSetNumberPassenger,
   isDestination,
   isDurationList,
+  setSearchTxt,
+  setIsSearching,
+  preview,
 }: {
   child: React.ReactNode;
   setValue: any;
@@ -41,6 +44,9 @@ export function ComboBox({
   isDestination?: boolean;
   isDurationList?: boolean;
   isReviews?: boolean;
+  setIsSearching?: React.Dispatch<React.SetStateAction<boolean>>;
+  setSearchTxt?: React.Dispatch<React.SetStateAction<string>>;
+  preview?: JSX.Element | null;
 }) {
   const [isFirst, setIsFirst] = React.useState(true);
   const [open, setOpen] = React.useState(false);
@@ -82,7 +88,8 @@ export function ComboBox({
   }, [departureDate]);
   return (
     <div className="relative " ref={dropdownRef}>
-      <div onClick={() => setOpen((prev) => !prev)}>{child}</div>
+      <div onClick={() => setOpen(true)}>{child}</div>
+
       {open && (
         <div
           className={`${isAirportList && "w-[300px]"} ${
@@ -93,6 +100,18 @@ export function ComboBox({
             isReviews && "w-full"
           } py-3  bg-white animate-fadeIn border-[1px] rounded-lg max-h-[300px] overflow-y-auto absolute z-10`}
         >
+          {" "}
+          {preview && (
+            <div className="">
+              <p className="text-xs px-4 font-bold text-gray-400">
+                Related hotel
+              </p>
+              {preview}
+              <p className="text-xs px-4 font-bold text-gray-400 mt-2">
+                Orther location
+              </p>
+            </div>
+          )}
           {frameworks &&
             frameworks.map((el, idx) => {
               return (
@@ -101,6 +120,12 @@ export function ComboBox({
                   onClick={() => {
                     setValue(el);
                     setOpen(false);
+                    if (setSearchTxt) {
+                      setSearchTxt(el.name + ", Việt Nam");
+                    }
+                    if (setIsSearching) {
+                      setIsSearching(false);
+                    }
                   }}
                   className="cursor-pointer px-4 hover:bg-gray-200 transition-all py-2"
                 >

@@ -33,7 +33,12 @@ const hotelApiRequest = {
       withCredentials: true,
     }),
   getHotels: (
-    body: { long: number; lat: number; filter: IFilterHotel },
+    body: {
+      long: number;
+      lat: number;
+      filter: IFilterHotel;
+      searchTxt?: string | null;
+    },
     params: string
   ) =>
     http.post<any>(`/hotel/getHotels${params}`, body, {

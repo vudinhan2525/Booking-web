@@ -99,12 +99,18 @@ export class HotelController {
   }
   @Post('getHotels')
   async getHotel(
-    @Body() data: { long: number; lat: number; filter: IFilterHotel },
+    @Body()
+    body: {
+      long: number;
+      lat: number;
+      filter: IFilterHotel;
+      searchTxt?: string | null;
+    },
     @Res() res: Response,
     @Query('page') page: number,
     @Query('limit') limit: number,
   ) {
-    const result: any = await this.hotelService.getHotel(data, page, limit);
+    const result: any = await this.hotelService.getHotel(body, page, limit);
     res.status(200).json({
       status: 'success',
       data: result.hotelWithRooms,

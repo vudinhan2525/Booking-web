@@ -216,7 +216,12 @@ export class HotelService {
     await Promise.all(savePromises);
   }
   async getHotel(
-    body: { long: number; lat: number; filter: IFilterHotel },
+    body: {
+      long: number;
+      lat: number;
+      filter: IFilterHotel;
+      searchTxt?: string | null;
+    },
     page: number,
     limit: number,
   ) {
@@ -229,6 +234,12 @@ export class HotelService {
     if (accomodations.length > 0) {
       query = query.where('hotel.accomodation IN (:...accomodations)', {
         accomodations,
+      });
+    }
+    //Filter by search text
+    if (body.searchTxt) {
+      query = query.andWhere('name LIKE :text', {
+        text: `%${body.searchTxt}%`,
       });
     }
     //Filter by facilities
