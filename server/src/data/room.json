@@ -6,7 +6,9 @@
     "area": 32,
     "facilitiesRoom": "Shower,Seating area,Wifi",
     "hotelId": 1,
-    "images": "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
+    "images": [
+      "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
+    ]
   },
   {
     "id": 2,
@@ -15,7 +17,9 @@
     "area": 45,
     "facilitiesRoom": "Shower,Seating area,Wifi,Hot water",
     "hotelId": 1,
-    "images": "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
+    "images": [
+      "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
+    ]
   },
   {
     "id": 3,
@@ -24,7 +28,9 @@
     "area": 32,
     "facilitiesRoom": "Shower,Seating area,Wifi,Hot water",
     "hotelId": 1,
-    "images": "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
+    "images": [
+      "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
+    ]
   },
   {
     "id": 4,
@@ -33,7 +39,9 @@
     "area": 36,
     "facilitiesRoom": "Shower,Seating area,Wifi,Hot water,Bathtub,Refrigerator",
     "hotelId": 2,
-    "images": "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
+    "images": [
+      "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
+    ]
   },
   {
     "id": 5,
@@ -42,7 +50,9 @@
     "area": 40,
     "facilitiesRoom": "Shower,Seating area,Wifi,Hot water,Bathtub,Refrigerator",
     "hotelId": 2,
-    "images": "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
+    "images": [
+      "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
+    ]
   },
   {
     "id": 6,
@@ -51,7 +61,9 @@
     "area": 36,
     "facilitiesRoom": "Shower,Seating area,Wifi,Hot water,Bathtub,Refrigerator",
     "hotelId": 2,
-    "images": "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
+    "images": [
+      "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
+    ]
   },
   {
     "id": 7,
@@ -60,7 +72,9 @@
     "area": 36,
     "facilitiesRoom": "Shower,Seating area,Wifi,Hot water,Balcony,Refrigerator",
     "hotelId": 3,
-    "images": "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
+    "images": [
+      "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
+    ]
   },
   {
     "id": 8,
@@ -69,7 +83,9 @@
     "area": 41,
     "facilitiesRoom": "Shower,Seating area,Wifi,Hot water,Balcony,Refrigerator",
     "hotelId": 3,
-    "images": "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
+    "images": [
+      "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
+    ]
   },
   {
     "id": 9,
@@ -78,7 +94,9 @@
     "area": 42,
     "facilitiesRoom": "Shower,Seating area,Wifi,Hot water,Balcony,Refrigerator",
     "hotelId": 3,
-    "images": "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
+    "images": [
+      "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
+    ]
   },
   {
     "id": 10,
@@ -87,7 +105,9 @@
     "area": 32,
     "facilitiesRoom": "Air conditioning,Seating area,Wifi",
     "hotelId": 4,
-    "images": "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
+    "images": [
+      "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
+    ]
   },
   {
     "id": 11,
@@ -96,7 +116,9 @@
     "area": 36,
     "facilitiesRoom": "Air conditioning,Seating area,Wifi",
     "hotelId": 4,
-    "images": "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
+    "images": [
+      "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
+    ]
   },
   {
     "id": 12,
@@ -105,7 +127,9 @@
     "area": 18,
     "facilitiesRoom": "Air conditioning,Seating area,Wifi",
     "hotelId": 5,
-    "images": "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
+    "images": [
+      "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
+    ]
   },
   {
     "id": 13,
@@ -114,7 +138,9 @@
     "area": 22,
     "facilitiesRoom": "Air conditioning,Seating area,Wifi",
     "hotelId": 5,
-    "images": "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
+    "images": [
+      "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
+    ]
   },
   {
     "id": 14,
@@ -123,7 +149,9 @@
     "area": 40,
     "facilitiesRoom": "Air conditioning,Seating area,Wifi",
     "hotelId": 6,
-    "images": "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
+    "images": [
+      "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
+    ]
   },
   {
     "id": 15,
@@ -132,7 +160,9 @@
     "area": 40,
     "facilitiesRoom": "Air conditioning,Seating area,Wifi",
     "hotelId": 6,
-    "images": "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
+    "images": [
+      "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
+    ]
   },
   {
     "id": 16,
@@ -141,7 +171,9 @@
     "area": 26,
     "facilitiesRoom": "Air conditioning,Seating area,Wifi",
     "hotelId": 7,
-    "images": "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
+    "images": [
+      "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
+    ]
   },
   {
     "id": 17,
@@ -150,6 +182,8 @@
     "area": 28,
     "facilitiesRoom": "Air conditioning,Seating area,Wifi",
     "hotelId": 7,
-    "images": "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
+    "images": [
+      "https://shopcartimg2.blob.core.windows.net/shopcartctn/room.jpg"
+    ]
   }
 ]

@@ -38,11 +38,11 @@ import { CouponModule } from './modules/coupon.module';
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: process.env.MYSQL_HOSTLOCAL,
-      port: +process.env.MYSQL_PORTLOCAL,
-      username: process.env.MYSQL_USERNAMELOCAL,
-      password: process.env.MYSQL_PASSWORDLOCAL,
-      database: process.env.MYSQL_DATABASENAMELOCAL,
+      host: process.env.MYSQL_HOST,
+      port: +process.env.MYSQL_PORT,
+      username: process.env.MYSQL_USERNAME,
+      password: process.env.MYSQL_PASSWORD,
+      database: process.env.MYSQL_DATABASENAME,
 
       entities: [
         User,
@@ -120,7 +120,7 @@ export class AppModule implements NestModule {
       { path: 'billFlight/addBillFlight', method: RequestMethod.POST },
       { path: 'billFlight/getBillFlight', method: RequestMethod.POST },
       //notifications
-      { path: 'noti/addNoti', method: RequestMethod.POST },
+      //{ path: 'noti/addNoti', method: RequestMethod.POST },
       { path: 'noti/getNoti', method: RequestMethod.POST },
       { path: 'noti/readNoti', method: RequestMethod.POST },
       //coupon

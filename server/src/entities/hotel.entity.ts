@@ -51,8 +51,8 @@ export class Hotel {
   @Column()
   facilities: string;
   @Column({
-    type: 'json',
     nullable: true,
+    length: 10000,
   })
   images: string;
   @OneToMany(() => Room, (room) => room.hotel)

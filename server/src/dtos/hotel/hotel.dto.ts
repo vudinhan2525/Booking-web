@@ -38,6 +38,8 @@ export class HotelBody {
 
   @Expose()
   adminId: number;
+  @Expose()
+  images: string[];
 }
 export class HotelUpdateBody {
   @IsNotEmpty()

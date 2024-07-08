@@ -206,8 +206,7 @@ export class HotelService {
         adminId: item.adminId,
         summary: item.summary,
         facilities: item.facilities,
-        images:
-          'https://shopcartimg2.blob.core.windows.net/shopcartctn/pexels-boonkong-boonpeng-442952-1134176.jpg',
+        images: JSON.stringify(item.images),
       });
     });
     const savePromises = hotels.map((hotel) =>
@@ -270,6 +269,20 @@ export class HotelService {
     }
 
     let hotels = await query.getMany();
+    hotels = hotels.map((hotel) => {
+      if (hotel.images) {
+        try {
+          hotel.images = JSON.parse(hotel.images);
+        } catch (error) {
+          console.error(
+            `Error parsing images for hotel id ${hotel.id}:`,
+            error,
+          );
+        }
+      }
+      return hotel;
+    });
+
     //
     //Filter by range
     const distanceFromPoint = (hotel) => {
@@ -368,6 +381,7 @@ export class HotelService {
     if (!hotel) {
       return { status: 'failed', message: 'Cannot found hotel with this id!' };
     }
+    hotel.images = JSON.parse(hotel.images);
     const rooms = await this.roomRepository
       .createQueryBuilder('room')
       .leftJoinAndSelect('room.roomOpts', 'roomOpt')
@@ -396,7 +410,20 @@ export class HotelService {
         searchText: `%${body.searchText}%`,
       });
     }
-    const hotels = await query.getMany();
+    let hotels = await query.getMany();
+    hotels = hotels.map((hotel) => {
+      if (hotel.images) {
+        try {
+          hotel.images = JSON.parse(hotel.images);
+        } catch (error) {
+          console.error(
+            `Error parsing images for hotel id ${hotel.id}:`,
+            error,
+          );
+        }
+      }
+      return hotel;
+    });
     const hotelWithRooms = await Promise.all(
       hotels.map(async (hotel) => {
         const rooms = await this.roomRepository

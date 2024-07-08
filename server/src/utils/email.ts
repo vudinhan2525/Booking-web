@@ -1,13 +1,12 @@
 import * as nodemailer from 'nodemailer';
-import * as fs from 'fs';
-const verifyEmailTemplate = fs.readFileSync(
-  './src/utils/templates/verifyEmail.html',
-  'utf8',
-);
-const forgotPasswordTemplate = fs.readFileSync(
-  './src/utils/templates/verifyEmail.html',
-  'utf8',
-);
+// const verifyEmailTemplate = fs.readFileSync(
+//   './src/utils/templates/verifyEmail.html',
+//   'utf8',
+// );
+// const forgotPasswordTemplate = fs.readFileSync(
+//   './src/utils/templates/verifyEmail.html',
+//   'utf8',
+// );
 export const sendMail = (to: string, subject: string, url: string) => {
   const transporter = nodemailer.createTransport({
     service: 'Gmail',
@@ -17,9 +16,9 @@ export const sendMail = (to: string, subject: string, url: string) => {
     },
   });
   let htmlCont;
-  if (subject === 'Reset your password') {
-    htmlCont = forgotPasswordTemplate.replace('{verificationLink}', url);
-  } else htmlCont = verifyEmailTemplate.replace('{verificationLink}', url);
+  // if (subject === 'Reset your password') {
+  //   htmlCont = forgotPasswordTemplate.replace('{verificationLink}', url);
+  // } else htmlCont = verifyEmailTemplate.replace('{verificationLink}', url);
 
   const options = {
     from: process.env.MAIL_FROM_ADDRESS,

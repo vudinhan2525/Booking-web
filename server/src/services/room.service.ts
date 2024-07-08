@@ -27,7 +27,7 @@ export class RoomService {
         area: item.area,
         facilitiesRoom: item.facilitiesRoom,
         hotelId: item.hotelId,
-        images: item.images,
+        images: JSON.stringify(item.images),
       });
     });
 

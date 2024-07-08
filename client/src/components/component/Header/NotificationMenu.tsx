@@ -69,7 +69,7 @@ export default function NotificationMenu({
         <div className="absolute top-[30px] animate-fadeIn w-[400px] h-[20px] bg-transparent"></div>
       )}
       {showNotis && (
-        <div className="z-[20] absolute top-[50px] pb-3 border-[1px] rounded-md shadow-lg animate-fadeIn w-[400px]  bg-white">
+        <div className="z-[22] absolute top-[50px] pb-3 border-[1px] rounded-md shadow-lg animate-fadeIn w-[400px]  bg-white">
           <header className="px-4 py-3 border-b-[1px] font-bold ">
             {`Notifications (${calcNoneRead()})`}
           </header>
