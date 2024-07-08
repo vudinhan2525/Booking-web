@@ -1,5 +1,5 @@
 "use client";
-import { ComboBox } from "@/components/component/Search/ComboBox";
+import ComboBox from "@/components/component/Search/ComboBox";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";

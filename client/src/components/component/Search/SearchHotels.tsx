@@ -8,7 +8,7 @@ import {
   faUserGroup,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ComboBox } from "./ComboBox";
+import ComboBox from "./ComboBox";
 import { KeyboardEvent, useCallback, useEffect, useState } from "react";
 import { destinations } from "@/lib/dataHotel";
 import {

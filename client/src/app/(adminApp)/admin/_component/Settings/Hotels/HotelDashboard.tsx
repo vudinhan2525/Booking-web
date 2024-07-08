@@ -1,6 +1,6 @@
 "use client";
 import hotelApiRequest from "@/apiRequest/hotel";
-import { ComboBox } from "@/components/component/Search/ComboBox";
+import ComboBox from "@/components/component/Search/ComboBox";
 import { Button } from "@/components/ui/button";
 import { IHotel } from "@/interfaces/IHotel";
 import {

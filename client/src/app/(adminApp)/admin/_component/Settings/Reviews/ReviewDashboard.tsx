@@ -13,7 +13,7 @@ import {
   faStar,
 } from "@fortawesome/free-solid-svg-icons";
 import ReplyFormModal from "./ReplyFormModal";
-import { ComboBox } from "@/components/component/Search/ComboBox";
+import ComboBox from "@/components/component/Search/ComboBox";
 
 import hotelApiRequest from "@/apiRequest/hotel";
 import { delay } from "@/utils/delay";

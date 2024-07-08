@@ -1,5 +1,5 @@
 "use client";
-import { ComboBox } from "@/components/component/Search/ComboBox";
+import ComboBox from "@/components/component/Search/ComboBox";
 import { Button } from "@/components/ui/button";
 import "react-calendar/dist/Calendar.css";
 import { toDayMonthYear } from "@/utils/convertTime";

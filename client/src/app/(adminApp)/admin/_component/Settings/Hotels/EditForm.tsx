@@ -1,5 +1,5 @@
 "use client";
-import { ComboBox } from "@/components/component/Search/ComboBox";
+import ComboBox from "@/components/component/Search/ComboBox";
 import { IHotel } from "@/interfaces/IHotel";
 import { destinations, destinationsMap } from "@/lib/dataHotel";
 import {

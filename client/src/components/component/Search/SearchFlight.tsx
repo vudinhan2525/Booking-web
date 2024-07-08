@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import { airports, getAirport } from "@/lib/dataAir";
 import { convertTime, toDayMonthYear } from "@/utils/convertTime";
 import objectToQueryString from "@/utils/convertToQueryString";
-import { ComboBox } from "./ComboBox";
+import ComboBox from "./ComboBox";
 const initialFrom = {
   name: "",
   nameAirport: "",
