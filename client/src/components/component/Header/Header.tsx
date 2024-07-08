@@ -250,6 +250,19 @@ export default function Header({ fromAdminPage }: { fromAdminPage?: boolean }) {
           >
             Flights
           </Button>
+          <Button
+            onClick={() => {
+              router.push("/admin");
+            }}
+            variant={onTop ? "transparent" : "outline"}
+            className={`${
+              onTop
+                ? "text-white hover:bg-black/30"
+                : "text-gray-600 hover:text-gray-600 border-[0px]"
+            } text-[15px] font-bold `}
+          >
+            Become a renter
+          </Button>
           {/* <Button
             variant={onTop ? "transparent" : "outline"}
             className={`${

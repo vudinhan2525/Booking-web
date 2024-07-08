@@ -127,7 +127,9 @@ export default function RegisterModal({
     >
       <div className="absolute bg-white px-6 pt-8 pb-6 w-[40%] left-[50%] translate-x-[-50%] top-[50%] translate-y-[-50%] rounded-xl">
         <div className="mb-4 flex justify-between items-center">
-          <p className="text-3xl font-bold">Register</p>
+          <p className="text-3xl font-bold">
+            {fromAdminPage ? "Register admin account" : "Register"}
+          </p>
           <FontAwesomeIcon
             icon={faXmark}
             onClick={() => {

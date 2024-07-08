@@ -317,6 +317,13 @@ export default function SearchFlight({
             />
           </div>
         </div>
+        <p
+          className={`${
+            fromFlightPage ? "text-gray-700" : "text-white"
+          }  mt-2 italic text-sm `}
+        >
+          * Search với ngày 10/12/2024 ^^ vì sự thiếu hụt data.
+        </p>
       </div>
       <div className="basis-[45%]">
         <p

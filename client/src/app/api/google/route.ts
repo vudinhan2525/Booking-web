@@ -27,7 +27,16 @@ export async function POST(req: Request) {
 
     // Optional: Validate ID token and process access token
 
-    return NextResponse.json({ id_token, access_token });
+    const responseHeaders = new Headers();
+    responseHeaders.set(
+      "Cross-Origin-Opener-Policy",
+      "same-origin-allow-popups"
+    );
+    responseHeaders.set("Cross-Origin-Embedder-Policy", "require-corp");
+
+    return new NextResponse(JSON.stringify({ id_token, access_token }), {
+      headers: responseHeaders,
+    });
   } catch (error) {
     console.error("Error exchanging authorization code:", error);
     return NextResponse.json(
