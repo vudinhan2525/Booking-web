@@ -15,11 +15,15 @@ const authApiRequest = {
       headers: { "Content-Type": "application/json" },
       withCredentials: true,
     }),
-  logoutFromNextClient: (): any =>
-    http.get("/auth/logout", {
-      headers: { "Content-Type": "application/json" },
-      withCredentials: true,
-    }),
+  logoutFromNextClient: () =>
+    http.post<any>(
+      "/auth/logout",
+      {},
+      {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      }
+    ),
   googleAuth: (body: {
     firstName: string;
     lastName: string;
