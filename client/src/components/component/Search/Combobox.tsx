@@ -1,5 +1,4 @@
 "use client";
-
 import { Calendar } from "@/components/ui/calendar";
 import {
   faBaby,
@@ -10,7 +9,14 @@ import {
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import * as React from "react";
+import React, {
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 export default function ComboBox({
   child,
   setValue,
@@ -28,7 +34,7 @@ export default function ComboBox({
   setIsSearching,
   preview,
 }: {
-  child: React.ReactNode;
+  child: ReactNode;
   setValue: any;
   isCalendar?: boolean;
   value: any;
@@ -44,14 +50,14 @@ export default function ComboBox({
   isDestination?: boolean;
   isDurationList?: boolean;
   isReviews?: boolean;
-  setIsSearching?: React.Dispatch<React.SetStateAction<boolean>>;
-  setSearchTxt?: React.Dispatch<React.SetStateAction<string>>;
+  setIsSearching?: Dispatch<SetStateAction<boolean>>;
+  setSearchTxt?: Dispatch<SetStateAction<string>>;
   preview?: JSX.Element | null;
 }) {
-  const [isFirst, setIsFirst] = React.useState(true);
-  const [open, setOpen] = React.useState(false);
-  const dropdownRef = React.useRef<HTMLDivElement>(null);
-  React.useEffect(() => {
+  const [isFirst, setIsFirst] = useState(true);
+  const [open, setOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
       if (
         dropdownRef.current &&
@@ -68,9 +74,9 @@ export default function ComboBox({
       document.removeEventListener("mousedown", handleOutsideClick);
     };
   }, []);
-  const [date, setDate] = React.useState<Date | undefined>(new Date());
-  const [showWarningInfant, setShowWarningInfant] = React.useState(false);
-  React.useEffect(() => {
+  const [date, setDate] = useState<Date | undefined>(new Date());
+  const [showWarningInfant, setShowWarningInfant] = useState(false);
+  useEffect(() => {
     if (setValue && isCalendar) {
       setValue(date);
       if (departureDate && isFirst) {
@@ -80,7 +86,7 @@ export default function ComboBox({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [date]);
-  React.useEffect(() => {
+  useEffect(() => {
     if (departureDate && date) {
       setDate(new Date(departureDate));
     }
